@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/MainMenu_home"
+            android:icon="@drawable/ic_home"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/MainMenu_2ndHand"
+            android:icon="@drawable/ic_2ndhand"
+            android:title="@string/second_hand" />
+        <item
+            android:id="@+id/MainMenu_auction"
+            android:icon="@drawable/ic_auction"
+            android:title="@string/auctions" />
+        <item
+            android:id="@+id/MainMenu_pawn"
+            android:icon="@drawable/ic_pwn"
+            android:title="@string/pawn" />
+    </group>
+
+    <item android:title="@string/social">
+        <menu>
+            <item
+                android:id="@+id/MainMenu_share"
+                android:icon="@drawable/ic_share"
+                android:title="@string/share" />
+            <item
+                android:id="@+id/MainMenu_rate"
+                android:icon="@drawable/ic_rate_review"
+                android:title="@string/rate_us" />
+        </menu>
+    </item>
+</menu>
