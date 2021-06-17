@@ -9,6 +9,7 @@ public class Listing {
     private String location;
     private double price;
     private Date date;
+    private String Type; //if its a auction or its a selling
 
 
 }
