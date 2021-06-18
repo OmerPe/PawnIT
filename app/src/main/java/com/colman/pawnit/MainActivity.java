@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         leftDrawer.setCheckedItem(R.id.MainMenu_home);
 
         // hide items
-        logout();
 
 
     }
@@ -116,11 +115,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Rate", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.logout:
-                logout();
                 Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.login:
-                login();
                 Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -132,27 +129,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return true;
-    }
-
-    private void logout(){
-        Menu profileMenu = rightDrawer.getMenu();
-        profileMenu.findItem(R.id.logout).setVisible(false);
-        profileMenu.findItem(R.id.contacts).setVisible(false);
-        profileMenu.findItem(R.id.my_listings).setVisible(false);
-        profileMenu.findItem(R.id.my_pawns).setVisible(false);
-        profileMenu.findItem(R.id.history).setVisible(false);
-        profileMenu.findItem(R.id.user_settings).setVisible(false);
-        profileMenu.findItem(R.id.login).setVisible(true);
-    }
-
-    private void login(){
-        Menu profileMenu = rightDrawer.getMenu();
-        profileMenu.findItem(R.id.logout).setVisible(true);
-        profileMenu.findItem(R.id.contacts).setVisible(true);
-        profileMenu.findItem(R.id.my_listings).setVisible(true);
-        profileMenu.findItem(R.id.my_pawns).setVisible(true);
-        profileMenu.findItem(R.id.history).setVisible(true);
-        profileMenu.findItem(R.id.user_settings).setVisible(true);
-        profileMenu.findItem(R.id.login).setVisible(false);
     }
 }
