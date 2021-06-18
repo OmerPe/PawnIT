@@ -9,6 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PawnIT">
+        <activity android:name=".contactsActivity"></activity>
+        <activity android:name=".appSettingsActivity" />
+        <activity android:name=".userSettingsActivity" />
+        <activity android:name=".userHistoryActivity" />
+        <activity android:name=".myPawnsActivity" />
+        <activity android:name=".myListingsActivity" />
+        <activity android:name=".auctionActivity" />
+        <activity android:name=".pawnActivity" />
+        <activity android:name=".secondHandActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,6 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
