@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawerLayout;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView rightDrawer;
     ImageButton menuBtn;
     ImageButton profileBtn;
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         rightDrawer = findViewById(R.id.nav_view_profile_menu);
         menuBtn = findViewById(R.id.MainAct_MenuBtn);
         profileBtn = findViewById(R.id.MainAct_UserIcon);
+        mAuth = FirebaseAuth.getInstance();
 
 
         /*------------------- Nav drawer menu ---------------------------- */
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.login:
-                Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this,loginActivity.class));
                 break;
         }
 
