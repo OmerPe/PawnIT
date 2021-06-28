@@ -9,4 +9,5 @@ public class Pawn {
     private Date dateRecieved;
     private Date lastDayToPay;
     private List<String> images;
+    private User loaner;
 }
