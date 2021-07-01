@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "732057988039",
+    "firebase_url": "https://pawnit-950b7-default-rtdb.firebaseio.com",
+    "project_id": "pawnit-950b7",
+    "storage_bucket": "pawnit-950b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:732057988039:android:e6320fd684e0b9aafb87e2",
+        "android_client_info": {
+          "package_name": "com.colman.pawnit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "732057988039-u5h8hfddjq41deaoapmr6otahudloquu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBv5CuNj0GAdZPAchxW4zWYnnn9q_RUvks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "732057988039-u5h8hfddjq41deaoapmr6otahudloquu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
