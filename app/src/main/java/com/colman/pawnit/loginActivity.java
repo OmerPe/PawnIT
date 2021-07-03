@@ -58,6 +58,7 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(this, registerActivity.class));
                 break;
             case R.id.login_frgtpwd:
+                startActivity(new Intent(this, forgotPwdActivity.class));
                 break;
             case R.id.login_btn:
                 userLogin();
