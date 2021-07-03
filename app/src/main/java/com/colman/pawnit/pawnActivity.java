@@ -46,17 +46,23 @@ public class pawnActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 10;
+            return 2;
         }
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
+            /*LayoutInflater inflater = getLayoutInflater();
+            View v = inflater.inflate(R.layout.item_list_row, null);
 
+            //TextView nameTv = v.findViewById(R.id.listrow_title_tv);
+            TextView nameTv = v.findViewById(R.id.pawn_listv);
+            nameTv.setText(mDatabaseRef.child("Users").child("userName").getKey());*/
             LayoutInflater inflater = getLayoutInflater();
             View v = inflater.inflate(R.layout.item_list_row, null);
 
-            TextView nameTv = v.findViewById(R.id.listrow_title_tv);
-            nameTv.setText(mDatabaseRef.child("Users").child("userName").getKey());
+
+
+
 
             return v;
         }
@@ -72,6 +78,4 @@ public class pawnActivity extends AppCompatActivity {
         }
 
     }
-
-
 }

@@ -3,47 +3,73 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/rounded_corners"
-    android:paddingBottom="5dp">
+    android:layout_height="350dp"
+    android:background="@drawable/rounded_corners">
 
     <ImageView
-        android:id="@+id/listrow_avatar_imagev"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/pawn_row_picture"
+        android:layout_width="389dp"
+        android:layout_height="272dp"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@android:drawable/presence_video_online" />
 
-    <TextView
-        android:id="@+id/listrow_title_tv"
-        android:layout_width="255dp"
-        android:layout_height="19dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="Title"
-        app:layout_constraintBottom_toTopOf="@+id/listrow_desc_tv"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/custom_gradient_bottom"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imagev"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:background="@drawable/custom_gradient_top"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/listrow_desc_tv"
-        android:layout_width="255dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="24dp"
-        android:text="Description"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/listrow_avatar_imagev"
-        app:layout_constraintTop_toBottomOf="@+id/listrow_title_tv" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/pawn_row_price"
+            android:layout_width="195dp"
+            android:layout_height="79dp"
+            android:fontFamily="@font/oleo_script"
+            android:text="Price:"
+            android:textAlignment="center"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/pawn_row_date"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/pawn_row_date"
+            android:layout_width="195dp"
+            android:layout_height="79dp"
+            android:fontFamily="@font/oleo_script"
+            android:text="Date:"
+            android:textAlignment="center"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/pawn_row_price" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
