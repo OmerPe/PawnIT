@@ -14,10 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class pawnActivity extends AppCompatActivity {
 
@@ -42,12 +40,13 @@ public class pawnActivity extends AppCompatActivity {
 
     class MyAdapter extends BaseAdapter {
         FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDatabaseRef = mDatabase.getReference("Users");
+        DatabaseReference mDatabaseRef = mDatabase.getReference();
+
+
 
         @Override
         public int getCount() {
-            DataSnapshot ds = mDatabaseRef.child("Users").get().getResult();
-            return 3;
+            return 10;
         }
 
         @Override
