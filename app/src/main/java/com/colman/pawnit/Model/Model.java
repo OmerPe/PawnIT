@@ -6,17 +6,8 @@ import java.util.List;
 public class Model {
     public static final Model instance = new Model();
 
-    private List<User> userList = new LinkedList<>();
     private List<Listing> listings = new LinkedList<>();
     private List<Pawn> pawns = new LinkedList<>();
-
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
 
     public List<Listing> getListings() {
         return listings;
@@ -32,10 +23,6 @@ public class Model {
 
     public void setPawns(List<Pawn> pawns) {
         this.pawns = pawns;
-    }
-
-    public void addUser(User user){
-        userList.add(user);
     }
 
     public void addListing(Listing listing){
