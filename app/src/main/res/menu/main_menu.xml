@@ -7,13 +7,9 @@
             android:icon="@drawable/ic_home"
             android:title="@string/home" />
         <item
-            android:id="@+id/MainMenu_2ndHand"
-            android:icon="@drawable/ic_2ndhand"
-            android:title="@string/second_hand" />
-        <item
-            android:id="@+id/MainMenu_auction"
-            android:icon="@drawable/ic_auction"
-            android:title="@string/auctions" />
+            android:id="@+id/MainMenu_market"
+            android:icon="@drawable/ic_market"
+            android:title="@string/market" />
         <item
             android:id="@+id/MainMenu_pawn"
             android:icon="@drawable/ic_pwn"

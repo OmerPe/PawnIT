@@ -9,16 +9,15 @@ public class Listing {
     private String title;
     private String description;
     private String location;
-    private double price;
-    private Date date;
+    private Date dateOpened;
     private List<String> images;
+
+    public Listing(){
+
+    }
 
     public String getListingID() {
         return listingID;
-    }
-
-    public void setListingID(String listingID) {
-        this.listingID = listingID;
     }
 
     public User getOwner() {
@@ -53,20 +52,12 @@ public class Listing {
         this.location = location;
     }
 
-    public double getPrice() {
-        return price;
+    public Date getDateOpened() {
+        return dateOpened;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDateOpened(Date dateOpened) {
+        this.dateOpened = dateOpened;
     }
 
     public List<String> getImages() {
@@ -76,6 +67,4 @@ public class Listing {
     public void setImages(List<String> images) {
         this.images = images;
     }
-
-    
 }

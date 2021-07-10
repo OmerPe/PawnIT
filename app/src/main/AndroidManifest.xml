@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PawnIT">
-        <activity android:name=".forgotPwdActivity"></activity>
+        <activity android:name=".marketActivity"></activity>
+        <activity android:name=".forgotPwdActivity" />
         <activity android:name=".registerActivity" />
         <activity android:name=".loginActivity" />
         <activity android:name=".contactsActivity" />

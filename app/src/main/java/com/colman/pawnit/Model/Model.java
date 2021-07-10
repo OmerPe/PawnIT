@@ -5,9 +5,46 @@ import java.util.List;
 
 public class Model {
     public static final Model instance = new Model();
+
     private List<User> userList = new LinkedList<>();
     private List<Listing> listings = new LinkedList<>();
     private List<Pawn> pawns = new LinkedList<>();
-    private List<Auction> auctions = new LinkedList<>();
+
+    public List<User> getUserList() {
+        return userList;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
+    public List<Listing> getListings() {
+        return listings;
+    }
+
+    public void setListings(List<Listing> listings) {
+        this.listings = listings;
+    }
+
+    public List<Pawn> getPawns() {
+        return pawns;
+    }
+
+    public void setPawns(List<Pawn> pawns) {
+        this.pawns = pawns;
+    }
+
+    public void addUser(User user){
+        userList.add(user);
+    }
+
+    public void addListing(Listing listing){
+        listings.add(listing);
+    }
+
+    public void addPawn(Pawn pawn){
+        pawns.add(pawn);
+    }
+
 
 }

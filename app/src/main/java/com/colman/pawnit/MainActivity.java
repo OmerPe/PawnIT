@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         user = mAuth.getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users");
 
-
-
         /*------------------- Nav drawer menu ---------------------------- */
         //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,menuBtn,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         leftDrawer.bringToFront();
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     User userProfile = snapshot.getValue(User.class);
 
                     if(userProfile != null){
-                        String fullname = userProfile.userName;
+                        String fullname = userProfile.getUserName();
                         username.setText(fullname + "!");
                         pdUname.setText(fullname);
                     }
@@ -121,11 +119,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case R.id.MainMenu_home:
                 break;
-            case R.id.MainMenu_2ndHand:
-                startActivity(new Intent(MainActivity.this,secondHandActivity.class));
-                break;
-            case R.id.MainMenu_auction:
-                startActivity(new Intent(MainActivity.this,auctionActivity.class));
+            case R.id.MainMenu_market:
+                startActivity(new Intent(MainActivity.this,marketActivity.class));
                 break;
             case R.id.MainMenu_pawn:
                 startActivity(new Intent(MainActivity.this,pawnActivity.class));
@@ -193,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem logout = rightDrawer.getMenu().findItem(R.id.logout);
         logout.setVisible(false);
 
-        pdUname.setText("Please log in");
     }
     private void showUserOptions() {
         MenuItem listings = rightDrawer.getMenu().findItem(R.id.my_listings);

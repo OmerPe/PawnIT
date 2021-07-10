@@ -20,5 +20,6 @@
     <string name="logout">Logout</string>
     <string name="login">Login</string>
     <string name="profile">Profile</string>
+    <string name="market">Market</string>
 
 </resources>
