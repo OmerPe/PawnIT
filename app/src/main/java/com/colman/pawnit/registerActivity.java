@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -208,6 +209,7 @@ public class registerActivity extends AppCompatActivity implements View.OnClickL
                                 Toast.makeText(registerActivity.this,"User has been registered successfully!", Toast.LENGTH_LONG).show();
 
                                 //redirect to where i want to go
+                                startActivity(new Intent(registerActivity.this,MainActivity.class));
                             }else{
                                 Toast.makeText(registerActivity.this,"OOPS something went wrong. user is not registered, try again!", Toast.LENGTH_LONG).show();
                             }
