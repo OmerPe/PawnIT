@@ -1,21 +1,49 @@
 package com.colman.pawnit.Model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+@Entity(tableName = "pawn_table")
 public class Pawn {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     private double loanAmount;
     private double intrestRate;
-    private Date dateRecieved;
+    private Date dateRquested;
     private Date deadLine;
     private int PaymentDay;
     private Date lastPayment;
     private List<String> images = images = new LinkedList<>();
-    private User loaner;
+    private String loaner;
+    private String owner;
 
     public Pawn(){
 
+    }
+
+    public Pawn(double loanAmount, double intrestRate, Date dateRquested, Date deadLine, int paymentDay, Date lastPayment, List<String> images, String loaner, String owner) {
+        this.loanAmount = loanAmount;
+        this.intrestRate = intrestRate;
+        this.dateRquested = dateRquested;
+        this.deadLine = deadLine;
+        PaymentDay = paymentDay;
+        this.lastPayment = lastPayment;
+        this.images = images;
+        this.loaner = loaner;
+        this.owner = owner;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getLoanAmount() {
@@ -34,12 +62,12 @@ public class Pawn {
         this.intrestRate = intrestRate;
     }
 
-    public Date getDateRecieved() {
-        return dateRecieved;
+    public Date getDateRquested() {
+        return dateRquested;
     }
 
-    public void setDateRecieved(Date dateRecieved) {
-        this.dateRecieved = dateRecieved;
+    public void setDateRquested(Date dateRquested) {
+        this.dateRquested = dateRquested;
     }
 
     public Date getDeadLine() {
@@ -74,21 +102,20 @@ public class Pawn {
         this.images = images;
     }
 
-    public User getLoaner() {
+    public String getLoaner() {
         return loaner;
     }
 
-    public void setLoaner(User loaner) {
+    public void setLoaner(String loaner) {
         this.loaner = loaner;
     }
 
-    public User getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 
-    private User owner;
 }
