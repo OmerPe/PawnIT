@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Update;
 
 @Dao
-public interface AuctionDao {
+public interface ResellListingDao {
 
     @Insert
     void insert(Listing listing);

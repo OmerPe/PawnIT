@@ -4,118 +4,89 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+
+/*
+this object is a pawn listing after being accepted, which means it already knows who gave the loan, whats the final interest rates and everything.
+basically this object is finalized once settled.
+ */
 
 @Entity(tableName = "pawn_table")
 public class Pawn {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private double loanAmount;
-    private double intrestRate;
-    private Date dateRquested;
-    private Date deadLine;
-    private int PaymentDay;
+    private final int listingID;
+    private final double loanAmount;
+    private final double interestRate;
+    private final String lenderId;
+    private final String borrowerId;
+    private final Date dateRecieved;
+    private final Date dateEnds;
+    private final String paymentDay;
+    private final int numOfPayments;
     private Date lastPayment;
-    private List<String> images = images = new LinkedList<>();
-    private String loaner;
-    private String owner;
 
-    public Pawn(){
-
-    }
-
-    public Pawn(double loanAmount, double intrestRate, Date dateRquested, Date deadLine, int paymentDay, Date lastPayment, List<String> images, String loaner, String owner) {
+    public Pawn(int listingID, double loanAmount, double interestRate, String lenderId, String borrowerId, Date dateRecieved, Date dateEnds, String paymentDay, int numOfPayments) {
+        this.listingID = listingID;
         this.loanAmount = loanAmount;
-        this.intrestRate = intrestRate;
-        this.dateRquested = dateRquested;
-        this.deadLine = deadLine;
-        PaymentDay = paymentDay;
-        this.lastPayment = lastPayment;
-        this.images = images;
-        this.loaner = loaner;
-        this.owner = owner;
-    }
-
-    public int getId() {
-        return id;
+        this.interestRate = interestRate;
+        this.lenderId = lenderId;
+        this.dateRecieved = dateRecieved;
+        this.dateEnds = dateEnds;
+        this.paymentDay = paymentDay;
+        this.numOfPayments = numOfPayments;
+        this.borrowerId = borrowerId;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
+    public void setLastPayment(Date lastPayment) {
+        this.lastPayment = lastPayment;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getBorrowerId() {
+        return borrowerId;
+    }
+
+    public int getListingID() {
+        return listingID;
+    }
+
     public double getLoanAmount() {
         return loanAmount;
     }
 
-    public void setLoanAmount(double loanAmount) {
-        this.loanAmount = loanAmount;
+    public double getInterestRate() {
+        return interestRate;
     }
 
-    public double getIntrestRate() {
-        return intrestRate;
+    public String getLenderId() {
+        return lenderId;
     }
 
-    public void setIntrestRate(double intrestRate) {
-        this.intrestRate = intrestRate;
+    public Date getDateRecieved() {
+        return dateRecieved;
     }
 
-    public Date getDateRquested() {
-        return dateRquested;
+    public Date getDateEnds() {
+        return dateEnds;
     }
 
-    public void setDateRquested(Date dateRquested) {
-        this.dateRquested = dateRquested;
+    public String getPaymentDay() {
+        return paymentDay;
     }
 
-    public Date getDeadLine() {
-        return deadLine;
-    }
-
-    public void setDeadLine(Date deadLine) {
-        this.deadLine = deadLine;
-    }
-
-    public int getPaymentDay() {
-        return PaymentDay;
-    }
-
-    public void setPaymentDay(int paymentDay) {
-        PaymentDay = paymentDay;
+    public int getNumOfPayments() {
+        return numOfPayments;
     }
 
     public Date getLastPayment() {
         return lastPayment;
     }
-
-    public void setLastPayment(Date lastPayment) {
-        this.lastPayment = lastPayment;
-    }
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
-    public String getLoaner() {
-        return loaner;
-    }
-
-    public void setLoaner(String loaner) {
-        this.loaner = loaner;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
 }

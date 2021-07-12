@@ -7,13 +7,13 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-@Entity(tableName = "listing_table")
+@Entity
 public class Listing {
 
     @PrimaryKey(autoGenerate = true)
     private String listingID;
 
-    private String owner;//owner id
+    private String ownerId;//owner id
     private String title;
     private String description;
     private String location;
@@ -21,13 +21,13 @@ public class Listing {
     private List<String> images = new LinkedList<>();
 
 
-    public Listing(String owner, String title, String description, String location, Date dateOpened, List<String> images) {
-        this.owner = owner;
+    public Listing(String ownerId, String title, String description, String location, Date dateOpened, List<String> images) {
+        this.ownerId = ownerId;
         this.title = title;
         this.description = description;
-        this.location = location;
         this.dateOpened = dateOpened;
         this.images = images;
+        this.location = location;
     }
 
     public Listing(){
@@ -38,16 +38,24 @@ public class Listing {
         this.listingID = listingID;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     public String getListingID() {
         return listingID;
     }
 
-    public String getOwner() {
-        return owner;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public String getTitle() {
@@ -64,14 +72,6 @@ public class Listing {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public Date getDateOpened() {

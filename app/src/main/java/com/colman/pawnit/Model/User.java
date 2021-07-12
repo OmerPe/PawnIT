@@ -10,7 +10,7 @@ public class User {
     private String profilePic;
     private List<Listing> listings = new LinkedList<>();
     private List<Pawn> pawns = new LinkedList<>();
-    private List<Auction> auctions = new LinkedList<>();
+    private List<AuctionListing> auctionListings = new LinkedList<>();
 
     public User(){
 
@@ -70,20 +70,20 @@ public class User {
         this.pawns = pawns;
     }
 
-    public List<Auction> getAuctions() {
-        return auctions;
+    public List<AuctionListing> getAuctionListings() {
+        return auctionListings;
     }
 
-    public void setAuctions(List<Auction> auctions) {
-        this.auctions = auctions;
+    public void setAuctionListings(List<AuctionListing> auctionListings) {
+        this.auctionListings = auctionListings;
     }
 
     public void addListing(Listing listing){
         listings.add(listing);
     }
 
-    public void addAuction(Auction auction){
-        auctions.add(auction);
+    public void addAuction(AuctionListing auctionListing){
+        auctionListings.add(auctionListing);
     }
 
     public void addPawn(Pawn pawn){
