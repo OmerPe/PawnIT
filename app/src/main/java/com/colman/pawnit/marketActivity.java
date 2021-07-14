@@ -30,7 +30,7 @@ public class marketActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
+/*
         RecyclerView rView = findViewById(R.id.market_activity_list);
         rView.setHasFixedSize(true);
 
@@ -45,7 +45,7 @@ public class marketActivity extends AppCompatActivity {
 
         MyAdapter adapter = new MyAdapter();
         rView.setAdapter(adapter);
-
+*/
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
