@@ -105,12 +105,20 @@
         android:id="@+id/auctionActivity"
         android:name="com.colman.pawnit.auctionActivity"
         android:label="activity_auction"
-        tools:layout="@layout/activity_auction" />
+        tools:layout="@layout/activity_auction" >
+        <action
+            android:id="@+id/action_auctionActivity_to_auction"
+            app:destination="@id/auction" />
+    </activity>
     <activity
         android:id="@+id/secondHandActivity"
         android:name="com.colman.pawnit.secondHandActivity"
         android:label="activity_second_hand"
-        tools:layout="@layout/activity_second_hand" />
+        tools:layout="@layout/activity_second_hand" >
+        <action
+            android:id="@+id/action_secondHandActivity_to_resell"
+            app:destination="@id/resell" />
+    </activity>
     <activity
         android:id="@+id/forgotPwdActivity"
         android:name="com.colman.pawnit.forgotPwdActivity"
@@ -121,4 +129,14 @@
         android:name="com.colman.pawnit.userSettingsActivity"
         android:label="activity_user_settings"
         tools:layout="@layout/activity_user_settings" />
+    <fragment
+        android:id="@+id/auction"
+        android:name="com.colman.pawnit.Auction"
+        android:label="fragment_auction"
+        tools:layout="@layout/fragment_auction" />
+    <fragment
+        android:id="@+id/resell"
+        android:name="com.colman.pawnit.Resell"
+        android:label="fragment_resell"
+        tools:layout="@layout/fragment_resell" />
 </navigation>
