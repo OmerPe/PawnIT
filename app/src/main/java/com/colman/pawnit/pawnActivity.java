@@ -2,80 +2,77 @@ package com.colman.pawnit;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
+import com.colman.pawnit.Model.Listing;
+import com.colman.pawnit.Model.Model;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
 
 public class pawnActivity extends AppCompatActivity {
 
-    private String itemName, desc;
-    private int img;
+    List<Listing> data;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pawn);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
+        RecyclerView rView = findViewById(R.id.pawn_activity_list);
+        rView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
+        rView.setLayoutManager(manager);
+
+        data = Model.instance.getListingData();
+        data.add(new Listing());
+        data.add(new Listing());
+        data.add(new Listing());
+        data.add(new Listing());
 
         MyAdapter adapter = new MyAdapter();
-        ListView listView = findViewById(R.id.pawn_listv);
-        listView.setClipToOutline(true);
-        listView.setAdapter(adapter);
-
+        rView.setAdapter(adapter);
 
     }
 
-    class MyAdapter extends BaseAdapter {
-        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference mDatabaseRef = mDatabase.getReference();
+    static class MyViewHolder extends RecyclerView.ViewHolder {
 
+        public MyViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
 
+    public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         @Override
-        public int getCount() {
-            return 2;
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.pawn_list_row, parent, false);
+            MyViewHolder holder = new pawnActivity.MyViewHolder(view);
+            return holder;
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            /*LayoutInflater inflater = getLayoutInflater();
-            View v = inflater.inflate(R.layout.item_list_row, null);
+        public void onBindViewHolder(MyViewHolder holder, int position) {
+            Listing listing = data.get(position);
 
-            //TextView nameTv = v.findViewById(R.id.listrow_title_tv);
-            TextView nameTv = v.findViewById(R.id.pawn_listv);
-            nameTv.setText(mDatabaseRef.child("Users").child("userName").getKey());*/
-            LayoutInflater inflater = getLayoutInflater();
-            View v = inflater.inflate(R.layout.item_list_row, null);
-
-
-
-
-
-            return v;
         }
 
         @Override
-        public Object getItem(int i) {
-            return null;
+        public int getItemCount() {
+            return data.size();
         }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
     }
 }
