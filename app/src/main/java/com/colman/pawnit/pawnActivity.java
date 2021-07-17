@@ -37,11 +37,11 @@ public class pawnActivity extends AppCompatActivity {
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
         rView.setLayoutManager(manager);
 
-        data = Model.instance.getListingData();
-        data.add(new Listing());
-        data.add(new Listing());
-        data.add(new Listing());
-        data.add(new Listing());
+//        data = Model.instance.getListingData();
+//        data.add(new Listing());
+//        data.add(new Listing());
+//        data.add(new Listing());
+//        data.add(new Listing());
 
         MyAdapter adapter = new MyAdapter();
         rView.setAdapter(adapter);
@@ -72,7 +72,7 @@ public class pawnActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return data.size();
+            return 0;
         }
     }
 }
