@@ -7,15 +7,92 @@
     tools:context=".marketActivity">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/market_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/oleo_script"
-        android:text="Market Activity"
+        android:text="Market Place"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/market_TextboxBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:hint="What are you looking for?"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="25dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="25dp"
+        app:boxStrokeColor="#00EE94"
+        app:hintEnabled="true"
+        app:hintTextColor="#009efe"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/market_title">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/market_Searchbox"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawableEnd="@android:drawable/ic_btn_speak_now"
+            android:fontFamily="@font/oleo_script"
+            android:inputType="text"
+            android:lines="1"
+            android:selectAllOnFocus="false"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/market_horizontaliv"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/market_TextboxBox">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/market_allbutton"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:text="All"
+                android:textSize="10dp" />
+
+            <Button
+                android:id="@+id/market_marketbutton"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:text="Market"
+                android:textSize="10dp" />
+
+            <Button
+                android:id="@+id/market_auctionbutton"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"
+                android:text="Auction"
+                android:textSize="10dp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
