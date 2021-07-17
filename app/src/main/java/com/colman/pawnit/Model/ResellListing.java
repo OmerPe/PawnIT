@@ -1,12 +1,14 @@
 package com.colman.pawnit.Model;
 
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity(tableName = "Resell_table")
 public class ResellListing extends Listing{
+
     private double price;
 
     public ResellListing(String owner, String title, String description, String location, Date dateOpened, List<String> images, double price) {

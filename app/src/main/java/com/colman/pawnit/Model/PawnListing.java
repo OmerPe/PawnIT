@@ -1,12 +1,14 @@
 package com.colman.pawnit.Model;
 
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.Date;
 import java.util.List;
 
 @Entity(tableName = "Pawn_Listings_table")
 public class PawnListing extends Listing {
+
     private double loanAmountRequested;
     private double interestRate;
     private Date whenToGet;

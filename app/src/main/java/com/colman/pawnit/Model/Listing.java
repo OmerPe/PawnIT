@@ -7,11 +7,11 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-@Entity
+@Entity(tableName = "listings_Table")
 public class Listing {
 
     @PrimaryKey(autoGenerate = true)
-    private String listingID;
+    private int listingID;
 
     private String ownerId;//owner id
     private String title;
@@ -34,7 +34,7 @@ public class Listing {
 
     }
 
-    public void setListingID(String listingID) {
+    public void setListingID(int listingID) {
         this.listingID = listingID;
     }
 
@@ -46,7 +46,7 @@ public class Listing {
         this.location = location;
     }
 
-    public String getListingID() {
+    public int getListingID() {
         return listingID;
     }
 

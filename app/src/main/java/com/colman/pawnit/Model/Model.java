@@ -2,22 +2,41 @@ package com.colman.pawnit.Model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Model {
+    public interface OnCompleteListener{
+        void onComplete();
+    }
+
     public static final Model instance = new Model();
 
-    private List<Listing> listingData = new LinkedList<>();
+    private ExecutorService executorService = Executors.newFixedThreadPool(4);
 
-    public List<Listing> getListingData() {
-        return listingData;
+    private Model(){
+
     }
 
-    public void setListingData(List<Listing> listingData) {
-        this.listingData = listingData;
+    public void get2ndHandData(){
+
     }
 
-    public void addListing(Listing listing){
-        listingData.add(listing);
+    public void getAuctionData(){
+
+    }
+
+    public void getPawnListingData(){
+
+    }
+
+    public void getPawnData(){
+
+    }
+
+    public void getOfferData(){
+
     }
 
 }

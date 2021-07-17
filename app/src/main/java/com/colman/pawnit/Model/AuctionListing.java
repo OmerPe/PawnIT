@@ -1,6 +1,7 @@
 package com.colman.pawnit.Model;
 
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Entity(tableName = "auction_listings_table")
 public class AuctionListing extends Listing {
+
     private Date endDate;
     private double startingPrice;
     private double currentPrice;
