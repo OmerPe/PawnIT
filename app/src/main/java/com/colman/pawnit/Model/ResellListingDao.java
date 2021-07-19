@@ -8,8 +8,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.colman.pawnit.Resell;
-
 import java.util.List;
 
 @Dao
