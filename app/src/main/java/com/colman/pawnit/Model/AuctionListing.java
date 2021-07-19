@@ -2,12 +2,7 @@ package com.colman.pawnit.Model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-import com.colman.pawnit.Auction;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

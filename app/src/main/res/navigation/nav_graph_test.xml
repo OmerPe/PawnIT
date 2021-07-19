@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/contacts2"
-        android:name="com.colman.pawnit.Contacts"
+        android:name="com.colman.pawnit.ContactsFragment"
         android:label="fragment_contacts"
         tools:layout="@layout/fragment_contacts" />
     <fragment

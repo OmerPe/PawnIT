@@ -110,7 +110,7 @@
         tools:layout="@layout/activity_user_settings" />
     <fragment
         android:id="@+id/auction"
-        android:name="com.colman.pawnit.Auction"
+        android:name="com.colman.pawnit.AuctionFragment"
         android:label="fragment_auction"
         tools:layout="@layout/fragment_auction" />
     <fragment
