@@ -3,47 +3,83 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".marketActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pawn_activity_list"
-        android:layout_width="match_parent"
-        android:layout_height="680dp"
+    <TextView
+        android:id="@+id/pawn_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/oleo_script"
+        android:text="Pawns"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/pawn_box_search_box"
+        android:id="@+id/pawn_TextboxBox"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="300dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:hint="What are you looking for?"
-        app:boxCornerRadiusBottomEnd="25dp"
+        app:boxCornerRadiusBottomEnd="20dp"
         app:boxCornerRadiusBottomStart="25dp"
-        app:boxCornerRadiusTopEnd="25dp"
+        app:boxCornerRadiusTopEnd="20dp"
         app:boxCornerRadiusTopStart="25dp"
         app:boxStrokeColor="#00EE94"
         app:hintEnabled="true"
         app:hintTextColor="#009efe"
-        app:layout_constraintBottom_toTopOf="@+id/pawn_activity_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/pawn_title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/pawn_search_box"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/pawn_Searchbox"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
             android:drawableStart="@android:drawable/ic_menu_search"
             android:drawableEnd="@android:drawable/ic_btn_speak_now"
             android:fontFamily="@font/oleo_script"
             android:inputType="text"
             android:lines="1"
             android:selectAllOnFocus="false"
-            android:singleLine="true"
-            android:textSize="12sp" />
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/pawn_fragment"
+        android:name="com.colman.pawnit.fragment_pawn"
+        android:layout_width="match_parent"
+        android:layout_height="640dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pawn_TextboxBox"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout="@layout/fragment_pawn" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".fragment_pawn">
+
+        <ProgressBar
+            android:id="@+id/pawn_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
