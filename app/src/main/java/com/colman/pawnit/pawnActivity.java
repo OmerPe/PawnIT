@@ -17,7 +17,7 @@ public class pawnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pawn);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
+        //hey
         progressBar = findViewById(R.id.pawn_progress_bar);
     }
 
