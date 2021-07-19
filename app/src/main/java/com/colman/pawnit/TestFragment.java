@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.colman.pawnit.Model.Listing;
 import com.colman.pawnit.Model.User;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class TestFragment extends Fragment {
+public class TestFragment extends Fragment{
 
     DrawerLayout drawerLayout;
     NavigationView leftDrawer;
@@ -191,4 +192,5 @@ public class TestFragment extends Fragment {
         MenuItem logout = rightDrawer.getMenu().findItem(R.id.logout);
         logout.setVisible(true);
     }
+
 }

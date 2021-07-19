@@ -2,63 +2,120 @@ package com.colman.pawnit;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyListings#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.colman.pawnit.Model.Listing;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyListings extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView recyclerList;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public MyListings() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyListings.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyListings newInstance(String param1, String param2) {
-        MyListings fragment = new MyListings();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_listings, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_listings, container, false);
+
+
+        List<Listing> demo = new ArrayList<>();
+        Listing listing1 = new Listing();
+        listing1.setTitle("eden");
+        Listing listing2 = new Listing();
+        listing2.setTitle("Dor");
+        demo.add(listing1);
+        demo.add(listing2);
+
+
+        recyclerList = view.findViewById(R.id.recyclerView);
+        recyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerList.setHasFixedSize(true);
+        recyclerList.setAdapter(new MyAdapter(demo));
+
+
+        return view;
     }
+
+    public void goToDetails(Listing currentListing, View v){
+        Navigation.findNavController(v).navigate(R.id.action_myListings_to_auctionFragment);
+    }
+
+
+    class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+
+        private List<Listing> mList;
+
+
+        public MyAdapter(List<Listing> data) {
+            mList = data;
+        }
+
+        @NonNull
+        @Override
+        public MyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.market_list_row, parent, false);
+            return new MyAdapter.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull MyListings.MyAdapter.ViewHolder holder, int position) {
+            Listing currentListing = mList.get(position);
+
+            holder.title.setText(currentListing.getTitle());
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return mList.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            ConstraintLayout row;
+            ImageView imageView;
+            TextView title, price;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+
+                imageView = itemView.findViewById(R.id.market_row_picture);
+                title =itemView.findViewById(R.id.market_row_title);
+                price =itemView.findViewById(R.id.market_row_Requested);
+                row = itemView.findViewById(R.id.constraintLayout_row);
+
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position  = getLayoutPosition();
+                        Listing currentListing = mList.get(position);
+                        goToDetails(currentListing, v);
+
+                    }
+                });
+
+            }
+
+
+        }
+
+
+    }
+
+
 }

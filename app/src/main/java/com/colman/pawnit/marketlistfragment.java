@@ -24,11 +24,9 @@ import java.util.List;
 public class marketlistfragment extends Fragment {
 
     private RecyclerView recyclerList;
-    private FloatingActionButton addBtn;
     private OnClick callback;
 
     public interface OnClick{
-        void onAddClick();
 
         void onDetails(Listing currentListing);
     }
@@ -50,10 +48,7 @@ public class marketlistfragment extends Fragment {
         demo.add(listing2);
 
 
-        addBtn = view.findViewById(R.id.fab);
-        addBtn.setOnClickListener(v -> {
-            callback.onAddClick();
-        });
+
 
         recyclerList = view.findViewById(R.id.market_reclist);
         recyclerList.setLayoutManager(new LinearLayoutManager(getContext()));

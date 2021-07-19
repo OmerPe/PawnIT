@@ -38,5 +38,14 @@
         android:id="@+id/myListings"
         android:name="com.colman.pawnit.MyListings"
         android:label="fragment_my_listings"
-        tools:layout="@layout/fragment_my_listings" />
+        tools:layout="@layout/fragment_my_listings" >
+        <action
+            android:id="@+id/action_myListings_to_auctionFragment"
+            app:destination="@id/auctionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/auctionFragment"
+        android:name="com.colman.pawnit.AuctionFragment"
+        android:label="fragment_auction"
+        tools:layout="@layout/fragment_auction" />
 </navigation>

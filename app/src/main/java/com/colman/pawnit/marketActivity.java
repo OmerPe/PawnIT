@@ -3,19 +3,23 @@ package com.colman.pawnit;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.colman.pawnit.Model.Listing;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 public class marketActivity extends AppCompatActivity implements marketlistfragment.OnClick{
 
+    private FloatingActionButton addBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_market2);
+        setContentView(R.layout.activity_market);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -23,6 +27,13 @@ public class marketActivity extends AppCompatActivity implements marketlistfragm
         tabLayout.addTab(tabLayout.newTab().setText("Auction"));
         tabLayout.addTab(tabLayout.newTab().setText("Third Tab"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+
+        addBtn = findViewById(R.id.fab);
+        addBtn.setOnClickListener(v -> {
+            tabSelector(tabLayout.getSelectedTabPosition());
+        });
+
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         final PagerAdapter adapter = new PagerAdapter
@@ -46,11 +57,28 @@ public class marketActivity extends AppCompatActivity implements marketlistfragm
 
     }
 
-    @Override
-    public void onAddClick(){
-        Intent intent = new Intent(this, addMarketItemFragment.class);
+    private void tabSelector(int selectedTabPosition) {
+        switch (selectedTabPosition){
+            case 0:
+                moveToActivity(addMarketItemFragment.class);
+                break;
+            case 1:
+                moveToActivity(addAuctionItemFragment.class);
+                break;
+            case 2:
+                moveToActivity(addAuctionItemFragment.class);
+                break;
+
+
+        }
+
+    }
+
+    private void moveToActivity(final Class<? extends Activity> ActivityToOpen){
+        Intent intent = new Intent(this, ActivityToOpen);
         startActivity(intent);
     }
+
 
     @Override
     public void onDetails(Listing currentListing) {

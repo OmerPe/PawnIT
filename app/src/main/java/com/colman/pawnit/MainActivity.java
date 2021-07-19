@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.colman.pawnit.Model.Listing;
 import com.colman.pawnit.Model.User;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -207,4 +208,11 @@ public class MainActivity extends AppCompatActivity{
         logout.setVisible(true);
     }*/
     }
+
+/*    @Override
+    public void onDetails(Listing currentListing) {
+        Intent i = new Intent(this,DetailItemListing.class);
+        i.putExtra("listing", currentListing);
+        startActivity(i);
+    }*/
 }
