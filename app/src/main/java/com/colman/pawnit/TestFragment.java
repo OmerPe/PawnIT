@@ -71,6 +71,9 @@ public class TestFragment extends Fragment {
                 case R.id.MainMenu_market:
                     startActivity(new Intent(getActivity(), marketActivity.class));
                     break;
+                case R.id.MainMenu_pawn:
+                    startActivity(new Intent(getActivity(),pawnActivity.class));
+                    break;
                 default:
             }
 
