@@ -8,19 +8,21 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.colman.pawnit.Auction;
+
 import java.util.List;
 
 @Dao
 public interface AuctionListingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Listing listing);
+    void insertAll(AuctionListing... listing);
 
     @Update
-    void update(Listing listing);
+    void update(AuctionListing listing);
 
     @Delete
-    void delete(Listing listing);
+    void delete(AuctionListing listing);
 
     @Query("SELECT * FROM auction_listings_table")
     LiveData<List<AuctionListing>> getAllAuctions();

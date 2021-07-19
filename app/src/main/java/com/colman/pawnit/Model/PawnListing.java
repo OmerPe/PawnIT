@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity(tableName = "Pawn_Listings_table")
 public class PawnListing extends Listing {
@@ -15,8 +16,14 @@ public class PawnListing extends Listing {
     private int numOfPayments;
     private String dayOfPayment;
 
+    final static String LOAN_AMOUNT_REQUESTED = "loanAmountRequested";
+    final static String INTEREST_RATE = "interestRate";
+    final static String WHEN_TO_GET = "whenToGet";
+    final static String NUM_OF_PAYMENTS = "numOfPayments";
+    final static String PAYMENT_DAY = "dayOfPayment";
+
     public PawnListing(String owner, String title, String description, String location, Date dateOpened, List<String> images, double loanAmountRequested, double interestRate, Date whenToGet, int numOfPayments, String dayOfPayment) {
-        super(owner, title, description, location, dateOpened, images);
+        super(owner, title, description, location, dateOpened, images, "Pawn");
         this.loanAmountRequested = loanAmountRequested;
         this.interestRate = interestRate;
         this.whenToGet = whenToGet;
@@ -66,5 +73,33 @@ public class PawnListing extends Listing {
 
     public void setNumOfPayments(int numOfPayments) {
         this.numOfPayments = numOfPayments;
+    }
+
+    @Override
+    public Map<String, Object> getJson(Listing listing) {
+        Map<String, Object> json = super.getJson(listing);
+        json.put(LOAN_AMOUNT_REQUESTED, loanAmountRequested);
+        json.put(INTEREST_RATE, interestRate);
+        json.put(WHEN_TO_GET, whenToGet.getTime());
+        json.put(NUM_OF_PAYMENTS, numOfPayments);
+        json.put(PAYMENT_DAY, dayOfPayment);
+
+        return json;
+    }
+
+    public static PawnListing create(Map<String, Object> json) {
+        Listing listing = Listing.createListing(json);
+
+        return new PawnListing(listing.getOwnerId(),
+                listing.getTitle(),
+                listing.getDescription(),
+                listing.getLocation(),
+                listing.getDateOpened(),
+                listing.getImages(),
+                (double) json.get(LOAN_AMOUNT_REQUESTED),
+                (double) json.get(INTEREST_RATE),
+                new Date((long) json.get((WHEN_TO_GET))),
+                (int) json.get(NUM_OF_PAYMENTS),
+                (String) json.get(PAYMENT_DAY));
     }
 }

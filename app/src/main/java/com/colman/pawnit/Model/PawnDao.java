@@ -1,19 +1,26 @@
 package com.colman.pawnit.Model;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
 import androidx.room.Update;
+
+import java.util.List;
 
 @Dao
 public interface PawnDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Listing listing);
+    void insertAll(Pawn... pawn);
 
     @Update
-    void update(Listing listing);
+    void update(Pawn pawn);
 
     @Delete
-    void delete(Listing listing);
+    void delete(Pawn pawn);
+
+    @Query("SELECT * FROM PAWN_TABLE WHERE borrowerId = :uid")
+    LiveData<List<Pawn>> getAllPawnsForUser(String uid);
 }

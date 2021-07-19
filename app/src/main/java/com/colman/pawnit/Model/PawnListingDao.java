@@ -14,13 +14,13 @@ import java.util.List;
 public interface PawnListingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Listing listing);
+    void insertAll(PawnListing... listing);
 
     @Update
-    void update(Listing listing);
+    void update(PawnListing listing);
 
     @Delete
-    void delete(Listing listing);
+    void delete(PawnListing listing);
 
     @Query("SELECT * FROM pawn_listings_table")
     LiveData<List<PawnListing>> getAllPawns();

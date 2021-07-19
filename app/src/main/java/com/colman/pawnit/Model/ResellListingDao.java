@@ -8,19 +8,21 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.colman.pawnit.Resell;
+
 import java.util.List;
 
 @Dao
 public interface ResellListingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Listing listing);
+    void insertAll(ResellListing... listing);
 
     @Update
-    void update(Listing listing);
+    void update(ResellListing listing);
 
     @Delete
-    void delete(Listing listing);
+    void delete(ResellListing listing);
 
     @Query("SELECT * FROM resell_table")
     LiveData<List<ResellListing>> getAllResells();

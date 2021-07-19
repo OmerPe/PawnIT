@@ -11,16 +11,16 @@ import androidx.room.Update;
 import java.util.List;
 
 @Dao
-public interface OfferDao {
+public interface HistoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(Offer... offer);
+    void insertAll(History... history);
 
     @Update
-    void update(Offer offer);
+    void update(History history);
 
     @Delete
-    void delete(Offer offer);
+    void delete(History history);
 
-    @Query("SELECT * FROM offer_table WHERE pawnListingID = :listingID")
-    LiveData<List<Offer>> getAllOffersForListing(int listingID);
+    @Query("SELECT * FROM history_table WHERE uid = :uid")
+    LiveData<List<History>> getAllHistoryForUser(String uid);
 }

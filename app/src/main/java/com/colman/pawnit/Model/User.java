@@ -12,11 +12,11 @@ public class User {
     private List<Pawn> pawns = new LinkedList<>();
     private List<AuctionListing> auctionListings = new LinkedList<>();
 
-    public User(){
+    public User() {
 
     }
 
-    public User(String name, Date birthDate, String email){
+    public User(String name, Date birthDate, String email) {
         this.userName = name;
         this.email = email;
         this.dateOfBirth = birthDate;
@@ -78,15 +78,15 @@ public class User {
         this.auctionListings = auctionListings;
     }
 
-    public void addListing(Listing listing){
+    public void addListing(Listing listing) {
         listings.add(listing);
     }
 
-    public void addAuction(AuctionListing auctionListing){
+    public void addAuction(AuctionListing auctionListing) {
         auctionListings.add(auctionListing);
     }
 
-    public void addPawn(Pawn pawn){
+    public void addPawn(Pawn pawn) {
         pawns.add(pawn);
     }
 

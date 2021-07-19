@@ -14,7 +14,7 @@ import java.util.List;
 public interface ListingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Listing listing);
+    void insertAll(Listing... listing);
 
     @Update
     void update(Listing listing);
