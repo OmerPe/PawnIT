@@ -19,25 +19,24 @@ public class Converters {
     }
 
     @TypeConverter
-    public static List<String> stringToList(String string){
-        if(string.trim().isEmpty()){
+    public static List<String> stringToList(String string) {
+        if (string.trim().isEmpty()) {
             return new ArrayList<>();
         }
         return Arrays.asList(string.split(","));
     }
 
     @TypeConverter
-    public static String listToString(List<String> list){
-        if(list.size() == 0){
+    public static String listToString(List<String> list) {
+        if (list.size() == 0) {
             return "";
-        }
-        else {
+        } else {
             StringBuilder sb = new StringBuilder();
             for (String s :
                     list) {
                 sb.append(s).append(",");
             }
-            sb.deleteCharAt(sb.length()-1);
+            sb.deleteCharAt(sb.length() - 1);
             return sb.toString();
         }
     }
