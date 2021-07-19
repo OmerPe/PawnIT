@@ -95,4 +95,24 @@
         </LinearLayout>
     </HorizontalScrollView>
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/auclist_fragment"
+        android:name="com.colman.pawnit.auclist"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/marketlist_fragment"
+        android:name="com.colman.pawnit.marketlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/auclist_fragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/market_horizontaliv" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

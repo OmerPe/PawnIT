@@ -1,53 +1,67 @@
 package com.colman.pawnit;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 
 import com.colman.pawnit.Model.Listing;
-import com.colman.pawnit.Model.Model;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.android.material.tabs.TabLayout;
 
-import java.util.List;
-
-public class marketActivity extends AppCompatActivity {
-
-    List<Listing> data;
-
+public class marketActivity extends AppCompatActivity implements marketlistfragment.OnClick{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_market);
+        setContentView(R.layout.activity_market2);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-/*
-        RecyclerView rView = findViewById(R.id.market_activity_list);
-        rView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
-        rView.setLayoutManager(manager);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.addTab(tabLayout.newTab().setText("Market"));
+        tabLayout.addTab(tabLayout.newTab().setText("Auction"));
+        tabLayout.addTab(tabLayout.newTab().setText("Third Tab"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        data = Model.instance.getListingData();
-        data.add(new Listing());
-        data.add(new Listing());
-        data.add(new Listing());
-        data.add(new Listing());
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        final PagerAdapter adapter = new PagerAdapter
+                (getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
 
-        MyAdapter adapter = new MyAdapter();
-        rView.setAdapter(adapter);
-*/
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+
     }
 
+    @Override
+    public void onAddClick(){
+        Intent intent = new Intent(this, addMarketItemFragment.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDetails(Listing currentListing) {
+        Intent i = new Intent(this,DetailItemListing.class);
+        i.putExtra("listing", currentListing);
+        startActivity(i);
+    }
+
+
+
+/*
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public MyViewHolder(View itemView) {
@@ -55,24 +69,39 @@ public class marketActivity extends AppCompatActivity {
         }
     }
 
-    public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
+    public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        class aucViewHolder extends RecyclerView.ViewHolder {
 
-        @Override
-        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.market_list_row, parent, false);
-            MyViewHolder holder = new marketActivity.MyViewHolder(view);
-            return holder;
+            public aucViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
+        }
+
+        class resellViewHolder extends RecyclerView.ViewHolder {
+            public resellViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
-            Listing listing = data.get(position);
+        public int getItemViewType(int position) {
+            return super.getItemViewType(position);
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         }
 
         @Override
         public int getItemCount() {
-            return data.size();
+            return 0;
         }
-    }
+    }*/
 }

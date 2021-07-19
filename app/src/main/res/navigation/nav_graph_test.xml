@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_test"
+    app:startDestination="@id/testFragment">
+
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.colman.pawnit.TestFragment"
+        android:label="fragment_test"
+        tools:layout="@layout/fragment_test" >
+        <action
+            android:id="@+id/action_testFragment_self2"
+            app:destination="@id/testFragment" />
+        <action
+            android:id="@+id/action_testFragment_to_history2"
+            app:destination="@id/history2"
+            app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_testFragment_to_contacts2"
+            app:destination="@id/contacts2" />
+        <action
+            android:id="@+id/action_testFragment_to_myListings"
+            app:destination="@id/myListings" />
+    </fragment>
+    <fragment
+        android:id="@+id/contacts2"
+        android:name="com.colman.pawnit.Contacts"
+        android:label="fragment_contacts"
+        tools:layout="@layout/fragment_contacts" />
+    <fragment
+        android:id="@+id/history2"
+        android:name="com.colman.pawnit.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/myListings"
+        android:name="com.colman.pawnit.MyListings"
+        android:label="fragment_my_listings"
+        tools:layout="@layout/fragment_my_listings" />
+</navigation>

@@ -30,70 +30,70 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <TextView
-        android:id="@+id/resell_title"
+    <EditText
+        android:id="@+id/editresell_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/oleo_script"
-        android:text="Title"
+        android:hint="Title:"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/auction_horizontaliv" />
 
-    <TextView
-        android:id="@+id/resell_owner"
+    <EditText
+        android:id="@+id/editresell_owner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/oleo_script"
-        android:text="Owner:"
+        android:hint="Owner:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resell_title" />
+        app:layout_constraintTop_toBottomOf="@+id/editresell_title" />
 
-    <TextView
-        android:id="@+id/resell_sdate"
+    <EditText
+        android:id="@+id/editresell_sdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/oleo_script"
-        android:text="Starting Date:"
+        android:hint="Starting Date:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resell_owner" />
+        app:layout_constraintTop_toBottomOf="@+id/editresell_owner" />
 
 
 
-    <TextView
-        android:id="@+id/resell_sprice"
+    <EditText
+        android:id="@+id/editresell_sprice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/oleo_script"
-        android:text="Price:"
+        android:hint="Price:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resell_sdate" />
+        app:layout_constraintTop_toBottomOf="@+id/editresell_sdate" />
 
 
 
-    <TextView
-        android:id="@+id/resell_description"
+    <EditText
+        android:id="@+id/editresell_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/oleo_script"
-        android:text="Description:"
+        android:hint="Description:"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resell_sprice" />
+        app:layout_constraintTop_toBottomOf="@+id/editresell_sprice" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

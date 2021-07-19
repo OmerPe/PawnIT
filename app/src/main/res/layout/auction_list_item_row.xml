@@ -7,7 +7,7 @@
     android:background="@drawable/rounded_corners">
 
     <ImageView
-        android:id="@+id/pawn_row_picture"
+        android:id="@+id/auction_row_picture"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
@@ -61,18 +61,18 @@
             android:fontFamily="@font/oleo_script"
             android:text="Price : "
             android:textSize="30sp"
-            app:layout_constraintEnd_toStartOf="@+id/auctionlistrow_interest"
+            app:layout_constraintEnd_toStartOf="@+id/auctionlistrow_sPrice"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/auctionlistrow_title" />
 
         <TextView
-            android:id="@+id/auctionlistrow_interest"
+            android:id="@+id/auctionlistrow_sPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/oleo_script"
-            android:text="Interest : "
+            android:text="StartingPrice:"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

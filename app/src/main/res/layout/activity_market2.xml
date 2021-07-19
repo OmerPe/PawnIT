@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:background="#FFFFFF">
+
+
+    <TextView
+        android:id="@+id/market_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/oleo_script"
+        android:gravity="center"
+        android:text="Market Place"
+        android:textSize="30sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/market_TextboxBox"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:hint="What are you looking for?"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="25dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="25dp"
+        app:boxStrokeColor="#00EE94"
+        app:hintEnabled="true"
+        app:hintTextColor="#009efe">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/market_Searchbox"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawableEnd="@android:drawable/ic_btn_speak_now"
+            android:fontFamily="@font/oleo_script"
+            android:inputType="text"
+            android:lines="1"
+            android:selectAllOnFocus="false"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="scrollable" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

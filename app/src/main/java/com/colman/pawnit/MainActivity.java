@@ -25,13 +25,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity{
     DrawerLayout drawerLayout;
     NavigationView leftDrawer;
     NavigationView rightDrawer;
     ImageButton menuBtn;
     ImageButton profileBtn;
-    TextView username,pdUname;
+    TextView username, pdUname;
 
 
     private FirebaseAuth mAuth;
@@ -42,9 +42,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
-        /*------------------- hooks ---------------------------- */
+        /* *//*------------------- hooks ---------------------------- *//*
         drawerLayout = findViewById(R.id.drawer_layout);
         leftDrawer = findViewById(R.id.nav_view_main_menu);
         rightDrawer = findViewById(R.id.nav_view_profile_menu);
@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         user = mAuth.getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users");
 
-        /*------------------- Nav drawer menu ---------------------------- */
-        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,menuBtn,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        *//*------------------- Nav drawer menu ---------------------------- *//*
+        //ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,me nuBtn,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         leftDrawer.bringToFront();
         rightDrawer.bringToFront();
         menuBtn.setOnClickListener(v -> drawerLayout.openDrawer(Gravity.LEFT));
@@ -205,5 +205,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         login.setVisible(false);
         MenuItem logout = rightDrawer.getMenu().findItem(R.id.logout);
         logout.setVisible(true);
+    }*/
     }
 }

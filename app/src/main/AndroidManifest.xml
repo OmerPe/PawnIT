@@ -3,14 +3,17 @@
     package="com.colman.pawnit">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PawnIT"
-        android:name=".MyApplication">
-        <activity android:name=".marketActivity"/>
+        android:theme="@style/Theme.PawnIT">
+        <activity android:name=".addAuctionItemFragment"></activity>
+        <activity android:name=".DetailItemListing" />
+        <activity android:name=".addMarketItemFragment" />
+        <activity android:name=".marketActivity" />
         <activity android:name=".forgotPwdActivity" />
         <activity android:name=".registerActivity" />
         <activity android:name=".loginActivity" />
