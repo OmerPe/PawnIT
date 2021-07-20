@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.colman.pawnitv2.Ui.Home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_marketFragment"
+            app:destination="@id/marketFragment" />
+        <action
+            android:id="@+id/action_homeFragment_self"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_pawnFragment"
+            app:destination="@id/pawnFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/marketFragment"
+        android:name="com.colman.pawnitv2.Ui.Market.MarketFragment"
+        android:label="market_fragment"
+        tools:layout="@layout/market_fragment" >
+        <action
+            android:id="@+id/action_marketFragment_to_addAuctionListingFragment"
+            app:destination="@id/addAuctionListingFragment" />
+        <action
+            android:id="@+id/action_marketFragment_to_addResellListingFragment"
+            app:destination="@id/addResellListingFragment" />
+        <action
+            android:id="@+id/action_marketFragment_to_auctionListingFragment"
+            app:destination="@id/auctionListingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pawnFragment"
+        android:name="com.colman.pawnitv2.Ui.Pawn.PawnFragment"
+        android:label="pawn_fragment"
+        tools:layout="@layout/pawn_fragment" >
+        <action
+            android:id="@+id/action_pawnFragment_to_addPawnListingFragment"
+            app:destination="@id/addPawnListingFragment" />
+        <action
+            android:id="@+id/action_pawnFragment_to_pawnListingFragment"
+            app:destination="@id/pawnListingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.colman.pawnitv2.Ui.User.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.colman.pawnitv2.Ui.User.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.colman.pawnitv2.Ui.User.ForgotPasswordFragment"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" />
+    <fragment
+        android:id="@+id/addAuctionListingFragment"
+        android:name="com.colman.pawnitv2.Ui.Market.New.AddAuctionListingFragment"
+        android:label="add_auction_listing_fragment"
+        tools:layout="@layout/add_auction_listing_fragment" />
+    <fragment
+        android:id="@+id/addResellListingFragment"
+        android:name="com.colman.pawnitv2.Ui.Market.New.AddResellListingFragment"
+        android:label="add_resell_listing_fragment"
+        tools:layout="@layout/add_resell_listing_fragment" />
+    <fragment
+        android:id="@+id/addPawnListingFragment"
+        android:name="com.colman.pawnitv2.Ui.Pawn.New.AddPawnListingFragment"
+        android:label="add_pawn_listing_fragment"
+        tools:layout="@layout/add_pawn_listing_fragment" />
+    <fragment
+        android:id="@+id/auctionListingFragment"
+        android:name="com.colman.pawnitv2.Ui.Market.AuctionListingFragment"
+        android:label="auction_listing_fragment"
+        tools:layout="@layout/auction_listing_fragment" />
+    <fragment
+        android:id="@+id/pawnListingFragment"
+        android:name="com.colman.pawnitv2.Ui.Pawn.PawnListingFragment"
+        android:label="pawn_listing_fragment"
+        tools:layout="@layout/pawn_listing_fragment" />
+</navigation>
