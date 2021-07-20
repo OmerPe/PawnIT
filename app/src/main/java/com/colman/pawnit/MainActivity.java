@@ -1,11 +1,10 @@
-package com.colman.pawnitv2;
-
-import android.os.Bundle;
+package com.colman.pawnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+import android.os.Bundle;
 
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

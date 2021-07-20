@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.User;
+package com.colman.pawnit.Ui.User;
 
 import android.os.Bundle;
 import android.util.Patterns;
@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
 
-import com.colman.pawnitv2.R;
+import com.colman.pawnit.R;
 
 public class ForgotPasswordFragment extends Fragment {
     private ProgressBar progressBar;

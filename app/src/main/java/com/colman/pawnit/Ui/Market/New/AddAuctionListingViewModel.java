@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.Market.New;
+package com.colman.pawnit.Ui.Market.New;
 
 import androidx.lifecycle.ViewModel;
 

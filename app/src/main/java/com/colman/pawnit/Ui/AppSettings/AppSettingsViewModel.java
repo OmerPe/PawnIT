@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.AppSettings;
+package com.colman.pawnit.Ui.AppSettings;
 
 import androidx.lifecycle.ViewModel;
 

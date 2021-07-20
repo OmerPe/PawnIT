@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Model;
+package com.colman.pawnit.Model;
 
 import java.util.Date;
 import java.util.LinkedList;

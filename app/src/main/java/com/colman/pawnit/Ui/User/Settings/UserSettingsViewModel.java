@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.User.Settings;
+package com.colman.pawnit.Ui.User.Settings;
 
 import androidx.lifecycle.ViewModel;
 

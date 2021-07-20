@@ -1,10 +1,10 @@
-package com.colman.pawnitv2.Ui.Market;
+package com.colman.pawnit.Ui.Market;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.colman.pawnitv2.Model.Listing;
-import com.colman.pawnitv2.Model.Model;
+import com.colman.pawnit.Model.Listing;
+import com.colman.pawnit.Model.Model;
 
 import java.util.List;
 

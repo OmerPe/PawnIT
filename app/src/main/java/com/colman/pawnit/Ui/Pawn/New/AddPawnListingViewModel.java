@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.Pawn.New;
+package com.colman.pawnit.Ui.Pawn.New;
 
 import androidx.lifecycle.ViewModel;
 

@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.Pawn;
+package com.colman.pawnit.Ui.Pawn;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.colman.pawnitv2.R;
+import com.colman.pawnit.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PawnFragment extends Fragment {

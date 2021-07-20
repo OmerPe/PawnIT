@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.User;
+package com.colman.pawnit.Ui.User;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
 
-import com.colman.pawnitv2.R;
+import com.colman.pawnit.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

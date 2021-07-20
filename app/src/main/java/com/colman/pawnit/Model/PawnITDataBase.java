@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Model;
+package com.colman.pawnit.Model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.colman.pawnitv2.MyApplication;
+import com.colman.pawnit.MyApplication;
 
 @Database(entities = {Listing.class, AuctionListing.class, ResellListing.class, PawnListing.class, Offer.class, Pawn.class, History.class}, version = 1)
 @TypeConverters({Converters.class})

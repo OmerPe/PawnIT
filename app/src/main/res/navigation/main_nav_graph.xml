@@ -6,7 +6,7 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.colman.pawnitv2.Ui.Home.HomeFragment"
+        android:name="com.colman.pawnit.Ui.Home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/marketFragment"
-        android:name="com.colman.pawnitv2.Ui.Market.MarketFragment"
+        android:name="com.colman.pawnit.Ui.Market.MarketFragment"
         android:label="market_fragment"
         tools:layout="@layout/market_fragment" >
         <action
@@ -39,7 +39,7 @@
     </fragment>
     <fragment
         android:id="@+id/pawnFragment"
-        android:name="com.colman.pawnitv2.Ui.Pawn.PawnFragment"
+        android:name="com.colman.pawnit.Ui.Pawn.PawnFragment"
         android:label="pawn_fragment"
         tools:layout="@layout/pawn_fragment" >
         <action
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.colman.pawnitv2.Ui.User.LoginFragment"
+        android:name="com.colman.pawnit.Ui.User.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -63,37 +63,37 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.colman.pawnitv2.Ui.User.RegisterFragment"
+        android:name="com.colman.pawnit.Ui.User.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.colman.pawnitv2.Ui.User.ForgotPasswordFragment"
+        android:name="com.colman.pawnit.Ui.User.ForgotPasswordFragment"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_forgot_password" />
     <fragment
         android:id="@+id/addAuctionListingFragment"
-        android:name="com.colman.pawnitv2.Ui.Market.New.AddAuctionListingFragment"
+        android:name="com.colman.pawnit.Ui.Market.New.AddAuctionListingFragment"
         android:label="add_auction_listing_fragment"
         tools:layout="@layout/add_auction_listing_fragment" />
     <fragment
         android:id="@+id/addResellListingFragment"
-        android:name="com.colman.pawnitv2.Ui.Market.New.AddResellListingFragment"
+        android:name="com.colman.pawnit.Ui.Market.New.AddResellListingFragment"
         android:label="add_resell_listing_fragment"
         tools:layout="@layout/add_resell_listing_fragment" />
     <fragment
         android:id="@+id/addPawnListingFragment"
-        android:name="com.colman.pawnitv2.Ui.Pawn.New.AddPawnListingFragment"
+        android:name="com.colman.pawnit.Ui.Pawn.New.AddPawnListingFragment"
         android:label="add_pawn_listing_fragment"
         tools:layout="@layout/add_pawn_listing_fragment" />
     <fragment
         android:id="@+id/auctionListingFragment"
-        android:name="com.colman.pawnitv2.Ui.Market.AuctionListingFragment"
+        android:name="com.colman.pawnit.Ui.Market.AuctionListingFragment"
         android:label="auction_listing_fragment"
         tools:layout="@layout/auction_listing_fragment" />
     <fragment
         android:id="@+id/pawnListingFragment"
-        android:name="com.colman.pawnitv2.Ui.Pawn.PawnListingFragment"
+        android:name="com.colman.pawnit.Ui.Pawn.PawnListingFragment"
         android:label="pawn_listing_fragment"
         tools:layout="@layout/pawn_listing_fragment" />
 </navigation>

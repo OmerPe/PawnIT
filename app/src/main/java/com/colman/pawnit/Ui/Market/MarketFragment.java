@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.Market;
+package com.colman.pawnit.Ui.Market;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.colman.pawnitv2.R;
+import com.colman.pawnit.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 

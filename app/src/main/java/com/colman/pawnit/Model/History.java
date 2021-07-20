@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Model;
+package com.colman.pawnit.Model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

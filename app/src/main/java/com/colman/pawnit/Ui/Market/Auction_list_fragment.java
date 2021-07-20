@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.Market;
+package com.colman.pawnit.Ui.Market;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.colman.pawnitv2.R;
+import com.colman.pawnit.R;
 
 public class Auction_list_fragment extends Fragment {
 

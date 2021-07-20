@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.AppSettings;
+package com.colman.pawnit.Ui.AppSettings;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.colman.pawnitv2.R;
+import com.colman.pawnit.R;
 
 public class AppSettingsFragment extends Fragment {
 

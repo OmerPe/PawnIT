@@ -1,4 +1,4 @@
-package com.colman.pawnitv2;
+package com.colman.pawnit;
 
 import android.app.Application;
 import android.content.Context;
@@ -15,7 +15,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        com.colman.pawnitv2.MyApplication.context = getApplicationContext();
+        com.colman.pawnit.MyApplication.context = getApplicationContext();
     }
 
 }

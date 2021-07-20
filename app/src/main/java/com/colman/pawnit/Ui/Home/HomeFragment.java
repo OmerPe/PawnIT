@@ -1,4 +1,4 @@
-package com.colman.pawnitv2.Ui.Home;
+package com.colman.pawnit.Ui.Home;
 
 import android.os.Bundle;
 import android.view.Gravity;
@@ -15,7 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.colman.pawnitv2.R;
+import com.colman.pawnit.R;
 import com.google.android.material.navigation.NavigationView;
 
 
