@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        android:src="@drawable/ic_image"
+        app:srcCompat="@drawable/ic_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,6 +64,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="@font/oleo_script"
         android:hint="Requested Price :"
+        android:inputType="number"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"

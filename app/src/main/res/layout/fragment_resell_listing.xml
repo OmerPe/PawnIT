@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Ui.Market.ResellListingFragment">
+    tools:context=".Ui.Market.Resell_listing_Fragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/resell_appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:fitsSystemWindows="true"
-        android:background="@drawable/header_background">
+        android:background="@drawable/header_background"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/resell_collapsing_toolbar"
@@ -92,14 +92,14 @@
         android:id="@+id/resell_listing_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
+        android:layout_marginEnd="30dp"
         android:baselineAlignBottom="false"
         android:clickable="true"
         android:contentDescription="Contact Seller"
-        android:src="@drawable/ic_message"
+        android:focusable="true"
         app:fabSize="normal"
         app:layout_anchor="@id/resell_appbar_layout"
         app:layout_anchorGravity="bottom|end"
-        android:backgroundTint="@color/design_default_color_secondary"/>
+        app:srcCompat="@drawable/ic_message" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

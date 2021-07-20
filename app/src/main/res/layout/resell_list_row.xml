@@ -6,7 +6,7 @@
     android:background="@drawable/rounded_corners">
 
     <ImageView
-        android:id="@+id/market_row_picture"
+        android:id="@+id/Resell_row_picture"
         android:layout_width="match_parent"
         android:layout_height="255dp"
         android:layout_marginBottom="16dp"
@@ -50,7 +50,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/market_row_title"
+            android:id="@+id/Resell_row_title"
             android:layout_width="195dp"
             android:layout_height="79dp"
             android:fontFamily="@font/oleo_script"
@@ -58,12 +58,12 @@
             android:textAlignment="center"
             android:textSize="34sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/market_row_Requested"
+            app:layout_constraintEnd_toStartOf="@+id/Resell_row_Price"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/market_row_Requested"
+            android:id="@+id/Resell_row_Price"
             android:layout_width="195dp"
             android:layout_height="79dp"
             android:fontFamily="@font/oleo_script"
@@ -73,7 +73,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/market_row_title" />
+            app:layout_constraintStart_toEndOf="@+id/Resell_row_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

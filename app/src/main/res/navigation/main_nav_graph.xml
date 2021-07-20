@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_marketFragment_to_auctionListingFragment"
             app:destination="@id/auctionListingFragment" />
+        <action
+            android:id="@+id/action_marketFragment_to_resell_listFragment"
+            app:destination="@id/resell_listFragment" />
     </fragment>
     <fragment
         android:id="@+id/pawnFragment"
@@ -75,12 +78,20 @@
         android:id="@+id/addAuctionListingFragment"
         android:name="com.colman.pawnit.Ui.Market.New.AddAuctionListingFragment"
         android:label="add_auction_listing_fragment"
-        tools:layout="@layout/add_auction_listing_fragment" />
+        tools:layout="@layout/add_auction_listing_fragment" >
+        <action
+            android:id="@+id/action_addAuctionListingFragment_to_marketFragment"
+            app:destination="@id/marketFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addResellListingFragment"
         android:name="com.colman.pawnit.Ui.Market.New.AddResellListingFragment"
         android:label="add_resell_listing_fragment"
-        tools:layout="@layout/add_resell_listing_fragment" />
+        tools:layout="@layout/add_resell_listing_fragment" >
+        <action
+            android:id="@+id/action_addResellListingFragment_to_marketFragment"
+            app:destination="@id/marketFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addPawnListingFragment"
         android:name="com.colman.pawnit.Ui.Pawn.New.AddPawnListingFragment"
@@ -96,4 +107,9 @@
         android:name="com.colman.pawnit.Ui.Pawn.PawnListingFragment"
         android:label="pawn_listing_fragment"
         tools:layout="@layout/pawn_listing_fragment" />
+    <fragment
+        android:id="@+id/resell_listFragment"
+        android:name="com.colman.pawnit.Ui.Market.Resell_listing_Fragment"
+        android:label="fragment_resell_list"
+        tools:layout="@layout/fragment_resell_listing" />
 </navigation>

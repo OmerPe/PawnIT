@@ -1,7 +1,13 @@
 package com.colman.pawnit.Model;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
 
+import com.colman.pawnit.MyApplication;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -37,14 +43,26 @@ public class Model {
 
     public LiveData<List<Listing>> getMarketList() {
         return ZipLiveData.create(
-                auctionListingDao.getAllAuctions(),
-                resellListingDao.getAllResells(),
+                getAuctionData(),
+                getResellData(),
                 (auction, resell) -> {
                     final List<Listing> listings = new LinkedList<>();
-                    listings.addAll(auction);
-                    listings.addAll(resell);
+                    if(auction != null){
+                        listings.addAll(auction);
+                    }
+                    if(resell != null){
+                        listings.addAll(resell);
+                    }
                     return listings;
                 });
+    }
+
+    public LiveData<List<ResellListing>> getResellData(){
+        return resellListingDao.getAllResells();
+    }
+
+    public LiveData<List<AuctionListing>> getAuctionData(){
+        return auctionListingDao.getAllAuctions();
     }
 
     public LiveData<List<PawnListing>> getAllPawnListings() {
@@ -63,5 +81,28 @@ public class Model {
         return offerDao.getAllOffersForListing(listingID);
     }
 
+    public interface myOnCompleteListener{
+        void onComplete();
+    }
 
+    public void saveListing(Listing listing,myOnCompleteListener onCompleteListener){
+        if(listing instanceof ResellListing){
+            executorService.execute(()->{
+                resellListingDao.insertAll((ResellListing) listing);
+                MyApplication.mainThreadHandler.post(onCompleteListener::onComplete);
+            });
+        }else if(listing instanceof AuctionListing){
+            executorService.execute(()->{
+                auctionListingDao.insertAll((AuctionListing) listing);
+                MyApplication.mainThreadHandler.post(onCompleteListener::onComplete);
+            });
+
+        }else if(listing instanceof PawnListing){
+            executorService.execute(()->{
+                pawnListingDao.insertAll((PawnListing) listing);
+                MyApplication.mainThreadHandler.post(onCompleteListener::onComplete);
+            });
+
+        }
+    }
 }
