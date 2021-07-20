@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item android:title="Profile">
+            <menu>
+                <item
+                    android:id="@+id/login"
+                    android:icon="@drawable/ic_login"
+                    android:title="Login" />
+                <item
+                    android:id="@+id/my_listings"
+                    android:icon="@drawable/ic_mylistings"
+                    android:title="My Listings" />
+                <item
+                    android:id="@+id/my_pawns"
+                    android:icon="@drawable/ic_pwn"
+                    android:title="My Pawns" />
+                <item
+                    android:id="@+id/history"
+                    android:icon="@drawable/ic_history"
+                    android:title="History" />
+                <item
+                    android:id="@+id/logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="Log out" />
+            </menu>
+        </item>
+
+    </group>
+
+    <item android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/user_settings"
+                android:icon="@drawable/ic_user_settings"
+                android:title="User Settings" />
+            <item
+                android:id="@+id/app_settings"
+                android:icon="@drawable/ic_app_settings"
+                android:title="App Settings" />
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "184180071797",
+    "project_id": "pawnit-18117",
+    "storage_bucket": "pawnit-18117.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184180071797:android:eeb139a690e36e2452073c",
+        "android_client_info": {
+          "package_name": "com.colman.pawnitv2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184180071797-rj9qhssvukm3t3or56ctvqeek43c1odt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD81sWBGj6uBViIjpyYUP8MqWcFKP0DVdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184180071797-rj9qhssvukm3t3or56ctvqeek43c1odt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

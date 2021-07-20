@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/market_menu_addResell"
+        android:icon="@drawable/ic_2ndhand"
+        android:title="Resell" />
+    <item
+        android:id="@+id/market_menu_addAuction"
+        android:icon="@drawable/ic_auction"
+        android:title="Auction" />
+
+</menu>
