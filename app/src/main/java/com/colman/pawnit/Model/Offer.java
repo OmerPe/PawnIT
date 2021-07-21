@@ -3,6 +3,8 @@ package com.colman.pawnit.Model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -117,7 +119,7 @@ public class Offer {
         this.accepted = accepted;
     }
 
-    public Map<String, Object> getjson(Offer offer) {
+    public Map<String, Object> getJson() {
         Map<String, Object> json = new HashMap<>();
 
         json.put(ID, id);
@@ -134,15 +136,15 @@ public class Offer {
     }
 
     public static Offer create(Map<String, Object> json) {
-        Offer offer = new Offer((int) json.get(PAWN_LISTING_ID),
+        Offer offer = new Offer(Integer.parseInt((String) json.get(PAWN_LISTING_ID)),
                 (String) json.get(UID),
-                (double) json.get(AMOUNT),
-                (double) json.get(INTEREST_RATE),
-                new Date((long) json.get(STARTING_DATE)),
-                (boolean) json.get(ACCEPTED),
-                (int) json.get(NUM_OF_PAYMENTS),
+                Double.parseDouble((String) json.get(AMOUNT)),
+                Double.parseDouble((String) json.get(INTEREST_RATE)),
+                ((Timestamp)json.get(STARTING_DATE)).toDate(),
+                Boolean.parseBoolean((String)json.get(ACCEPTED)) ,
+                Integer.parseInt((String) json.get(NUM_OF_PAYMENTS)),
                 (String) json.get(PAYMENT_DAY));
-        offer.setId((int) json.get(ID));
+        offer.setId(Integer.parseInt((String) json.get(ID)));
         return offer;
     }
 }

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.firebase.Timestamp;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -115,7 +117,7 @@ public class Listing implements Serializable {
         this.images = images;
     }
 
-    public Map<String, Object> getJson(Listing listing) {
+    public Map<String, Object> getJson() {
         Map<String, Object> json = new HashMap<>();
         json.put(ID, listingID);
         json.put(OWNER_ID, ownerId);
@@ -133,10 +135,10 @@ public class Listing implements Serializable {
         Listing listing = new Listing((String) json.get(OWNER_ID),
                 (String) json.get(TITLE),
                 (String) json.get(DESCRIPTION),
-                (String) json.get(LOCATION), new Date((long) json.get(DATE_OPENED)),
-                new ArrayList<String>(Arrays.asList(((String) json.get(IMAGES)).split(","))),
+                (String) json.get(LOCATION), ((Timestamp)json.get(DATE_OPENED)).toDate(),
+                (ArrayList<String>)json.get(IMAGES),
                 (String) json.get(TYPE));
-        listing.setListingID((int) json.get(ID));
+        listing.setListingID( (int)((long)json.get(ID)));
         return listing;
     }
 }

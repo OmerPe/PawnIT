@@ -31,8 +31,8 @@ public class ResellListing extends Listing {
     }
 
     @Override
-    public Map<String, Object> getJson(Listing listing) {
-        Map<String, Object> json = super.getJson(listing);
+    public Map<String, Object> getJson() {
+        Map<String, Object> json = super.getJson();
         json.put(PRICE, price);
         return json;
     }
@@ -46,6 +46,6 @@ public class ResellListing extends Listing {
                 listing.getLocation(),
                 listing.getDateOpened(),
                 listing.getImages(),
-                (double) json.get(PRICE));
+                (double)json.get(PRICE));
     }
 }

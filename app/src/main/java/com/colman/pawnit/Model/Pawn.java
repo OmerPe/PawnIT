@@ -3,6 +3,8 @@ package com.colman.pawnit.Model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -105,7 +107,7 @@ public class Pawn {
         return lastPayment;
     }
 
-    public Map<String, Object> toJson(Pawn pawn) {
+    public Map<String, Object> toJson() {
         Map<String, Object> json = new HashMap<>();
         json.put(ID, id);
         json.put(LISTING_ID, listingID);
@@ -123,18 +125,18 @@ public class Pawn {
 
     public static Pawn create(Map<String, Object> json) {
         Pawn pawn = new Pawn(
-                (int) json.get(LISTING_ID),
-                (double) json.get(LOAN_AMOUNT),
-                (double) json.get(INTEREST_RATE),
+                Integer.parseInt((String) json.get(LISTING_ID)),
+                Double.parseDouble((String) json.get(LOAN_AMOUNT)),
+                Double.parseDouble((String) json.get(INTEREST_RATE)),
                 (String) json.get(LENDER_ID),
                 (String) json.get(BORROWER_ID),
-                new Date((long) json.get(DATE_RECEIVED)),
-                new Date((long) json.get(END_DATE)),
+                ((Timestamp)json.get(DATE_RECEIVED)).toDate(),
+                ((Timestamp)json.get(END_DATE)).toDate(),
                 (String) json.get(PAYMENT_DAY),
-                (int) json.get(NUM_OF_PAYMENTS)
+                Integer.parseInt((String) json.get(NUM_OF_PAYMENTS))
         );
-        pawn.setId((int) json.get(ID));
-        pawn.setLastPayment(new Date((long) json.get(LAST_PAYMENT)));
+        pawn.setId(Integer.parseInt((String) json.get(ID)));
+        pawn.setLastPayment(((Timestamp)json.get(LAST_PAYMENT)).toDate());
         return pawn;
     }
 
