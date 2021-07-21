@@ -16,6 +16,8 @@ public class PawnListingFragment extends Fragment {
 
     private PawnListingViewModel mViewModel;
 
+
+
     public static PawnListingFragment newInstance() {
         return new PawnListingFragment();
     }
@@ -23,7 +25,12 @@ public class PawnListingFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.pawn_listing_fragment, container, false);
+        View view = inflater.inflate(R.layout.pawn_listing_fragment, container, false);
+
+
+
+
+        return view;
     }
 
     @Override

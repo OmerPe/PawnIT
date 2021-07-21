@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userPawnFragments"
+            app:destination="@id/userPawnFragments" />
     </fragment>
     <fragment
         android:id="@+id/marketFragment"
@@ -112,4 +115,13 @@
         android:name="com.colman.pawnit.Ui.Market.Resell_listing_Fragment"
         android:label="fragment_resell_list"
         tools:layout="@layout/fragment_resell_listing" />
+    <fragment
+        android:id="@+id/userPawnFragments"
+        android:name="com.colman.pawnit.Ui.User.Pawns.UserPawnFragments"
+        android:label="user_pawn_fragment"
+        tools:layout="@layout/user_pawn_fragment" >
+        <action
+            android:id="@+id/action_userPawnFragments_to_pawnListingFragment"
+            app:destination="@id/pawnListingFragment" />
+    </fragment>
 </navigation>

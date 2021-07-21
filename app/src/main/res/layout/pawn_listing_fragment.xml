@@ -49,7 +49,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/pawn_listing_priceTv"
+                android:id="@+id/pawn_listing_requested"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -57,13 +57,13 @@
                 android:text="Requested :"
                 android:textAlignment="center"
                 android:textSize="24sp"
-                app:layout_constraintEnd_toStartOf="@+id/pawn_listing_priceTv3"
+                app:layout_constraintEnd_toStartOf="@+id/pawn_listing_due"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/pawn_listing_priceTv2"
+                android:id="@+id/pawn_listing_interest"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -74,10 +74,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pawn_listing_priceTv" />
+                app:layout_constraintTop_toBottomOf="@+id/pawn_listing_requested" />
 
             <TextView
-                android:id="@+id/pawn_listing_priceTv3"
+                android:id="@+id/pawn_listing_due"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -87,14 +87,14 @@
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/pawn_listing_priceTv"
+                app:layout_constraintStart_toEndOf="@+id/pawn_listing_requested"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/pawn_listing_descriptionTV"
+                android:id="@+id/pawn_listing_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="140dp"
                 android:fontFamily="@font/oleo_script"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                 sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -105,23 +105,24 @@
                 android:textAlignment="center"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pawn_listing_priceTv2" />
+                app:layout_constraintTop_toBottomOf="@+id/pawn_listing_interest" />
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/pawn_listing_mapView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="410dp"
+                android:layout_height="235dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pawn_listing_descriptionTV" />
+                app:layout_constraintTop_toBottomOf="@+id/pawn_listing_description" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
-
+<!--
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pawn_listing_fab"
         android:layout_width="wrap_content"
@@ -134,6 +135,6 @@
         app:fabSize="normal"
         app:layout_anchor="@id/pawn_appbar_layout"
         app:layout_anchorGravity="bottom|end"
-        android:backgroundTint="@color/design_default_color_secondary"/>
+        android:backgroundTint="@color/design_default_color_secondary"/>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
