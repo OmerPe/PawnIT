@@ -55,7 +55,7 @@ public class AddPawnListingFragment extends Fragment {
         addImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "dor has ebola", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "ABCD", Toast.LENGTH_SHORT).show();
             }
         });
         initDatePicker();
