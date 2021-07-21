@@ -76,7 +76,7 @@ public class History {
 
     public static History create(Map<String, Object> json) {
         History history = new History((String) json.get(EVENT), (String) json.get(UID),((Timestamp)json.get(EVENT_TIME)).toDate());
-        history.setId(Integer.parseInt((String)json.get(ID)));
+        history.setId((int)((long)json.get(ID)));
         return history;
     }
 }

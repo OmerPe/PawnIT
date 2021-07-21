@@ -2,6 +2,7 @@ package com.colman.pawnit.Model;
 
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -124,21 +125,17 @@ public class User {
         List<Integer> auctionListings = new LinkedList<>();
         List<Integer> pawnListings = new LinkedList<>();
 
-        String[] rl = ((String)json.get(RESELL_LISTINGS)).split(",");
-        String[] al = ((String)json.get(AUCTION_LISTINGS)).split(",");
-        String[] pl = ((String)json.get(PAWN_LISTINGS)).split(",");
-
-        for (String id :
-                rl) {
-            resellListings.add(Integer.parseInt(id));
+        for (long id :
+                (ArrayList<Long>)json.get(RESELL_LISTINGS)) {
+            resellListings.add((int)(id));
         }
-        for (String id :
-                al) {
-            auctionListings.add(Integer.parseInt(id));
+        for (long id :
+                (ArrayList<Long>)json.get(AUCTION_LISTINGS)) {
+            auctionListings.add((int)(id));
         }
-        for (String id :
-                pl) {
-            pawnListings.add(Integer.parseInt(id));
+        for (long id :
+                (ArrayList<Long>)json.get(PAWN_LISTINGS)) {
+            pawnListings.add((int)(id));
         }
         user.setResellListings(resellListings);
         user.setAuctionListings(auctionListings);

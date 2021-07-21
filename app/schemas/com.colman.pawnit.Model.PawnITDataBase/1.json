@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "db8c9c8f7b2d91631a77f3417db15aa8",
+    "identityHash": "e91c8502f5156a2edc207428279a022a",
     "entities": [
       {
         "tableName": "listings_Table",
@@ -68,8 +68,14 @@
       },
       {
         "tableName": "auction_listings_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`endDate` INTEGER, `startingPrice` REAL NOT NULL, `currentPrice` REAL NOT NULL, `listingID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`startDate` INTEGER, `endDate` INTEGER, `startingPrice` REAL NOT NULL, `currentPrice` REAL NOT NULL, `listingID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT)",
         "fields": [
+          {
+            "fieldPath": "startDate",
+            "columnName": "startDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
           {
             "fieldPath": "endDate",
             "columnName": "endDate",
@@ -496,7 +502,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'db8c9c8f7b2d91631a77f3417db15aa8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e91c8502f5156a2edc207428279a022a')"
     ]
   }
 }

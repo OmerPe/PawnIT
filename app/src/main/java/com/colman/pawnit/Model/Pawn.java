@@ -125,17 +125,17 @@ public class Pawn {
 
     public static Pawn create(Map<String, Object> json) {
         Pawn pawn = new Pawn(
-                Integer.parseInt((String) json.get(LISTING_ID)),
-                Double.parseDouble((String) json.get(LOAN_AMOUNT)),
-                Double.parseDouble((String) json.get(INTEREST_RATE)),
+                (int)((long) json.get(LISTING_ID)),
+                (double) json.get(LOAN_AMOUNT),
+                (double) json.get(INTEREST_RATE),
                 (String) json.get(LENDER_ID),
                 (String) json.get(BORROWER_ID),
                 ((Timestamp)json.get(DATE_RECEIVED)).toDate(),
                 ((Timestamp)json.get(END_DATE)).toDate(),
                 (String) json.get(PAYMENT_DAY),
-                Integer.parseInt((String) json.get(NUM_OF_PAYMENTS))
+                (int)((long) json.get(NUM_OF_PAYMENTS))
         );
-        pawn.setId(Integer.parseInt((String) json.get(ID)));
+        pawn.setId((int)((long) json.get(ID)));
         pawn.setLastPayment(((Timestamp)json.get(LAST_PAYMENT)).toDate());
         return pawn;
     }

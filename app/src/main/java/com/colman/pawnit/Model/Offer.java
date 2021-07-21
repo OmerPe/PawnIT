@@ -138,13 +138,13 @@ public class Offer {
     public static Offer create(Map<String, Object> json) {
         Offer offer = new Offer(Integer.parseInt((String) json.get(PAWN_LISTING_ID)),
                 (String) json.get(UID),
-                Double.parseDouble((String) json.get(AMOUNT)),
-                Double.parseDouble((String) json.get(INTEREST_RATE)),
+                (double) json.get(AMOUNT),
+                (double) json.get(INTEREST_RATE),
                 ((Timestamp)json.get(STARTING_DATE)).toDate(),
-                Boolean.parseBoolean((String)json.get(ACCEPTED)) ,
-                Integer.parseInt((String) json.get(NUM_OF_PAYMENTS)),
+                (boolean)json.get(ACCEPTED) ,
+                (int)((long) json.get(NUM_OF_PAYMENTS)),
                 (String) json.get(PAYMENT_DAY));
-        offer.setId(Integer.parseInt((String) json.get(ID)));
+        offer.setId((int)((long) json.get(ID)));
         return offer;
     }
 }

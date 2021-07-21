@@ -97,10 +97,10 @@ public class PawnListing extends Listing {
                 listing.getLocation(),
                 listing.getDateOpened(),
                 listing.getImages(),
-                Double.parseDouble((String)json.get(LOAN_AMOUNT_REQUESTED)),
-                Double.parseDouble((String)json.get(INTEREST_RATE)),
+                (double)json.get(LOAN_AMOUNT_REQUESTED),
+                (double)json.get(INTEREST_RATE),
                 ((Timestamp)json.get(WHEN_TO_GET)).toDate(),
-                Integer.parseInt((String)json.get(NUM_OF_PAYMENTS)),
+                (int)((long)json.get(NUM_OF_PAYMENTS)),
                 (String) json.get(PAYMENT_DAY));
     }
 }
