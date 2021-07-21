@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Ui.Pawn.PawnFragment">
 
-    <ProgressBar
+   <!-- <ProgressBar
         android:id="@+id/PawnList_progressbar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pawn_TextboxBox" />
+        app:layout_constraintTop_toBottomOf="@+id/pawn_TextboxBox" />-->
 
     <TextView
         android:id="@+id/pawn_title"
@@ -69,27 +69,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:context=".fragment_pawn" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/PawnList_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="604dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PawnList_progressbar"
-        tools:listitem="@layout/pawn_list_row"/>
+        app:layout_constraintTop_toBottomOf="@+id/pawn_TextboxBox"
+        tools:listitem="@layout/pawn_list_row" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pawn_fab"

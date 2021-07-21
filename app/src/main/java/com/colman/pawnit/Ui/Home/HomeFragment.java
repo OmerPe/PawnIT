@@ -63,6 +63,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
             case R.id.my_listings:
                 break;
             case R.id.my_pawns:
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_userPawnFragments);
                 break;
             case R.id.history:
                 break;

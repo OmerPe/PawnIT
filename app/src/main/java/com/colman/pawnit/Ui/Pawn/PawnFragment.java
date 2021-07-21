@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -75,7 +76,9 @@ public class PawnFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
             String title = data.get(position).getTitle();
+            String requested = Double.valueOf(data.get(position).getLoanAmountRequested()).toString();
             holder.title.setText(title);
+            holder.requested.setText(requested);
         }
 
         @Override
@@ -88,14 +91,24 @@ public class PawnFragment extends Fragment {
             notifyDataSetChanged();
         }
 
-
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            private TextView title;
+            TextView title;
+            TextView requested;
+            ImageView image;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 title = itemView.findViewById(R.id.pawn_row_title);
+                requested = itemView.findViewById(R.id.pawn_row_price);
+                image = itemView.findViewById(R.id.pawn_row_picture);
+
+                image.setOnClickListener(new View.OnClickListener(){
+
+                    @Override
+                    public void onClick(View view) {
+                        Navigation.findNavController(view).navigate(R.id.action_pawnFragment_to_pawnListingFragment);
+                    }
+                });
             }
         }
     }
-
 }
