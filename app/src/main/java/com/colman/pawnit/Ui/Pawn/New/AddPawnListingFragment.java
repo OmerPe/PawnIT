@@ -10,7 +10,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +51,13 @@ public class AddPawnListingFragment extends Fragment {
         EditText interestRate = view.findViewById(R.id.add_pawn_interest);
         EditText description = view.findViewById(R.id.add_pawn_description);
         ProgressBar progressBar = view.findViewById(R.id.add_pawn_progressbar);
+        ImageButton addImages = view.findViewById(R.id.add_pawn_imageV);
+        addImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "dor has ebola", Toast.LENGTH_SHORT).show();
+            }
+        });
         initDatePicker();
         sdateButton = (Button) view.findViewById(R.id.pawn_datebtn);
         sdateButton.setText(getTodaysDate());

@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -111,19 +113,35 @@ public class Market_list_fragment extends Fragment {
         public class ResellViewHolder extends RecyclerView.ViewHolder {
              private TextView title;
              private TextView price;
+             private ImageView img;
             public ResellViewHolder(@NonNull View itemView) {
                 super(itemView);
                 title = itemView.findViewById(R.id.Resell_row_title);
                 price = itemView.findViewById(R.id.Resell_row_Price);
+                img = itemView.findViewById(R.id.Resell_row_picture);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Navigation.findNavController(v).navigate(R.id.action_marketFragment_to_resell_listFragment);
+                    }
+                });
             }
         }
         public class AuctionViewHolder extends RecyclerView.ViewHolder {
             private TextView title;
             private TextView startingPrice;
+            private ImageView img;
             public AuctionViewHolder(@NonNull View itemView) {
                 super(itemView);
                 title = itemView.findViewById(R.id.auctionlistrow_title);
                 startingPrice = itemView.findViewById(R.id.auctionlistrow_sPrice);
+                img = itemView.findViewById(R.id.auction_row_picture);
+                img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Navigation.findNavController(v).navigate(R.id.action_marketFragment_to_auctionListingFragment);
+                    }
+                });
             }
         }
     }

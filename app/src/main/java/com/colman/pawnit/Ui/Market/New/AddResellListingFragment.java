@@ -7,8 +7,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +44,8 @@ public class AddResellListingFragment extends Fragment {
         Button addBtn = view.findViewById(R.id.add_resell_add_btn);
         ProgressBar progressBar = view.findViewById(R.id.add_resell_progressbar);
         progressBar.setVisibility(View.GONE);
+        ImageButton addImages = view.findViewById(R.id.add_resell_imageV);
+
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +63,12 @@ public class AddResellListingFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                 });
                 Navigation.findNavController(v).navigateUp();
+            }
+        });
+        addImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "dor is cured", Toast.LENGTH_SHORT).show();
             }
         });
 
