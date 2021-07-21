@@ -24,6 +24,18 @@
         <action
             android:id="@+id/action_homeFragment_to_userPawnFragments"
             app:destination="@id/userPawnFragments" />
+        <action
+            android:id="@+id/action_homeFragment_to_userListingsFragment"
+            app:destination="@id/userListingsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_appSettingsFragment"
+            app:destination="@id/appSettingsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userSettingsFragment"
+            app:destination="@id/userSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/marketFragment"
@@ -124,4 +136,24 @@
             android:id="@+id/action_userPawnFragments_to_pawnListingFragment"
             app:destination="@id/pawnListingFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/userListingsFragment"
+        android:name="com.colman.pawnit.Ui.User.Listings.UserListingsFragment"
+        android:label="user_listings_fragment"
+        tools:layout="@layout/user_listings_fragment" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.colman.pawnit.Ui.User.History.HistoryFragment"
+        android:label="history_fragment"
+        tools:layout="@layout/history_fragment" />
+    <fragment
+        android:id="@+id/appSettingsFragment"
+        android:name="com.colman.pawnit.Ui.AppSettings.AppSettingsFragment"
+        android:label="app_settings_fragment"
+        tools:layout="@layout/app_settings_fragment" />
+    <fragment
+        android:id="@+id/userSettingsFragment"
+        android:name="com.colman.pawnit.Ui.User.Settings.UserSettingsFragment"
+        android:label="user_settings_fragment"
+        tools:layout="@layout/user_settings_fragment" />
 </navigation>

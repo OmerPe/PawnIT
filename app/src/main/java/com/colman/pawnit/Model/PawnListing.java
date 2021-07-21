@@ -2,6 +2,8 @@ package com.colman.pawnit.Model;
 
 import androidx.room.Entity;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -75,8 +77,8 @@ public class PawnListing extends Listing {
     }
 
     @Override
-    public Map<String, Object> getJson(Listing listing) {
-        Map<String, Object> json = super.getJson(listing);
+    public Map<String, Object> getJson() {
+        Map<String, Object> json = super.getJson();
         json.put(LOAN_AMOUNT_REQUESTED, loanAmountRequested);
         json.put(INTEREST_RATE, interestRate);
         json.put(WHEN_TO_GET, whenToGet.getTime());
@@ -95,10 +97,10 @@ public class PawnListing extends Listing {
                 listing.getLocation(),
                 listing.getDateOpened(),
                 listing.getImages(),
-                (double) json.get(LOAN_AMOUNT_REQUESTED),
-                (double) json.get(INTEREST_RATE),
-                new Date((long) json.get((WHEN_TO_GET))),
-                (int) json.get(NUM_OF_PAYMENTS),
+                Double.parseDouble((String)json.get(LOAN_AMOUNT_REQUESTED)),
+                Double.parseDouble((String)json.get(INTEREST_RATE)),
+                ((Timestamp)json.get(WHEN_TO_GET)).toDate(),
+                Integer.parseInt((String)json.get(NUM_OF_PAYMENTS)),
                 (String) json.get(PAYMENT_DAY));
     }
 }

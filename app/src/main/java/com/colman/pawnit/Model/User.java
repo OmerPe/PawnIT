@@ -1,16 +1,28 @@
 package com.colman.pawnit.Model;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class User {
     private String userName, email;
     private Date dateOfBirth;
     private String profilePic;
-    private List<Listing> listings = new LinkedList<>();
-    private List<Pawn> pawns = new LinkedList<>();
-    private List<AuctionListing> auctionListings = new LinkedList<>();
+    private List<Integer> resellListings = new LinkedList<>();
+    private List<Integer> pawnListings = new LinkedList<>();
+    private List<Integer> auctionListings = new LinkedList<>();
+
+    final static String USER_NAME = "userName";
+    final static String EMAIL = "email";
+    final static String DATE_OF_BIRTH = "dateOfBirth";
+    final static String PROFILE_PIC = "profilePic";
+    final static String RESELL_LISTINGS = "resellListings";
+    final static String PAWN_LISTINGS = "pawnListings";
+    final static String AUCTION_LISTINGS = "auctionListings";
 
     public User() {
 
@@ -54,41 +66,85 @@ public class User {
         this.profilePic = profilePic;
     }
 
-    public List<Listing> getListings() {
-        return listings;
+    public List<Integer> getResellListings() {
+        return resellListings;
     }
 
-    public void setListings(List<Listing> listings) {
-        this.listings = listings;
+    public void setResellListings(List<Integer> resellListings) {
+        this.resellListings = resellListings;
     }
 
-    public List<Pawn> getPawns() {
-        return pawns;
+    public List<Integer> getPawnListings() {
+        return pawnListings;
     }
 
-    public void setPawns(List<Pawn> pawns) {
-        this.pawns = pawns;
+    public void setPawnListings(List<Integer> pawnListings) {
+        this.pawnListings = pawnListings;
     }
 
-    public List<AuctionListing> getAuctionListings() {
+    public List<Integer> getAuctionListings() {
         return auctionListings;
     }
 
-    public void setAuctionListings(List<AuctionListing> auctionListings) {
+    public void setAuctionListings(List<Integer> auctionListings) {
         this.auctionListings = auctionListings;
     }
 
-    public void addListing(Listing listing) {
-        listings.add(listing);
+    public void addResellListing(ResellListing listing) {
+        resellListings.add(listing.getListingID());
     }
 
-    public void addAuction(AuctionListing auctionListing) {
-        auctionListings.add(auctionListing);
+    public void addAuctionListing(AuctionListing auctionListing) {
+        auctionListings.add(auctionListing.getListingID());
     }
 
-    public void addPawn(Pawn pawn) {
-        pawns.add(pawn);
+    public void addPawnListing(PawnListing pawn) {
+        pawnListings.add(pawn.getListingID());
     }
 
+    public Map<String, Object> toJson() {
+        Map<String, Object> json = new HashMap<>();
+        json.put(USER_NAME, userName);
+        json.put(EMAIL, email);
+        json.put(DATE_OF_BIRTH, dateOfBirth.getTime());
+        json.put(PROFILE_PIC, profilePic);
+        json.put(RESELL_LISTINGS, resellListings.toString().substring(1, resellListings.size() - 1));
+        json.put(AUCTION_LISTINGS, auctionListings.toString().substring(1, auctionListings.size() - 1));
+        json.put(PAWN_LISTINGS, pawnListings.toString().substring(1, pawnListings.size() - 1));
+        return json;
+    }
+
+    public static User create(Map<String, Object> json) {
+        User user = new User();
+        user.setUserName((String) json.get(USER_NAME));
+        user.setEmail((String) json.get(EMAIL));
+        user.setDateOfBirth(((Timestamp)json.get(DATE_OF_BIRTH)).toDate());
+        user.setProfilePic((String)json.get(PROFILE_PIC));
+        List<Integer> resellListings = new LinkedList<>();
+        List<Integer> auctionListings = new LinkedList<>();
+        List<Integer> pawnListings = new LinkedList<>();
+
+        String[] rl = ((String)json.get(RESELL_LISTINGS)).split(",");
+        String[] al = ((String)json.get(AUCTION_LISTINGS)).split(",");
+        String[] pl = ((String)json.get(PAWN_LISTINGS)).split(",");
+
+        for (String id :
+                rl) {
+            resellListings.add(Integer.parseInt(id));
+        }
+        for (String id :
+                al) {
+            auctionListings.add(Integer.parseInt(id));
+        }
+        for (String id :
+                pl) {
+            pawnListings.add(Integer.parseInt(id));
+        }
+        user.setResellListings(resellListings);
+        user.setAuctionListings(auctionListings);
+        user.setPawnListings(pawnListings);
+
+        return user;
+    }
 
 }

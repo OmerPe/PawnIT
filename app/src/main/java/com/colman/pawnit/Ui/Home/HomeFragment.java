@@ -61,15 +61,19 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_pawnFragment);
                 break;
             case R.id.my_listings:
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_userListingsFragment);
                 break;
             case R.id.my_pawns:
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_userPawnFragments);
                 break;
             case R.id.history:
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_historyFragment);
                 break;
             case R.id.user_settings:
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_userSettingsFragment);
                 break;
             case R.id.app_settings:
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_appSettingsFragment);
                 break;
             case R.id.MainMenu_share:
                 Toast.makeText(getActivity(), "Share", Toast.LENGTH_SHORT).show();

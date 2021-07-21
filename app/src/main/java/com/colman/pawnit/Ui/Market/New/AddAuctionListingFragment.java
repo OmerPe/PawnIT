@@ -10,7 +10,9 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +37,7 @@ public class AddAuctionListingFragment extends Fragment {
     private Button sdateButton;
     private Button edateButton;
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class AddAuctionListingFragment extends Fragment {
         EditText startingPrice = view.findViewById(R.id.add_auction_sprice);
         EditText description = view.findViewById(R.id.add_auction_description);
         ProgressBar progressBar = view.findViewById(R.id.add_auction_progressbar);
+        ImageButton addImages = view.findViewById(R.id.add_auction_imageV);
         initDatePicker();
         sdateButton = (Button) view.findViewById(R.id.auction_sdatebtn);
         sdateButton.setText(getTodaysDate());
@@ -80,6 +84,13 @@ public class AddAuctionListingFragment extends Fragment {
 
                 });
                 Navigation.findNavController(v).navigateUp();
+            }
+
+        });
+        addImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "dor has covid", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -235,5 +246,8 @@ public class AddAuctionListingFragment extends Fragment {
     }
     public void eopenDatePicker(View view) {
         edatePickerDialog.show();
+    }
+    public void addImages(){
+
     }
 }
