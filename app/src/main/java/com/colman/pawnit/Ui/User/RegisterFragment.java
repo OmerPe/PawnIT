@@ -145,7 +145,7 @@ public class RegisterFragment extends Fragment {
             dateButton.requestFocus();
             return;
         }
-        final Date dateOfBirth = getDate(dateButton.getText().toString().trim());
+        final Date dateOfBirth = getDate(date);
         if (dateOfBirth == null) {
             return;
         }
