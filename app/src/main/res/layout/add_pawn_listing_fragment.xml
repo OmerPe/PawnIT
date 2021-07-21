@@ -84,19 +84,37 @@
         app:layout_constraintStart_toEndOf="@+id/add_pawn_requested"
         app:layout_constraintTop_toBottomOf="@+id/add_pawn_title" />
 
-    <EditText
+    <TextView
         android:id="@+id/add_pawn_date"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/oleo_script"
+        android:textColor="@color/black"
+        android:text="Start:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_pawn_interest" />
+
+    <Button
+        android:id="@+id/pawn_datebtn"
+        style="?android:spinnerStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/oleo_script"
-        android:hint="Starting Date:"
-        android:inputType="date"
-        android:textSize="20sp"
+        android:text="JAN 01 2021"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/add_pawn_description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintStart_toEndOf="@+id/add_pawn_date"
         app:layout_constraintTop_toBottomOf="@+id/add_pawn_interest" />
 
     <EditText
@@ -111,7 +129,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_pawn_date" />
+        app:layout_constraintTop_toBottomOf="@+id/pawn_datebtn" />
 
     <Button
         android:id="@+id/add_pawn_add_btn"
