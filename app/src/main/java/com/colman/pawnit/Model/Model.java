@@ -237,4 +237,21 @@ public class Model {
     public boolean isLoggedIn(){
         return FirebaseModel.isLoggedIn();
     }
+
+    MutableLiveData<List<PawnListing>> allUserPawns = new MutableLiveData<>();
+
+    public LiveData<List<PawnListing>> getAllUserPawns(String Uid){
+        FirebaseModel.getAllPawnsForUser(Uid,(pawns) -> {
+            Collections.sort(pawns, (listing1, listing2) -> {
+                if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
+                    return 0;
+                }
+                return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
+            });
+            allUserPawns.setValue(pawns);
+            pawnListingLoadingState.setValue(LoadingState.loaded);
+        });
+
+        return allUserPawns;
+    }
 }

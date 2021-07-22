@@ -146,6 +146,37 @@ public class FirebaseModel {
 
     }
 
+    public static void getAllPawnsForUser(String Uid, getAllPawnsListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(USER_COLLECTION).document(Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    User user = User.create(documentSnapshot.getData());
+                    List<PawnListing> listings = new LinkedList<>();
+                    for(String id:
+                    user.getPawnListings()){
+                        db.collection(PAWN_LISTING_COLLECTION).document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if(documentSnapshot.exists()){
+                                    PawnListing listing = PawnListing.create(documentSnapshot.getData());
+                                    listings.add(listing);
+                                }
+                            }
+                        });
+                    }
+                    listener.onComplete(listings);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
 
     /*---------------------------------------------------------------------------Auth---------------------------------------------------------------------------------------*/
     public static FirebaseAuth getAuth() {
