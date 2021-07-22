@@ -146,32 +146,34 @@ public class FirebaseModel {
 
     }
 
-    public static void getAllPawnsForUser(String Uid, getAllPawnsListener listener){
+    public static void getAllPawnsForUser(String Uid, getAllPawnsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(USER_COLLECTION).document(Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection(USER_COLLECTION).document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    User user = User.create(documentSnapshot.getData());
-                    List<PawnListing> listings = new LinkedList<>();
-                    for(String id:
-                    user.getPawnListings()){
-                        db.collection(PAWN_LISTING_COLLECTION).document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if(documentSnapshot.exists()){
-                                    listings.add(PawnListing.create(documentSnapshot.getData()));
-                                }
-                            }
-                        });
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        User user = User.create(document.getData());
+                        List<PawnListing> listings = new LinkedList<>();
+                        for (String id :
+                                user.getPawnListings()) {
+                            db.collection(PAWN_LISTING_COLLECTION).document(id).get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot doc = task.getResult();
+                                                if (doc.exists()) {
+                                                    listings.add(PawnListing.create(doc.getData()));
+                                                }
+                                            }
+                                        }
+                                    });
+                        }
+                        listener.onComplete(listings);
                     }
-                    listener.onComplete(listings);
                 }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
             }
         });
     }
@@ -249,7 +251,7 @@ public class FirebaseModel {
         }
     }
 
-    public static void updateUser(User user,Model.updateUserDataOnCompleteListener listener) {
+    public static void updateUser(User user, Model.updateUserDataOnCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(USER_COLLECTION).document(getUser().getUid())
                 .update(user.toJson())
