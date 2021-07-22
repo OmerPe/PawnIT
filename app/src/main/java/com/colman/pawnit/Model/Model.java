@@ -140,7 +140,6 @@ public class Model {
     }
 
     MutableLiveData<List<PawnListing>> allPawnListings = new MutableLiveData<List<PawnListing>>(new LinkedList<PawnListing>());
-
     public LiveData<List<PawnListing>> getAllPawnListings() {
         pawnListingLoadingState.setValue(LoadingState.loading);
         FirebaseModel.getAllPawns((pawns) -> {
@@ -238,9 +237,9 @@ public class Model {
         return FirebaseModel.isLoggedIn();
     }
 
-    MutableLiveData<List<PawnListing>> allUserPawns = new MutableLiveData<>();
-
+    MutableLiveData<List<PawnListing>> allUserPawns = new MutableLiveData<List<PawnListing>>(new LinkedList<PawnListing>());
     public LiveData<List<PawnListing>> getAllUserPawns(){
+        pawnListingLoadingState.setValue(LoadingState.loading);
         FirebaseModel.getAllPawnsForUser(FirebaseModel.getUser().getUid(),(pawns) -> {
             Collections.sort(pawns, (listing1, listing2) -> {
                 if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {

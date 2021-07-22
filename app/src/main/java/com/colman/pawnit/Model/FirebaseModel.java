@@ -160,8 +160,7 @@ public class FirebaseModel {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                 if(documentSnapshot.exists()){
-                                    PawnListing listing = PawnListing.create(documentSnapshot.getData());
-                                    listings.add(listing);
+                                    listings.add(PawnListing.create(documentSnapshot.getData()));
                                 }
                             }
                         });
