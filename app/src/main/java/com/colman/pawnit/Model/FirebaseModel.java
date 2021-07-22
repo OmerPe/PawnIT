@@ -155,27 +155,37 @@ public class FirebaseModel {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         User user = User.create(document.getData());
-                        List<PawnListing> listings = new LinkedList<>();
+                        final List<PawnListing> listings = new LinkedList<>();
                         for (String id :
                                 user.getPawnListings()) {
-                            db.collection(PAWN_LISTING_COLLECTION).document(id).get()
-                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot doc = task.getResult();
-                                                if (doc.exists()) {
-                                                    listings.add(PawnListing.create(doc.getData()));
-                                                }
-                                            }
-                                        }
-                                    });
+                            getPawnListingByID(id,listing -> {
+                                listings.add(listing);
+                            });
                         }
                         listener.onComplete(listings);
                     }
                 }
             }
         });
+    }
+
+    public interface PawnOnComplete{
+        void OnComplete(PawnListing listing);
+    }
+    public static void getPawnListingByID(String id, PawnOnComplete listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(PAWN_LISTING_COLLECTION).document(id).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot doc = task.getResult();
+                            if (doc.exists()) {
+                                listener.OnComplete(PawnListing.create(doc.getData()));
+                            }
+                        }
+                    }
+                });
     }
 
 
