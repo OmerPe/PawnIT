@@ -72,7 +72,7 @@ public class History {
         json.put(ID, id);
         json.put(EVENT, event);
         json.put(UID, uid);
-        json.put(EVENT_TIME,eventTime.getTime());
+        json.put(EVENT_TIME,eventTime);
         return json;
     }
 

@@ -72,8 +72,8 @@ public class AuctionListing extends Listing {
     public Map<String, Object> getJson() {
         Map<String, Object> json = super.getJson();
 
-        json.put(END_DATE, endDate.getTime());
-        json.put(START_DATE,startDate.getTime());
+        json.put(END_DATE, endDate);
+        json.put(START_DATE,startDate);
         json.put(STARTING_PRICE, startingPrice);
         json.put(CURRENT_PRICE, currentPrice);
 

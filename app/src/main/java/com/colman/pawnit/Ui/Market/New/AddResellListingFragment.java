@@ -60,8 +60,13 @@ public class AddResellListingFragment extends Fragment {
                 listing.setDateOpened(Calendar.getInstance().getTime());
                 listing.setOwnerId(Model.instance.getLoggedUser().getUid());
 
-                Model.instance.saveListing(listing,()->{
-
+                Model.instance.saveListing(listing,(listingId)->{
+                    Model.instance.getUserFromDB(user -> {
+                        user.addResellListing(listingId);
+                        Model.instance.updateUserData(user,()->{
+                            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                        });
+                    });
                 });
                 Navigation.findNavController(v).navigateUp();
             }

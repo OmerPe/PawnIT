@@ -125,8 +125,8 @@ public class Listing implements Serializable {
         json.put(TITLE, title);
         json.put(DESCRIPTION, description);
         json.put(LOCATION, location);
-        json.put(DATE_OPENED, dateOpened.getTime());
-        json.put(IMAGES, images.toString());
+        json.put(DATE_OPENED, dateOpened);
+        json.put(IMAGES, images);
         json.put(TYPE, type);
 
         return json;

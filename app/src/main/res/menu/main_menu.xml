@@ -15,8 +15,7 @@
             android:icon="@drawable/ic_pwn"
             android:title="@string/pawn" />
     </group>
-
-    <item android:title="@string/social">
+<!-- <item android:title="@string/social">
         <menu>
             <item
                 android:id="@+id/MainMenu_share"
@@ -27,5 +26,6 @@
                 android:icon="@drawable/ic_rate_review"
                 android:title="@string/rate_us" />
         </menu>
-    </item>
+    </item>-->
+
 </menu>

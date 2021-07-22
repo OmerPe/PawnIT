@@ -82,8 +82,14 @@ public class AddAuctionListingFragment extends Fragment {
                 auctionListing.setStartDate(getDate(sdateButton.getText().toString().trim()));
                 auctionListing.setEndDate(getDate(edateButton.getText().toString().trim()));
                 auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
-                Model.instance.saveListing(auctionListing, () -> {
 
+                Model.instance.saveListing(auctionListing,(listingId)->{
+                    Model.instance.getUserFromDB(user -> {
+                        user.addAuctionListing(listingId);
+                        Model.instance.updateUserData(user,()->{
+                            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                        });
+                    });
                 });
                 Navigation.findNavController(v).navigateUp();
             }

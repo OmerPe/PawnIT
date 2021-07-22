@@ -27,6 +27,7 @@ import java.util.List;
 public class PawnFragment extends Fragment {
 
     private PawnViewModel mViewModel;
+    MyAdapter adapter;
 
     public static PawnFragment newInstance() {
         return new PawnFragment();
@@ -36,7 +37,7 @@ public class PawnFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.pawn_fragment, container, false);
-        
+
         FloatingActionButton addBtn = view.findViewById(R.id.pawn_fab);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,21 +52,23 @@ public class PawnFragment extends Fragment {
 
         RecyclerView list = view.findViewById(R.id.PawnList_recyclerView);
 
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
-        list.setHasFixedSize(true);
-        MyAdapter adapter = new MyAdapter();
-        list.setAdapter(adapter);
-
         mViewModel = new ViewModelProvider(this).get(PawnViewModel.class);
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
             adapter.notifyDataSetChanged();
         });
 
+        list.setLayoutManager(new LinearLayoutManager(getContext()));
+        list.setHasFixedSize(true);
+        adapter = new MyAdapter();
+        list.setAdapter(adapter);
+
+
+
         ProgressBar progressBar = view.findViewById(R.id.pawn_list_pb);
         progressBar.setVisibility(View.GONE);
 
-        Model.instance.pawnLoadingState.observe(getViewLifecycleOwner(),(state)->{
+        Model.instance.pawnListingLoadingState.observe(getViewLifecycleOwner(),(state)->{
             switch (state){
                 case loaded:
                     progressBar.setVisibility(View.GONE);
@@ -117,7 +120,6 @@ public class PawnFragment extends Fragment {
                 image = itemView.findViewById(R.id.pawn_row_picture);
 
                 image.setOnClickListener(new View.OnClickListener(){
-
                     @Override
                     public void onClick(View view) {
                         Navigation.findNavController(view).navigate(R.id.action_pawnFragment_to_pawnListingFragment);

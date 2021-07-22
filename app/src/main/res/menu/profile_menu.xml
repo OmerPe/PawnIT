@@ -29,7 +29,7 @@
 
     </group>
 
-    <item android:title="@string/settings">
+    <!-- <item android:title="@string/settings">
         <menu>
             <item
                 android:id="@+id/user_settings"
@@ -40,6 +40,8 @@
                 android:icon="@drawable/ic_app_settings"
                 android:title="@string/app_settings" />
         </menu>
-    </item>
+    </item>-->
+
+
 
 </menu>

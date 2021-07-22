@@ -84,10 +84,15 @@ public class AddPawnListingFragment extends Fragment {
                 pawnListing.setWhenToGet(getDate(sdateButton.getText().toString().trim()));
                 pawnListing.setOwnerId(Model.instance.getLoggedUser().getUid());
 
-
-                Model.instance.saveListing(pawnListing,()->{
-
+                Model.instance.saveListing(pawnListing,(listingId)->{
+                    Model.instance.getUserFromDB(user -> {
+                        user.addPawnListing(listingId);
+                        Model.instance.updateUserData(user,()->{
+                            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                        });
+                    });
                 });
+
                 Navigation.findNavController(v).navigateUp();
             }
         });

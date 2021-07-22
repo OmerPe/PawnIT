@@ -81,7 +81,7 @@ public class PawnListing extends Listing {
         Map<String, Object> json = super.getJson();
         json.put(LOAN_AMOUNT_REQUESTED, loanAmountRequested);
         json.put(INTEREST_RATE, interestRate);
-        json.put(WHEN_TO_GET, whenToGet.getTime());
+        json.put(WHEN_TO_GET, whenToGet);
         json.put(NUM_OF_PAYMENTS, numOfPayments);
         json.put(PAYMENT_DAY, dayOfPayment);
 

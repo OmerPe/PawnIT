@@ -124,7 +124,6 @@ public class Model {
     }
 
     MutableLiveData<List<AuctionListing>> allAuctionListings = new MutableLiveData<List<AuctionListing>>(new LinkedList<AuctionListing>());
-
     public LiveData<List<AuctionListing>> getAuctionData() {
         auctionLoadingState.setValue(LoadingState.loading);
         FirebaseModel.getAllAuctions((auctions) -> {
@@ -143,7 +142,7 @@ public class Model {
     MutableLiveData<List<PawnListing>> allPawnListings = new MutableLiveData<List<PawnListing>>(new LinkedList<PawnListing>());
 
     public LiveData<List<PawnListing>> getAllPawnListings() {
-        pawnLoadingState.setValue(LoadingState.loading);
+        pawnListingLoadingState.setValue(LoadingState.loading);
         FirebaseModel.getAllPawns((pawns) -> {
             Collections.sort(pawns, (listing1, listing2) -> {
                 if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
@@ -152,7 +151,7 @@ public class Model {
                 return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
             });
             allPawnListings.setValue(pawns);
-            pawnLoadingState.setValue(LoadingState.loaded);
+            pawnListingLoadingState.setValue(LoadingState.loaded);
         });
         return allPawnListings;
     }
@@ -170,12 +169,11 @@ public class Model {
     }
 
     public interface myOnCompleteListener {
-        void onComplete();
+        void onComplete(String listingID);
     }
+
     public void saveListing(Listing listing, myOnCompleteListener onCompleteListener) {
-        FirebaseModel.saveListing(listing, () -> {
-            onCompleteListener.onComplete();
-        });
+        FirebaseModel.saveListing(listing, onCompleteListener);
     }
 
     public interface createUserDataOnCompleteListener{
@@ -193,18 +191,22 @@ public class Model {
         return currentUser;
     }
 
+    public void getUserFromDB(FirebaseModel.getUserDataListener listener){
+        FirebaseModel.getUserData(user -> {
+            currentUser = new User(FirebaseModel.getUser().getUid(),user.getUserName(),user.getDateOfBirth(),user.getEmail());
+            currentUser.setResellListings(user.getResellListings());
+            currentUser.setAuctionListings(user.getAuctionListings());
+            currentUser.setPawnListings(user.getPawnListings());
+            listener.onComplete(currentUser);
+        });
+    }
+
     public interface updateUserDataOnCompleteListener{
         void onComplete();
     }
-    public void updateUserData(updateUserDataOnCompleteListener listener) {
+    public void updateUserData(User user,updateUserDataOnCompleteListener listener) {
         userLoadingState.setValue(LoadingState.loading);
-        if(currentUser.getUid() == null && isLoggedIn()){
-            FirebaseModel.getUserData((user)->{
-                currentUser = user;
-                listener.onComplete();
-                userLoadingState.setValue(LoadingState.loaded);
-            });
-        }
+        FirebaseModel.updateUser(user,listener);
     }
 
     public void signUpUser(String email, String password, com.google.android.gms.tasks.OnCompleteListener<AuthResult> listener){

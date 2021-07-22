@@ -32,6 +32,7 @@ public class FirebaseModel {
     private FirebaseModel() {
     }
 
+    /*---------------------------------------------------------------------------Store--------------------------------------------------------------------------------------*/
     public interface getAllResellsListener {
         public void onComplete(List<ResellListing> resells);
     }
@@ -111,6 +112,7 @@ public class FirebaseModel {
     public static void saveListing(Listing listing, Model.myOnCompleteListener onCompleteListener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Task<DocumentReference> ref = null;
+
         if (listing instanceof ResellListing) {
             Model.instance.resellLoadingState.setValue(Model.LoadingState.loading);
             ResellListing resellListing = (ResellListing) listing;
@@ -120,7 +122,7 @@ public class FirebaseModel {
             AuctionListing auctionListing = (AuctionListing) listing;
             ref = db.collection(AUCTION_LISTING_COLLECTION).add(auctionListing);
         } else if (listing instanceof PawnListing) {
-            Model.instance.pawnLoadingState.setValue(Model.LoadingState.loading);
+            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loading);
             PawnListing pawnListing = (PawnListing) listing;
             ref = db.collection(PAWN_LISTING_COLLECTION).add(pawnListing);
         }
@@ -129,8 +131,8 @@ public class FirebaseModel {
             ref.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
-                    MyApplication.mainThreadHandler.post(()->{
-                        onCompleteListener.onComplete();
+                    MyApplication.mainThreadHandler.post(() -> {
+                        onCompleteListener.onComplete(documentReference.getId());
                     });
                 }
             })
@@ -144,6 +146,8 @@ public class FirebaseModel {
 
     }
 
+
+    /*---------------------------------------------------------------------------Auth---------------------------------------------------------------------------------------*/
     public static FirebaseAuth getAuth() {
         return FirebaseAuth.getInstance();
     }
@@ -172,7 +176,11 @@ public class FirebaseModel {
         getAuth().sendPasswordResetEmail(email).addOnCompleteListener(listener);
     }
 
-    public static void saveUser(User user, Model.myOnCompleteListener onCompleteListener) {
+    public interface userOnCompleteListener {
+        void onComplete();
+    }
+
+    public static void saveUser(User user, userOnCompleteListener onCompleteListener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(USER_COLLECTION).document(user.getUid())
                 .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -209,6 +217,24 @@ public class FirebaseModel {
                 }
             });
         }
+    }
+
+    public static void updateUser(User user,Model.updateUserDataOnCompleteListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(USER_COLLECTION).document(getUser().getUid())
+                .update(user.toJson())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        listener.onComplete();
     }
 
 }

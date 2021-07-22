@@ -129,7 +129,7 @@ public class Offer {
         json.put(PAWN_LISTING_ID, pawnListingID);
         json.put(AMOUNT, amount);
         json.put(INTEREST_RATE, interestRate);
-        json.put(STARTING_DATE, dateToStart.getTime());
+        json.put(STARTING_DATE, dateToStart);
         json.put(ACCEPTED, accepted);
         json.put(NUM_OF_PAYMENTS, numOfPayments);
         json.put(PAYMENT_DAY, dayOfPayment);

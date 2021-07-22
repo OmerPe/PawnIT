@@ -102,27 +102,27 @@ public class User {
         this.auctionListings = auctionListings;
     }
 
-    public void addResellListing(ResellListing listing) {
-        resellListings.add(listing.getListingID());
+    public void addResellListing(String listing) {
+        resellListings.add(listing);
     }
 
-    public void addAuctionListing(AuctionListing auctionListing) {
-        auctionListings.add(auctionListing.getListingID());
+    public void addAuctionListing(String auctionListing) {
+        auctionListings.add(auctionListing);
     }
 
-    public void addPawnListing(PawnListing pawn) {
-        pawnListings.add(pawn.getListingID());
+    public void addPawnListing(String pawn) {
+        pawnListings.add(pawn);
     }
 
     public Map<String, Object> toJson() {
         Map<String, Object> json = new HashMap<>();
         json.put(USER_NAME, userName);
         json.put(EMAIL, email);
-        json.put(DATE_OF_BIRTH, dateOfBirth.getTime());
+        json.put(DATE_OF_BIRTH, dateOfBirth);
         json.put(PROFILE_PIC, profilePic);
-        json.put(RESELL_LISTINGS, resellListings.toString());
-        json.put(AUCTION_LISTINGS, auctionListings.toString());
-        json.put(PAWN_LISTINGS, pawnListings.toString());
+        json.put(RESELL_LISTINGS, resellListings);
+        json.put(AUCTION_LISTINGS, auctionListings);
+        json.put(PAWN_LISTINGS, pawnListings);
         json.put(UID, Uid);
         return json;
     }

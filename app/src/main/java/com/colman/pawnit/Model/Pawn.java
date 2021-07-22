@@ -117,11 +117,11 @@ public class Pawn {
         json.put(INTEREST_RATE, interestRate);
         json.put(LENDER_ID, lenderId);
         json.put(BORROWER_ID, borrowerId);
-        json.put(DATE_RECEIVED, dateReceived.getTime());
-        json.put(END_DATE, dateEnds.getTime());
+        json.put(DATE_RECEIVED, dateReceived);
+        json.put(END_DATE, dateEnds);
         json.put(PAYMENT_DAY, paymentDay);
         json.put(NUM_OF_PAYMENTS, numOfPayments);
-        json.put(LAST_PAYMENT, lastPayment.getTime());
+        json.put(LAST_PAYMENT, lastPayment);
         return json;
     }
 

@@ -85,11 +85,8 @@ public class LoginFragment extends Fragment {
         Model.instance.logIn(email, password, task -> {
             if (task.isSuccessful()) {
                 if (Model.instance.getLoggedUser().isEmailVerified()) {
-                    Model.instance.updateUserData(()->{
-                        Toast.makeText(getActivity(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
-                        Navigation.findNavController(v).navigateUp();
-                    });
-
+                    Toast.makeText(getActivity(), "Logged in successfully!", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(v).navigateUp();
                 } else {
                     Model.instance.getLoggedUser().sendEmailVerification();
                     Toast.makeText(getActivity(), "Email needs verification, please check your email.", Toast.LENGTH_SHORT).show();
