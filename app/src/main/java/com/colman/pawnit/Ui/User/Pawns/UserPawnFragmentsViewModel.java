@@ -12,10 +12,11 @@ public class UserPawnFragmentsViewModel extends ViewModel {
     LiveData<List<PawnListing>> data;
 
     public UserPawnFragmentsViewModel(){
-        data = Model.instance.getAllPawnListings();
+        data = Model.instance.getAllUserPawns();
     }
 
     public LiveData<List<PawnListing>> getData() {
+        //List<PawnListing> pl = data.getValue();
         return data;
     }
 }

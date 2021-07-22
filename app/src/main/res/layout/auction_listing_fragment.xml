@@ -35,6 +35,15 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />
 
+            <ImageButton
+                android:id="@+id/auction_popup_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="#00FFFFFF"
+                android:padding="20dp"
+                app:srcCompat="@drawable/ic_popup_menu" />
+
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

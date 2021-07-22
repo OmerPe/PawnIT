@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Ui.Pawn.PawnListingFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/pawn_appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="230dp"
-        android:fitsSystemWindows="true"
-        android:background="@drawable/header_background">
+        android:background="@drawable/header_background"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/pawn_collapsing_toolbar"
@@ -23,6 +23,7 @@
             app:title="Post Title">
 
             <ImageView
+                android:id="@+id/pawn_listing_imageV"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -34,6 +35,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin" />
+
+            <ImageButton
+                android:id="@+id/pawn_popup_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="#00FFFFFF"
+                android:padding="20dp"
+                app:srcCompat="@drawable/ic_popup_menu" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -122,19 +132,19 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
-<!--
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/pawn_listing_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="30dp"
-        android:baselineAlignBottom="false"
-        android:clickable="true"
-        android:contentDescription="Contact Seller"
-        android:src="@drawable/ic_message"
-        app:fabSize="normal"
-        app:layout_anchor="@id/pawn_appbar_layout"
-        app:layout_anchorGravity="bottom|end"
-        android:backgroundTint="@color/design_default_color_secondary"/>-->
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/pawn_listing_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:baselineAlignBottom="false"
+            android:clickable="true"
+            android:contentDescription="Contact Seller"
+            app:srcCompat="@drawable/ic_message"
+            app:fabSize="normal"
+            app:layout_anchor="@id/pawn_appbar_layout"
+            app:layout_anchorGravity="bottom|end"
+            android:backgroundTint="@color/design_default_color_secondary"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
