@@ -240,8 +240,8 @@ public class Model {
 
     MutableLiveData<List<PawnListing>> allUserPawns = new MutableLiveData<>();
 
-    public LiveData<List<PawnListing>> getAllUserPawns(String Uid){
-        FirebaseModel.getAllPawnsForUser(Uid,(pawns) -> {
+    public LiveData<List<PawnListing>> getAllUserPawns(){
+        FirebaseModel.getAllPawnsForUser(FirebaseModel.getUser().getUid(),(pawns) -> {
             Collections.sort(pawns, (listing1, listing2) -> {
                 if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
                     return 0;
