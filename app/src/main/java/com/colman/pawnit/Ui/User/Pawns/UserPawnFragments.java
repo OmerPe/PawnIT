@@ -46,7 +46,6 @@ public class UserPawnFragments extends Fragment {
         mViewModel = new ViewModelProvider(this).get(UserPawnFragmentsViewModel.class);
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
-            adapter.setData(data);
             adapter.notifyDataSetChanged();
         });
 
@@ -61,7 +60,7 @@ public class UserPawnFragments extends Fragment {
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-        List<PawnListing> data = new LinkedList<>();
+
 
         public MyAdapter(){
         }
@@ -75,21 +74,19 @@ public class UserPawnFragments extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
-            String title = data.get(position).getTitle();
-            String requested = Double.valueOf(data.get(position).getLoanAmountRequested()).toString();
+            String title = mViewModel.getData().getValue().get(position).getTitle();
+            String requested = Double.valueOf(mViewModel.getData().getValue().get(position).getLoanAmountRequested()).toString();
             holder.title.setText(title);
             holder.requested.setText(requested);
         }
 
         @Override
         public int getItemCount() {
-            return data.size();
+            if(mViewModel.getData().getValue() == null)
+                return 0;
+            return mViewModel.getData().getValue().size();
         }
 
-        public void setData(List<PawnListing> list){
-            this.data = list;
-            notifyDataSetChanged();
-        }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             TextView title;

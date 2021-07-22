@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ public class PawnListingFragment extends Fragment {
     TextView due;
     TextView interest;
     TextView description;
+    ImageButton popup;
 
     public static PawnListingFragment newInstance() {
         return new PawnListingFragment();
@@ -42,8 +44,7 @@ public class PawnListingFragment extends Fragment {
         due = view.findViewById(R.id.pawn_listing_due);
         interest = view.findViewById(R.id.pawn_listing_interest);
         description = view.findViewById(R.id.pawn_listing_description);
-
-
+        popup = view.findViewById(R.id.pawn_popup_menu);
 
 
         return view;
@@ -71,7 +72,6 @@ public class PawnListingFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
-
         }
 
         @Override
@@ -85,7 +85,6 @@ public class PawnListingFragment extends Fragment {
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-
             public MyViewHolder(@NonNull @NotNull View itemView) {
                 super(itemView);
             }

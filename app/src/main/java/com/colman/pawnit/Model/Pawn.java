@@ -22,8 +22,8 @@ public class Pawn {
     private String id;
 
     private final int listingID;
-    private final double loanAmount;
-    private final double interestRate;
+    private final String loanAmount;
+    private final String interestRate;
     private final String lenderId;
     private final String borrowerId;
     private final Date dateReceived;
@@ -45,7 +45,7 @@ public class Pawn {
     final static String LAST_PAYMENT = "lastPayment";
 
 
-    public Pawn(int listingID, double loanAmount, double interestRate, String lenderId, String borrowerId, Date dateReceived, Date dateEnds, String paymentDay, int numOfPayments) {
+    public Pawn(int listingID, String loanAmount, String interestRate, String lenderId, String borrowerId, Date dateReceived, Date dateEnds, String paymentDay, int numOfPayments) {
         this.listingID = listingID;
         this.loanAmount = loanAmount;
         this.interestRate = interestRate;
@@ -77,11 +77,11 @@ public class Pawn {
         return listingID;
     }
 
-    public double getLoanAmount() {
+    public String getLoanAmount() {
         return loanAmount;
     }
 
-    public double getInterestRate() {
+    public String getInterestRate() {
         return interestRate;
     }
 
@@ -128,8 +128,8 @@ public class Pawn {
     public static Pawn create(Map<String, Object> json) {
         Pawn pawn = new Pawn(
                 (int) ((long) json.get(LISTING_ID)),
-                (double) json.get(LOAN_AMOUNT),
-                (double) json.get(INTEREST_RATE),
+                (String) json.get(LOAN_AMOUNT),
+                (String) json.get(INTEREST_RATE),
                 (String) json.get(LENDER_ID),
                 (String) json.get(BORROWER_ID),
                 ((Timestamp) json.get(DATE_RECEIVED)).toDate(),
