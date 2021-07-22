@@ -54,6 +54,9 @@
         <action
             android:id="@+id/action_marketFragment_to_resell_listFragment"
             app:destination="@id/resell_listFragment" />
+        <action
+            android:id="@+id/action_marketFragment_self"
+            app:destination="@id/marketFragment" />
     </fragment>
     <fragment
         android:id="@+id/pawnFragment"
@@ -66,6 +69,9 @@
         <action
             android:id="@+id/action_pawnFragment_to_pawnListingFragment"
             app:destination="@id/pawnListingFragment" />
+        <action
+            android:id="@+id/action_pawnFragment_self"
+            app:destination="@id/pawnFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -83,7 +89,11 @@
         android:id="@+id/registerFragment"
         android:name="com.colman.pawnit.Ui.User.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
         android:name="com.colman.pawnit.Ui.User.ForgotPasswordFragment"

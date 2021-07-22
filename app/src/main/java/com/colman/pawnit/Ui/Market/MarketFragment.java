@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +18,7 @@ import androidx.navigation.Navigation;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -90,6 +92,38 @@ public class MarketFragment extends Fragment {
                     }
                 });
                 popup.show();
+            }
+        });
+        addBtn.setVisibility(View.GONE);
+
+        if(Model.instance.isLoggedIn()){
+            addBtn.setVisibility(View.VISIBLE);
+        }
+
+        ProgressBar progressBar = view.findViewById(R.id.Market_progressbar);
+        progressBar.setVisibility(View.GONE);
+        Model.instance.auctionLoadingState.observe(getViewLifecycleOwner(),(state)->{
+            switch (state){
+                case loaded:
+                    progressBar.setVisibility(View.GONE);
+                    break;
+                case loading:
+                    progressBar.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
+            }
+        });
+        Model.instance.resellLoadingState.observe(getViewLifecycleOwner(),(state)->{
+            switch (state){
+                case loaded:
+                    progressBar.setVisibility(View.GONE);
+                    break;
+                case loading:
+                    progressBar.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
             }
         });
 

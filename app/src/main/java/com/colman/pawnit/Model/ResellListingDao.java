@@ -25,6 +25,6 @@ public interface ResellListingDao {
     @Query("SELECT * FROM resell_table")
     LiveData<List<ResellListing>> getAllResells();
 
-    @Query("SELECT * FROM resell_table WHERE listingID = :id")
-    ResellListing getResellListing(int id);
+    @Query("SELECT * FROM resell_table WHERE listingID = :id ORDER BY dateOpened DESC")
+    ResellListing getResellListing(String id);
 }

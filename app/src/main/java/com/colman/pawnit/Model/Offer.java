@@ -1,5 +1,6 @@
 package com.colman.pawnit.Model;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -11,8 +12,9 @@ import java.util.Map;
 
 @Entity(tableName = "Offer_table")
 public class Offer {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @NonNull
+    private String id;
 
     private String Uid;
     private int pawnListingID;
@@ -71,11 +73,11 @@ public class Offer {
         this.numOfPayments = numOfPayments;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -144,7 +146,7 @@ public class Offer {
                 (boolean)json.get(ACCEPTED) ,
                 (int)((long) json.get(NUM_OF_PAYMENTS)),
                 (String) json.get(PAYMENT_DAY));
-        offer.setId((int)((long) json.get(ID)));
+        offer.setId((String) json.get(ID));
         return offer;
     }
 }

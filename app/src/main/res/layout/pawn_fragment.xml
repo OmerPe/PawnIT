@@ -6,19 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".Ui.Pawn.PawnFragment">
 
-   <!-- <ProgressBar
-        android:id="@+id/PawnList_progressbar"
+   <ProgressBar
+        android:id="@+id/pawn_list_pb"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:indeterminateBehavior="cycle"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/PawnList_recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pawn_TextboxBox" />-->
+        app:layout_constraintTop_toBottomOf="@+id/pawn_TextboxBox" />
 
     <TextView
         android:id="@+id/pawn_title"

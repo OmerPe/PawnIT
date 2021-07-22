@@ -1,6 +1,7 @@
 package com.colman.pawnit.Model;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -10,6 +11,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,12 +27,16 @@ public class FirebaseModel {
     final static String RESELL_LISTING_COLLECTION = "Resell_listings";
     final static String AUCTION_LISTING_COLLECTION = "Auction_listings";
     final static String PAWN_LISTING_COLLECTION = "Pawn_listings";
+    final static String USER_COLLECTION = "Users";
+
+    private FirebaseModel() {
+    }
 
     public interface getAllResellsListener {
         public void onComplete(List<ResellListing> resells);
     }
 
-    public void getAllResells(getAllResellsListener listener) {
+    public static void getAllResells(getAllResellsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RESELL_LISTING_COLLECTION)
                 .get()
@@ -53,7 +61,7 @@ public class FirebaseModel {
         public void onComplete(List<AuctionListing> resells);
     }
 
-    public void getAllAuctions(getAllAuctionsListener listener) {
+    public static void getAllAuctions(getAllAuctionsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(AUCTION_LISTING_COLLECTION)
                 .get()
@@ -78,7 +86,7 @@ public class FirebaseModel {
         public void onComplete(List<PawnListing> resells);
     }
 
-    public void getAllPawns(getAllPawnsListener listener) {
+    public static void getAllPawns(getAllPawnsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(PAWN_LISTING_COLLECTION)
                 .get()
@@ -96,31 +104,34 @@ public class FirebaseModel {
                         }
                         listener.onComplete(listings);
                     }
-                });;
+                });
+        ;
     }
 
-    public void saveListing(Listing listing, Model.myOnCompleteListener onCompleteListener) {
+    public static void saveListing(Listing listing, Model.myOnCompleteListener onCompleteListener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Task<Void> ref = null;
+        Task<DocumentReference> ref = null;
         if (listing instanceof ResellListing) {
+            Model.instance.resellLoadingState.setValue(Model.LoadingState.loading);
             ResellListing resellListing = (ResellListing) listing;
-            ref = db.collection(RESELL_LISTING_COLLECTION).document(Integer.toString(resellListing.getListingID()))
-                    .set(resellListing);
+            ref = db.collection(RESELL_LISTING_COLLECTION).add(resellListing);
         } else if (listing instanceof AuctionListing) {
+            Model.instance.auctionLoadingState.setValue(Model.LoadingState.loading);
             AuctionListing auctionListing = (AuctionListing) listing;
-            ref = db.collection(AUCTION_LISTING_COLLECTION).document(Integer.toString(auctionListing.getListingID()))
-                    .set(auctionListing);
+            ref = db.collection(AUCTION_LISTING_COLLECTION).add(auctionListing);
         } else if (listing instanceof PawnListing) {
+            Model.instance.pawnLoadingState.setValue(Model.LoadingState.loading);
             PawnListing pawnListing = (PawnListing) listing;
-            ref = db.collection(PAWN_LISTING_COLLECTION).document(Integer.toString(pawnListing.getListingID()))
-                    .set(pawnListing);
+            ref = db.collection(PAWN_LISTING_COLLECTION).add(pawnListing);
         }
 
         if (ref != null) {
-            ref.addOnSuccessListener(new OnSuccessListener<Void>() {
+            ref.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
-                public void onSuccess(Void aVoid) {
-                    onCompleteListener.onComplete();
+                public void onSuccess(DocumentReference documentReference) {
+                    MyApplication.mainThreadHandler.post(()->{
+                        onCompleteListener.onComplete();
+                    });
                 }
             })
                     .addOnFailureListener(new OnFailureListener() {
@@ -131,6 +142,73 @@ public class FirebaseModel {
                     });
         }
 
+    }
+
+    public static FirebaseAuth getAuth() {
+        return FirebaseAuth.getInstance();
+    }
+
+    public static FirebaseUser getUser() {
+        return getAuth().getCurrentUser();
+    }
+
+    public static boolean isLoggedIn() {
+        return getUser() != null;
+    }
+
+    public static void signUpUser(String email, String password, OnCompleteListener<AuthResult> listener) {
+        getAuth().createUserWithEmailAndPassword(email, password).addOnCompleteListener(listener);
+    }
+
+    public static void logIn(String email, String password, OnCompleteListener<AuthResult> listener) {
+        getAuth().signInWithEmailAndPassword(email, password).addOnCompleteListener(listener);
+    }
+
+    public static void logOut() {
+        getAuth().signOut();
+    }
+
+    public static void forgotPassword(String email, OnCompleteListener<Void> listener) {
+        getAuth().sendPasswordResetEmail(email).addOnCompleteListener(listener);
+    }
+
+    public static void saveUser(User user, Model.myOnCompleteListener onCompleteListener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(USER_COLLECTION).document(user.getUid())
+                .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                onCompleteListener.onComplete();
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("TAG", "documentation failed");
+                    }
+                });
+    }
+
+    public interface getUserDataListener {
+        public void onComplete(User user);
+    }
+
+    public static void getUserData(getUserDataListener listener) {
+        if (isLoggedIn()) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection(USER_COLLECTION).document(getUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            User user = User.create(document.getData());
+                            listener.onComplete(user);
+                        }
+                    }
+                }
+            });
+        }
     }
 
 }

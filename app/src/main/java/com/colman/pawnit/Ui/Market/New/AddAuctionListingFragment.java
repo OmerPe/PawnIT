@@ -81,7 +81,7 @@ public class AddAuctionListingFragment extends Fragment {
                 auctionListing.setDateOpened(Calendar.getInstance().getTime());
                 auctionListing.setStartDate(getDate(sdateButton.getText().toString().trim()));
                 auctionListing.setEndDate(getDate(edateButton.getText().toString().trim()));
-
+                auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
                 Model.instance.saveListing(auctionListing, () -> {
 
                 });

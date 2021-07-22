@@ -25,7 +25,7 @@ public interface AuctionListingDao {
     @Query("SELECT * FROM auction_listings_table")
     LiveData<List<AuctionListing>> getAllAuctions();
 
-    @Query("SELECT * FROM auction_listings_table WHERE listingID = :id")
-    AuctionListing getAuctionListing(int id);
+    @Query("SELECT * FROM auction_listings_table WHERE listingID = :id ORDER BY dateOpened DESC")
+    AuctionListing getAuctionListing(String id);
 
 }

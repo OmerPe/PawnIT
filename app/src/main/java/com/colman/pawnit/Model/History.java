@@ -1,5 +1,6 @@
 package com.colman.pawnit.Model;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -12,8 +13,9 @@ import java.util.Map;
 @Entity(tableName = "History_Table")
 public class History {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @NonNull
+    private String id;
 
     private String event;
     private String uid;
@@ -41,11 +43,11 @@ public class History {
         this.eventTime = eventTime;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,7 +78,7 @@ public class History {
 
     public static History create(Map<String, Object> json) {
         History history = new History((String) json.get(EVENT), (String) json.get(UID),((Timestamp)json.get(EVENT_TIME)).toDate());
-        history.setId((int)((long)json.get(ID)));
+        history.setId((String)json.get(ID));
         return history;
     }
 }

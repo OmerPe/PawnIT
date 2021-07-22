@@ -18,8 +18,9 @@ import java.util.Map;
 @Entity(tableName = "listings_Table")
 public class Listing implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-    private int listingID;
+    @PrimaryKey
+    @NonNull
+    private String listingID;
 
     private String ownerId;//owner id
     private String title;
@@ -61,7 +62,7 @@ public class Listing implements Serializable {
         this.type = type;
     }
 
-    public void setListingID(int listingID) {
+    public void setListingID(String listingID) {
         this.listingID = listingID;
     }
 
@@ -73,7 +74,7 @@ public class Listing implements Serializable {
         this.location = location;
     }
 
-    public int getListingID() {
+    public String getListingID() {
         return listingID;
     }
 
@@ -125,7 +126,7 @@ public class Listing implements Serializable {
         json.put(DESCRIPTION, description);
         json.put(LOCATION, location);
         json.put(DATE_OPENED, dateOpened.getTime());
-        json.put(IMAGES, images.toString().substring(1, images.size() - 1));
+        json.put(IMAGES, images.toString());
         json.put(TYPE, type);
 
         return json;
@@ -138,7 +139,7 @@ public class Listing implements Serializable {
                 (String) json.get(LOCATION), ((Timestamp)json.get(DATE_OPENED)).toDate(),
                 (ArrayList<String>)json.get(IMAGES),
                 (String) json.get(TYPE));
-        listing.setListingID( (int)((long)json.get(ID)));
+        listing.setListingID((String)json.get(ID));
         return listing;
     }
 }

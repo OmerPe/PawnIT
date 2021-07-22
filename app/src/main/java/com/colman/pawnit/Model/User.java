@@ -10,12 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 public class User {
+    private String Uid;
     private String userName, email;
     private Date dateOfBirth;
     private String profilePic;
-    private List<Integer> resellListings = new LinkedList<>();
-    private List<Integer> pawnListings = new LinkedList<>();
-    private List<Integer> auctionListings = new LinkedList<>();
+    private List<String> resellListings = new LinkedList<>();
+    private List<String> pawnListings = new LinkedList<>();
+    private List<String> auctionListings = new LinkedList<>();
 
     final static String USER_NAME = "userName";
     final static String EMAIL = "email";
@@ -24,15 +25,25 @@ public class User {
     final static String RESELL_LISTINGS = "resellListings";
     final static String PAWN_LISTINGS = "pawnListings";
     final static String AUCTION_LISTINGS = "auctionListings";
+    final static String UID = "Uid";
 
     public User() {
 
     }
 
-    public User(String name, Date birthDate, String email) {
+    public User(String Uid, String name, Date birthDate, String email) {
         this.userName = name;
         this.email = email;
         this.dateOfBirth = birthDate;
+        this.Uid = Uid;
+    }
+
+    public String getUid() {
+        return Uid;
+    }
+
+    public void setUid(String uid) {
+        Uid = uid;
     }
 
     public String getUserName() {
@@ -67,27 +78,27 @@ public class User {
         this.profilePic = profilePic;
     }
 
-    public List<Integer> getResellListings() {
+    public List<String> getResellListings() {
         return resellListings;
     }
 
-    public void setResellListings(List<Integer> resellListings) {
+    public void setResellListings(List<String> resellListings) {
         this.resellListings = resellListings;
     }
 
-    public List<Integer> getPawnListings() {
+    public List<String> getPawnListings() {
         return pawnListings;
     }
 
-    public void setPawnListings(List<Integer> pawnListings) {
+    public void setPawnListings(List<String> pawnListings) {
         this.pawnListings = pawnListings;
     }
 
-    public List<Integer> getAuctionListings() {
+    public List<String> getAuctionListings() {
         return auctionListings;
     }
 
-    public void setAuctionListings(List<Integer> auctionListings) {
+    public void setAuctionListings(List<String> auctionListings) {
         this.auctionListings = auctionListings;
     }
 
@@ -109,9 +120,10 @@ public class User {
         json.put(EMAIL, email);
         json.put(DATE_OF_BIRTH, dateOfBirth.getTime());
         json.put(PROFILE_PIC, profilePic);
-        json.put(RESELL_LISTINGS, resellListings.toString().substring(1, resellListings.size() - 1));
-        json.put(AUCTION_LISTINGS, auctionListings.toString().substring(1, auctionListings.size() - 1));
-        json.put(PAWN_LISTINGS, pawnListings.toString().substring(1, pawnListings.size() - 1));
+        json.put(RESELL_LISTINGS, resellListings.toString());
+        json.put(AUCTION_LISTINGS, auctionListings.toString());
+        json.put(PAWN_LISTINGS, pawnListings.toString());
+        json.put(UID, Uid);
         return json;
     }
 
@@ -119,27 +131,13 @@ public class User {
         User user = new User();
         user.setUserName((String) json.get(USER_NAME));
         user.setEmail((String) json.get(EMAIL));
-        user.setDateOfBirth(((Timestamp)json.get(DATE_OF_BIRTH)).toDate());
-        user.setProfilePic((String)json.get(PROFILE_PIC));
-        List<Integer> resellListings = new LinkedList<>();
-        List<Integer> auctionListings = new LinkedList<>();
-        List<Integer> pawnListings = new LinkedList<>();
+        user.setDateOfBirth(((Timestamp) json.get(DATE_OF_BIRTH)).toDate());
+        user.setProfilePic((String) json.get(PROFILE_PIC));
+        user.setUid((String) json.get(UID));
 
-        for (long id :
-                (ArrayList<Long>)json.get(RESELL_LISTINGS)) {
-            resellListings.add((int)(id));
-        }
-        for (long id :
-                (ArrayList<Long>)json.get(AUCTION_LISTINGS)) {
-            auctionListings.add((int)(id));
-        }
-        for (long id :
-                (ArrayList<Long>)json.get(PAWN_LISTINGS)) {
-            pawnListings.add((int)(id));
-        }
-        user.setResellListings(resellListings);
-        user.setAuctionListings(auctionListings);
-        user.setPawnListings(pawnListings);
+        user.setResellListings((ArrayList<String>) json.get(RESELL_LISTINGS));
+        user.setAuctionListings((ArrayList<String>) json.get(AUCTION_LISTINGS));
+        user.setPawnListings((ArrayList<String>) json.get(PAWN_LISTINGS));
 
         return user;
     }

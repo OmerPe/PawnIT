@@ -22,5 +22,5 @@ public interface OfferDao {
     void delete(Offer offer);
 
     @Query("SELECT * FROM offer_table WHERE pawnListingID = :listingID")
-    LiveData<List<Offer>> getAllOffersForListing(int listingID);
+    LiveData<List<Offer>> getAllOffersForListing(String listingID);
 }

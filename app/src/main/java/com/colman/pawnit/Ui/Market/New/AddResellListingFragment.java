@@ -58,9 +58,10 @@ public class AddResellListingFragment extends Fragment {
                 listing.setPrice(Double.parseDouble(price.getText().toString().trim()));
                 listing.setDescription(desc.getText().toString().trim());
                 listing.setDateOpened(Calendar.getInstance().getTime());
+                listing.setOwnerId(Model.instance.getLoggedUser().getUid());
 
                 Model.instance.saveListing(listing,()->{
-                    progressBar.setVisibility(View.GONE);
+
                 });
                 Navigation.findNavController(v).navigateUp();
             }

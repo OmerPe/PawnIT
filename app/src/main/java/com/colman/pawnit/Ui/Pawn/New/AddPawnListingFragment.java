@@ -81,6 +81,8 @@ public class AddPawnListingFragment extends Fragment {
                 pawnListing.setInterestRate(Double.parseDouble(interestRate.getText().toString().trim()));
                 pawnListing.setDescription(description.getText().toString().trim());
                 pawnListing.setDateOpened(Calendar.getInstance().getTime());
+                pawnListing.setWhenToGet(getDate(sdateButton.getText().toString().trim()));
+                pawnListing.setOwnerId(Model.instance.getLoggedUser().getUid());
 
 
                 Model.instance.saveListing(pawnListing,()->{

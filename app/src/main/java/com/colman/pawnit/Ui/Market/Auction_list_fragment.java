@@ -38,7 +38,6 @@ public class Auction_list_fragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(AuctionListViewmodel.class);
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
-            adapter.setData(data);
             adapter.notifyDataSetChanged();
         });
 
@@ -46,7 +45,6 @@ public class Auction_list_fragment extends Fragment {
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-        List<AuctionListing> data = new LinkedList<>();
 
         public MyAdapter(){
         }
@@ -60,18 +58,17 @@ public class Auction_list_fragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
-            String title = data.get(position).getTitle();
+            String title = mViewModel.getData().getValue().get(position).getTitle();
             holder.title.setText(title);
         }
 
         @Override
         public int getItemCount() {
-            return data.size();
-        }
-
-        public void setData(List<AuctionListing> list){
-            this.data = list;
-            notifyDataSetChanged();
+            if(mViewModel.getData().getValue() != null){
+                return mViewModel.getData().getValue().size();
+            }else{
+                return 0;
+            }
         }
 
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,7 +36,7 @@ public class PawnFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.pawn_fragment, container, false);
-
+        
         FloatingActionButton addBtn = view.findViewById(R.id.pawn_fab);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +44,10 @@ public class PawnFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_pawnFragment_to_addPawnListingFragment);
             }
         });
+        addBtn.setVisibility(View.GONE);
+        if(Model.instance.isLoggedIn()){
+            addBtn.setVisibility(View.VISIBLE);
+        }
 
         RecyclerView list = view.findViewById(R.id.PawnList_recyclerView);
 
@@ -53,15 +59,29 @@ public class PawnFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(PawnViewModel.class);
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
-            adapter.setData(data);
             adapter.notifyDataSetChanged();
+        });
+
+        ProgressBar progressBar = view.findViewById(R.id.pawn_list_pb);
+        progressBar.setVisibility(View.GONE);
+
+        Model.instance.pawnLoadingState.observe(getViewLifecycleOwner(),(state)->{
+            switch (state){
+                case loaded:
+                    progressBar.setVisibility(View.GONE);
+                    break;
+                case loading:
+                    progressBar.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    break;
+            }
         });
 
         return view;
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-        List<PawnListing> data = new LinkedList<>();
 
         public MyAdapter(){
         }
@@ -75,20 +95,15 @@ public class PawnFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
-            String title = data.get(position).getTitle();
-            String requested = Double.valueOf(data.get(position).getLoanAmountRequested()).toString();
+            String title = mViewModel.getData().getValue().get(position).getTitle();
+            String requested = Double.valueOf(mViewModel.getData().getValue().get(position).getLoanAmountRequested()).toString();
             holder.title.setText(title);
             holder.requested.setText(requested);
         }
 
         @Override
         public int getItemCount() {
-            return data.size();
-        }
-
-        public void setData(List<PawnListing> list){
-            this.data = list;
-            notifyDataSetChanged();
+            return mViewModel.getData().getValue().size();
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {

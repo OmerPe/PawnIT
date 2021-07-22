@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.colman.pawnit.Model.Model;
+import com.colman.pawnit.Model.User;
 import com.colman.pawnit.R;
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,6 +38,7 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
         ImageButton profileBtn = view.findViewById(R.id.HomeFrag_UserIcon);
         leftDrawer = view.findViewById(R.id.nav_view_main_menu);
         rightDrawer = view.findViewById(R.id.nav_view_profile_menu);
+        TextView welcome = view.findViewById(R.id.main_fragment_welcome_tv);
 
         leftDrawer.bringToFront();
         rightDrawer.bringToFront();
@@ -44,6 +48,19 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
 
         leftDrawer.setNavigationItemSelectedListener(this);
         rightDrawer.setNavigationItemSelectedListener(this);
+
+        if (Model.instance.isLoggedIn()) {
+            if(Model.instance.getUserData().getUid() == null){
+                Model.instance.updateUserData(()->{
+                    welcome.setText("Welcome, " + Model.instance.getUserData().getUserName()+" !");
+                });
+            }else{
+                welcome.setText("Welcome, " + Model.instance.getUserData().getUserName()+" !");
+            }
+            showUserOptions();
+        } else {
+            hideUserOptions();
+        }
 
 
         return view;
@@ -82,7 +99,9 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                 Toast.makeText(getActivity(), "Rate", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.logout:
+                Model.instance.logOut();
                 Toast.makeText(getActivity(), "Logged out", Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(view).navigate(R.id.action_homeFragment_self);
                 break;
             case R.id.login:
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_loginFragment);
@@ -96,5 +115,38 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
         }
 
         return true;
+    }
+
+    private void hideUserOptions() {
+        MenuItem listings = rightDrawer.getMenu().findItem(R.id.my_listings);
+        listings.setVisible(false);
+        MenuItem pawns = rightDrawer.getMenu().findItem(R.id.my_pawns);
+        pawns.setVisible(false);
+        MenuItem hist = rightDrawer.getMenu().findItem(R.id.history);
+        hist.setVisible(false);
+        MenuItem us = rightDrawer.getMenu().findItem(R.id.user_settings);
+        us.setVisible(false);
+
+        MenuItem login = rightDrawer.getMenu().findItem(R.id.login);
+        login.setVisible(true);
+        MenuItem logout = rightDrawer.getMenu().findItem(R.id.logout);
+        logout.setVisible(false);
+    }
+
+    private void showUserOptions() {
+        MenuItem listings = rightDrawer.getMenu().findItem(R.id.my_listings);
+        listings.setVisible(true);
+        MenuItem pawns = rightDrawer.getMenu().findItem(R.id.my_pawns);
+        pawns.setVisible(true);
+        MenuItem hist = rightDrawer.getMenu().findItem(R.id.history);
+        ;
+        hist.setVisible(true);
+        MenuItem us = rightDrawer.getMenu().findItem(R.id.user_settings);
+        us.setVisible(true);
+
+        MenuItem login = rightDrawer.getMenu().findItem(R.id.login);
+        login.setVisible(false);
+        MenuItem logout = rightDrawer.getMenu().findItem(R.id.logout);
+        logout.setVisible(true);
     }
 }

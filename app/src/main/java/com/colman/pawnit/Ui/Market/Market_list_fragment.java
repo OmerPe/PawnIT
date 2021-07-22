@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Listing;
+import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
 
@@ -43,7 +45,6 @@ public class Market_list_fragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(MarketListViewModel.class);
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
-            adapter.setData(data);
             adapter.notifyDataSetChanged();
         });
 
@@ -52,7 +53,6 @@ public class Market_list_fragment extends Fragment {
 
 
     private class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        List<Listing> data = new LinkedList<>();
 
         public MyAdapter(){
         }
@@ -76,13 +76,13 @@ public class Market_list_fragment extends Fragment {
             switch (holder.getItemViewType()){
                 case 0:
                     ResellViewHolder viewHolder = (ResellViewHolder) holder;
-                    viewHolder.title.setText(data.get(position).getTitle());
-                    viewHolder.price.setText("" +((ResellListing)data.get(position)).getPrice());
+                    viewHolder.title.setText(mViewModel.getData().getValue().get(position).getTitle());
+                    viewHolder.price.setText("" +((ResellListing)mViewModel.getData().getValue().get(position)).getPrice());
                     break;
                 case 1:
                     AuctionViewHolder viewHolder1 = (AuctionViewHolder) holder;
-                    viewHolder1.title.setText(data.get(position).getTitle());
-                    viewHolder1.startingPrice.setText(""+((AuctionListing)data.get(position)).getStartingPrice());
+                    viewHolder1.title.setText(mViewModel.getData().getValue().get(position).getTitle());
+                    viewHolder1.startingPrice.setText(""+((AuctionListing)mViewModel.getData().getValue().get(position)).getStartingPrice());
                     break;
                 default:
                     break;
@@ -93,17 +93,16 @@ public class Market_list_fragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return data.size();
-        }
-
-        public void setData(List<Listing> list){
-            this.data = list;
-            notifyDataSetChanged();
+            if(mViewModel.getData().getValue() != null){
+                return mViewModel.getData().getValue().size();
+            }else{
+                return 0;
+            }
         }
 
         @Override
         public int getItemViewType(int position) {
-            if(data.get(position) instanceof ResellListing){
+            if(mViewModel.getData().getValue().get(position) instanceof ResellListing){
                 return 0;
             }else {
                 return 1;

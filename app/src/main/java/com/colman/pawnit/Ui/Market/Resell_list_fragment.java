@@ -38,7 +38,6 @@ public class Resell_list_fragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(ResellListViewModel.class);
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
-            adapter.setData(data);
             adapter.notifyDataSetChanged();
         });
 
@@ -46,7 +45,6 @@ public class Resell_list_fragment extends Fragment {
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-        List<ResellListing> data = new LinkedList<>();
 
         public MyAdapter(){
         }
@@ -60,20 +58,18 @@ public class Resell_list_fragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
-            String title = data.get(position).getTitle();
+            String title = mViewModel.getData().getValue().get(position).getTitle();
             holder.title.setText(title);
         }
 
         @Override
         public int getItemCount() {
-            return data.size();
+            if(mViewModel.getData().getValue() != null){
+                return mViewModel.getData().getValue().size();
+            }else{
+                return 0;
+            }
         }
-
-        public void setData(List<ResellListing> list){
-            this.data = list;
-            notifyDataSetChanged();
-        }
-
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             private TextView title;

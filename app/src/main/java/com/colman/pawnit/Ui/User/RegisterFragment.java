@@ -11,9 +11,13 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
+import com.colman.pawnit.Model.Model;
+import com.colman.pawnit.Model.User;
 import com.colman.pawnit.R;
 
 import java.text.ParseException;
@@ -45,14 +49,13 @@ public class RegisterFragment extends Fragment {
         });
 
         etFullName = (EditText) view.findViewById(R.id.register_name);
-
         etEmail = (EditText) view.findViewById(R.id.register_email);
         etPwd = (EditText) view.findViewById(R.id.register_pwd);
 
         view.findViewById(R.id.register_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RegisterUser();
+                RegisterUser(v);
             }
         });
 
@@ -127,7 +130,7 @@ public class RegisterFragment extends Fragment {
         return m + " " + day + " " + year;
     }
 
-    private void RegisterUser() {
+    private void RegisterUser(View v) {
         String email = etEmail.getText().toString().trim();
         String pwd = etPwd.getText().toString().trim();
         String fullName = etFullName.getText().toString().trim();
@@ -173,7 +176,22 @@ public class RegisterFragment extends Fragment {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        //TODO : Register logic
+        Model.instance.signUpUser(email, pwd, (task -> {
+            if (task.isSuccessful()) {
+                User user = new User();
+                user.setUid(Model.instance.getLoggedUser().getUid());
+                user.setEmail(email);
+                user.setDateOfBirth(getDate(date));
+                user.setUserName(fullName);
+
+                Model.instance.createUser(user,()->{
+                    Navigation.findNavController(v).navigate(R.id.action_registerFragment_to_homeFragment);
+                });
+            } else {
+                Toast.makeText(getActivity(), "Failed to signup make sure everything is ok", Toast.LENGTH_SHORT).show();
+            }
+            progressBar.setVisibility(View.GONE);
+        }));
     }
 
     private Date getDate(String date) {
