@@ -148,42 +148,17 @@ public class FirebaseModel {
 
     public static void getAllPawnsForUser(String Uid, getAllPawnsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(USER_COLLECTION).document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        User user = User.create(document.getData());
-                        final List<PawnListing> listings = new LinkedList<>();
-                        for (String id :
-                                user.getPawnListings()) {
-                            getPawnListingByID(id,listing -> {
-                                listings.add(listing);
-                            });
-                        }
-                        listener.onComplete(listings);
-                    }
-                }
-            }
-        });
-    }
-
-    public interface PawnOnComplete{
-        void OnComplete(PawnListing listing);
-    }
-    public static void getPawnListingByID(String id, PawnOnComplete listener){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(PAWN_LISTING_COLLECTION).document(id).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection(PAWN_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID,Uid).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot doc = task.getResult();
-                            if (doc.exists()) {
-                                listener.OnComplete(PawnListing.create(doc.getData()));
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<PawnListing> listings = new LinkedList<>();
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                listings.add(PawnListing.create(document.getData()));
                             }
                         }
+                        listener.onComplete(listings);
                     }
                 });
     }
