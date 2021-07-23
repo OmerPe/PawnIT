@@ -24,8 +24,6 @@ public class Model {
     private AuctionListingDao auctionListingDao;
     private ResellListingDao resellListingDao;
     private PawnListingDao pawnListingDao;
-    private PawnDao pawnDao;
-    private OfferDao offerDao;
     private HistoryDao historyDao;
 
     public static final String PROFILE_DIR = "profilePics";
@@ -55,8 +53,6 @@ public class Model {
         auctionListingDao = dataBase.auctionListingDao();
         resellListingDao = dataBase.resellListingDao();
         pawnListingDao = dataBase.pawnListingDao();
-        pawnDao = dataBase.pawnDao();
-        offerDao = dataBase.offerDao();
         historyDao = dataBase.historyDao();
     }
 
@@ -156,16 +152,8 @@ public class Model {
         return allPawnListings;
     }
 
-    public LiveData<List<Pawn>> getAllPawnsForUser(String uid) {
-        return pawnDao.getAllPawnsForUser(uid);
-    }
-
     public LiveData<List<History>> getAllHistoryForUser(String uid) {
         return historyDao.getAllHistoryForUser(uid);
-    }
-
-    public LiveData<List<Offer>> getAllOffersForListing(String listingID) {
-        return offerDao.getAllOffersForListing(listingID);
     }
 
     public interface myOnCompleteListener {

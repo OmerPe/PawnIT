@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.colman.pawnit.MyApplication;
 
-@Database(entities = {Listing.class, AuctionListing.class, ResellListing.class, PawnListing.class, Offer.class, Pawn.class, History.class}, version = 2)
+@Database(entities = {Listing.class, AuctionListing.class, ResellListing.class, PawnListing.class, History.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class PawnITDataBase extends RoomDatabase {
 
@@ -22,10 +22,6 @@ public abstract class PawnITDataBase extends RoomDatabase {
     public abstract PawnListingDao pawnListingDao();
 
     public abstract ResellListingDao resellListingDao();
-
-    public abstract PawnDao pawnDao();
-
-    public abstract OfferDao offerDao();
 
     public abstract HistoryDao historyDao();
 

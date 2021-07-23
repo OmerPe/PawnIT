@@ -64,7 +64,7 @@ public class FirebaseModel {
     }
 
     public interface getAllAuctionsListener {
-        public void onComplete(List<AuctionListing> resells);
+        void onComplete(List<AuctionListing> resells);
     }
 
     public static void getAllAuctions(getAllAuctionsListener listener) {
