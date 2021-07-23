@@ -89,12 +89,16 @@ public class AddPawnListingFragment extends Fragment {
                 pawnListing.setOwnerId(Model.instance.getLoggedUser().getUid());
 
                 Model.instance.saveListing(pawnListing,(listingId)->{
-                    Model.instance.getUserFromDB(user -> {
-                        user.addPawnListing(listingId);
-                        Model.instance.updateUserData(user,()->{
-                            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                    if(listingId != null){
+                        Model.instance.getUserFromDB(user -> {
+                            if(user != null){
+                                user.addPawnListing(listingId);
+                                Model.instance.updateUserData(user,()->{
+                                    Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                                });
+                            }
                         });
-                    });
+                    }
                 });
 
                 Navigation.findNavController(v).navigateUp();

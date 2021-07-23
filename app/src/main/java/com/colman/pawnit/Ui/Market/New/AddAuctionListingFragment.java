@@ -93,12 +93,16 @@ public class AddAuctionListingFragment extends Fragment {
                 auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
 
                 Model.instance.saveListing(auctionListing,(listingId)->{
-                    Model.instance.getUserFromDB(user -> {
-                        user.addAuctionListing(listingId);
-                        Model.instance.updateUserData(user,()->{
-                            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                    if(listingId != null){
+                        Model.instance.getUserFromDB(user -> {
+                            if(user != null){
+                                user.addAuctionListing(listingId);
+                                Model.instance.updateUserData(user,()->{
+                                    Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                                });
+                            }
                         });
-                    });
+                    }
                 });
                 Navigation.findNavController(v).navigateUp();
             }

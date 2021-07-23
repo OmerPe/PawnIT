@@ -204,11 +204,15 @@ public class Model {
 
     public void getUserFromDB(FirebaseModel.getUserDataListener listener){
         FirebaseModel.getUserData(user -> {
-            currentUser = new User(FirebaseModel.getUser().getUid(),user.getUserName(),user.getDateOfBirth(),user.getEmail());
-            currentUser.setResellListings(user.getResellListings());
-            currentUser.setAuctionListings(user.getAuctionListings());
-            currentUser.setPawnListings(user.getPawnListings());
-            listener.onComplete(currentUser);
+            if(user != null){
+                currentUser = new User(FirebaseModel.getUser().getUid(),user.getUserName(),user.getDateOfBirth(),user.getEmail());
+                currentUser.setResellListings(user.getResellListings());
+                currentUser.setAuctionListings(user.getAuctionListings());
+                currentUser.setPawnListings(user.getPawnListings());
+                listener.onComplete(currentUser);
+            }else{
+                listener.onComplete(null);
+            }
         });
     }
 

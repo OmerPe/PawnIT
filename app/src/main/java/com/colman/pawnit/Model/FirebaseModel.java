@@ -143,6 +143,7 @@ public class FirebaseModel {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            onCompleteListener.onComplete(null);
                             Log.d("TAG", "documentation failed");
                         }
                     });
@@ -320,6 +321,8 @@ public class FirebaseModel {
                             User user = User.create(document.getData());
                             listener.onComplete(user);
                         }
+                    }else {
+                        listener.onComplete(null);
                     }
                 }
             });

@@ -53,9 +53,11 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
 
         if (Model.instance.isLoggedIn()) {
             Model.instance.getUserFromDB(user -> {
-                String tmp = "Welcome, " + user.getUserName()+" !";
-                welcome.setText(tmp);
-                userMenuDrawerWelcome.setText(tmp);
+                if(user != null){
+                    String tmp = "Welcome, " + user.getUserName()+" !";
+                    welcome.setText(tmp);
+                    userMenuDrawerWelcome.setText(tmp);
+                }
             });
             Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
             showUserOptions();
