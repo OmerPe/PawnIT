@@ -40,6 +40,8 @@ public class RegisterFragment extends Fragment {
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
     private ImageView imageView;
+    Button addImgBtn, registerBtn;
+    Bitmap imageBitmap;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,12 +63,12 @@ public class RegisterFragment extends Fragment {
         etEmail = (EditText) view.findViewById(R.id.register_email);
         etPwd = (EditText) view.findViewById(R.id.register_pwd);
         imageView = view.findViewById(R.id.register_profilepic_imageV);
-        Button addImgBtn = view.findViewById(R.id.register_profilepic_btn);
+        addImgBtn = view.findViewById(R.id.register_profilepic_btn);
         addImgBtn.setOnClickListener(v -> {
             addImage();
         });
-
-        view.findViewById(R.id.register_btn).setOnClickListener(new View.OnClickListener() {
+        registerBtn = view.findViewById(R.id.register_btn);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RegisterUser(v);
@@ -189,6 +191,10 @@ public class RegisterFragment extends Fragment {
         }
 
         progressBar.setVisibility(View.VISIBLE);
+        registerBtn.setEnabled(false);
+        addImgBtn.setEnabled(false);
+
+
 
         Model.instance.signUpUser(email, pwd, (task -> {
             if (task.isSuccessful()) {
@@ -198,15 +204,26 @@ public class RegisterFragment extends Fragment {
                 user.setDateOfBirth(getDate(date));
                 user.setUserName(fullName);
 
-                Model.instance.createUser(user,()->{
-                    Model.instance.logOut();
-                    Navigation.findNavController(v).navigateUp();
-                });
+                if(imageBitmap != null){
+                    Model.instance.uploadImage(imageBitmap,user.getUid(),Model.PROFILE_DIR, url -> {
+                        user.setProfilePic(url);
+                        createUser(user,v);
+                    });
+                }else{
+                    createUser(user,v);
+                }
+
             } else {
                 Toast.makeText(getActivity(), "Failed to signup make sure everything is ok", Toast.LENGTH_SHORT).show();
             }
-            progressBar.setVisibility(View.GONE);
         }));
+    }
+
+    private void createUser(User user, View v){
+        Model.instance.createUser(user,()->{
+            Model.instance.logOut();
+            Navigation.findNavController(v).navigateUp();
+        });
     }
 
     private Date getDate(String date) {
@@ -219,9 +236,6 @@ public class RegisterFragment extends Fragment {
             dateOfBirth = sdf.parse(finalDate);
         } catch (ParseException e) {
             e.printStackTrace();
-        }
-        if (dateOfBirth != null) {
-
         }
 
         return dateOfBirth;
@@ -307,8 +321,8 @@ public class RegisterFragment extends Fragment {
             try {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView.setImageBitmap(selectedImage);
+                imageBitmap = BitmapFactory.decodeStream(imageStream);
+                imageView.setImageBitmap(imageBitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();

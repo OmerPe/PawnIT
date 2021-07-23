@@ -12,14 +12,16 @@ public class ResellListing extends Listing {
     private double price;
 
     final static String PRICE = "price";
+    final static String TYPE = "Resell";
 
     public ResellListing(String owner, String title, String description, String location, Date dateOpened, List<String> images, double price) {
-        super(owner, title, description, location, dateOpened, images, "Resell");
+        super(owner, title, description, location, dateOpened, images, TYPE);
         this.price = price;
     }
 
     public ResellListing() {
         super();
+        super.setType(TYPE);
     }
 
     public double getPrice() {

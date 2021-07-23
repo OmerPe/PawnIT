@@ -22,9 +22,10 @@ public class PawnListing extends Listing {
     final static String WHEN_TO_GET = "whenToGet";
     final static String NUM_OF_PAYMENTS = "numOfPayments";
     final static String PAYMENT_DAY = "dayOfPayment";
+    final static String TYPE = "Pawn";
 
     public PawnListing(String owner, String title, String description, String location, Date dateOpened, List<String> images, double loanAmountRequested, double interestRate, Date whenToGet, int numOfPayments, String dayOfPayment) {
-        super(owner, title, description, location, dateOpened, images, "Pawn");
+        super(owner, title, description, location, dateOpened, images, TYPE);
         this.loanAmountRequested = loanAmountRequested;
         this.interestRate = interestRate;
         this.whenToGet = whenToGet;
@@ -34,6 +35,7 @@ public class PawnListing extends Listing {
 
     public PawnListing() {
         super();
+        super.setType(TYPE);
     }
 
     public String getDayOfPayment() {

@@ -31,11 +31,12 @@ public class User {
 
     }
 
-    public User(String Uid, String name, Date birthDate, String email) {
+    public User(String Uid, String name, Date birthDate, String email, String profilePic) {
         this.userName = name;
         this.email = email;
         this.dateOfBirth = birthDate;
         this.Uid = Uid;
+        this.profilePic = profilePic;
     }
 
     public String getUid() {

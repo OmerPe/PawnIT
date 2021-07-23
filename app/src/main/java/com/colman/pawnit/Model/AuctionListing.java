@@ -22,14 +22,16 @@ public class AuctionListing extends Listing {
     final static String START_DATE = "startDate";
     final static String STARTING_PRICE = "startingPrice";
     final static String CURRENT_PRICE = "currentPrice";
+    final static String TYPE = "Auction";
 
 
     public AuctionListing() {
         super();
+        super.setType(TYPE);
     }
 
     public AuctionListing(String owner, String title, String description, String location, Date dateOpened, List<String> images, Date endDate,Date startDate, double startingPrice, double currentPrice) {
-        super(owner, title, description, location, dateOpened, images, "Auction");
+        super(owner, title, description, location, dateOpened, images, TYPE);
         this.endDate = endDate;
         this.startingPrice = startingPrice;
         this.currentPrice = currentPrice;

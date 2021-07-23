@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.R;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 
 public class HomeFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,9 +58,15 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                     String tmp = "Welcome, " + user.getUserName()+" !";
                     welcome.setText(tmp);
                     userMenuDrawerWelcome.setText(tmp);
+                    //incase we use this in a recycler view we need to reset the image to the default one, not relevant here.
+                    //profilePic.setImageResource(R.drawable.avatar_placeholder_foreground);
+                    if (user.getProfilePic() != null && !user.getProfilePic().isEmpty()){
+                        Picasso.get().load(user.getProfilePic()).into(profilePic);
+                    }
+                    Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
                 }
             });
-            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+
             showUserOptions();
         } else {
             hideUserOptions();

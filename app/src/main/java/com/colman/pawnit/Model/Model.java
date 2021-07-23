@@ -1,5 +1,7 @@
 package com.colman.pawnit.Model;
 
+import android.graphics.Bitmap;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -25,6 +27,9 @@ public class Model {
     private PawnDao pawnDao;
     private OfferDao offerDao;
     private HistoryDao historyDao;
+
+    public static final String PROFILE_DIR = "profilePics";
+    public static final String LISTINGS_DIR = "listingsImages";
 
     User currentUser = new User();
 
@@ -205,7 +210,7 @@ public class Model {
     public void getUserFromDB(FirebaseModel.getUserDataListener listener){
         FirebaseModel.getUserData(user -> {
             if(user != null){
-                currentUser = new User(FirebaseModel.getUser().getUid(),user.getUserName(),user.getDateOfBirth(),user.getEmail());
+                currentUser = new User(FirebaseModel.getUser().getUid(),user.getUserName(),user.getDateOfBirth(),user.getEmail(),user.getProfilePic());
                 currentUser.setResellListings(user.getResellListings());
                 currentUser.setAuctionListings(user.getAuctionListings());
                 currentUser.setPawnListings(user.getPawnListings());
@@ -285,5 +290,12 @@ public class Model {
 
     public void updateListing(String listingID, Listing listing, FirebaseModel.updateListingListener listener){
         FirebaseModel.updateListing(listingID,listing,listener);
+    }
+
+    public interface UploadImageListener {
+        void onComplete(String url);
+    }
+    public void uploadImage(Bitmap imageBmp, String name, String dir, final UploadImageListener listener) {
+        FirebaseModel.uploadImage(imageBmp, name, dir, listener);
     }
 }
