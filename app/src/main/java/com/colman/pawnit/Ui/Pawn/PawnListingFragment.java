@@ -2,10 +2,12 @@ package com.colman.pawnit.Ui.Pawn;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
 
@@ -30,7 +33,7 @@ public class PawnListingFragment extends Fragment {
     TextView due;
     TextView interest;
     TextView description;
-    ImageButton popup;
+    ImageButton popupMenu;
 
     public static PawnListingFragment newInstance() {
         return new PawnListingFragment();
@@ -44,7 +47,30 @@ public class PawnListingFragment extends Fragment {
         due = view.findViewById(R.id.pawn_listing_due);
         interest = view.findViewById(R.id.pawn_listing_interest);
         description = view.findViewById(R.id.pawn_listing_description);
-        popup = view.findViewById(R.id.pawn_popup_menu);
+        popupMenu = view.findViewById(R.id.pawn_popup_menu);
+        popupMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getActivity(),popupMenu);
+                popup.getMenuInflater().inflate(R.menu.pawn_popup_menu,popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.pawn_popup_edit:
+                                //Navigation.findNavController(view).navigate(R.id.action_marketFragment_to_addResellListingFragment);
+                                break;
+                            case R.id.pawn_popup_delete:
+                                // to do delete func
+                                Navigation.findNavController(view).navigate(R.id.action_pawnListingFragment_to_userPawnFragments);
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+            }
+        });
 
 
         return view;

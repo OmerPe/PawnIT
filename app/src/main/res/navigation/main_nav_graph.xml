@@ -131,7 +131,11 @@
         android:id="@+id/pawnListingFragment"
         android:name="com.colman.pawnit.Ui.Pawn.PawnListingFragment"
         android:label="pawn_listing_fragment"
-        tools:layout="@layout/pawn_listing_fragment" />
+        tools:layout="@layout/pawn_listing_fragment" >
+        <action
+            android:id="@+id/action_pawnListingFragment_to_userPawnFragments"
+            app:destination="@id/userPawnFragments" />
+    </fragment>
     <fragment
         android:id="@+id/resell_listFragment"
         android:name="com.colman.pawnit.Ui.Market.Resell_listing_Fragment"
