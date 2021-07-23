@@ -2,6 +2,10 @@ package com.colman.pawnit.Ui.User;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -10,9 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -20,6 +26,8 @@ import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.User;
 import com.colman.pawnit.R;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,6 +39,7 @@ public class RegisterFragment extends Fragment {
     private ProgressBar progressBar;
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
+    private ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +60,11 @@ public class RegisterFragment extends Fragment {
         etFullName = (EditText) view.findViewById(R.id.register_name);
         etEmail = (EditText) view.findViewById(R.id.register_email);
         etPwd = (EditText) view.findViewById(R.id.register_pwd);
+        imageView = view.findViewById(R.id.register_profilepic_imageV);
+        Button addImgBtn = view.findViewById(R.id.register_profilepic_btn);
+        addImgBtn.setOnClickListener(v -> {
+            addImage();
+        });
 
         view.findViewById(R.id.register_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,7 +199,8 @@ public class RegisterFragment extends Fragment {
                 user.setUserName(fullName);
 
                 Model.instance.createUser(user,()->{
-                    Navigation.findNavController(v).navigate(R.id.action_registerFragment_to_homeFragment);
+                    Model.instance.logOut();
+                    Navigation.findNavController(v).navigateUp();
                 });
             } else {
                 Toast.makeText(getActivity(), "Failed to signup make sure everything is ok", Toast.LENGTH_SHORT).show();
@@ -263,6 +278,45 @@ public class RegisterFragment extends Fragment {
 
     public void openDatePicker(View view) {
         datePickerDialog.show();
+    }
+
+    static final int PICK_IMAGE = 1;
+    void addImage(){
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        startActivityForResult(chooserIntent, PICK_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode == getActivity().RESULT_OK) {
+//            this is for camera activity
+//            Bundle extras = data.getExtras();
+//            imageBitmap = (Bitmap) extras.get("dat");
+//            imageView.setImageBitmap(imageBitmap);
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
     }
 
 }

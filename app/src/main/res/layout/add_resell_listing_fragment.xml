@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Ui.Market.New.AddResellListingFragment">
 
     <HorizontalScrollView
         android:id="@+id/add_resell_addimage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:clickable="true">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/add_resell_imageV"
                 android:layout_width="410dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/placeholder" />
@@ -34,14 +34,15 @@
     </HorizontalScrollView>
 
     <ImageButton
-        android:id="@+id/add_resell_imageV"
+        android:id="@+id/add_resell_imageB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
-        app:srcCompat="@drawable/ic_image"
+        android:background="#00FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_image" />
 
     <EditText
         android:id="@+id/add_resell_title"
@@ -102,10 +103,10 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/add_resell_addimage"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toTopOf="@+id/add_resell_addimage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

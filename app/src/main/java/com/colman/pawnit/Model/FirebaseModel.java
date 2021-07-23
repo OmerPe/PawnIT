@@ -46,6 +46,7 @@ public class FirebaseModel {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 ResellListing resellListing = ResellListing.create(document.getData());
+                                resellListing.setListingID(document.getId());
                                 listings.add(resellListing);
                             }
                         } else {
@@ -71,6 +72,7 @@ public class FirebaseModel {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 AuctionListing listing = AuctionListing.create(document.getData());
+                                listing.setListingID(document.getId());
                                 listings.add(listing);
                             }
                         } else {
@@ -95,7 +97,8 @@ public class FirebaseModel {
                         List<PawnListing> listings = new LinkedList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                listings.add(PawnListing.create(document.getData()));
+                                PawnListing listing = PawnListing.create(document.getData());
+                                listings.add(listing);
                             }
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
@@ -103,7 +106,6 @@ public class FirebaseModel {
                         listener.onComplete(listings);
                     }
                 });
-        ;
     }
 
     public static void saveListing(Listing listing, Model.myOnCompleteListener onCompleteListener) {
@@ -113,23 +115,28 @@ public class FirebaseModel {
         if (listing instanceof ResellListing) {
             Model.instance.resellLoadingState.setValue(Model.LoadingState.loading);
             ResellListing resellListing = (ResellListing) listing;
-            ref = db.collection(RESELL_LISTING_COLLECTION).add(resellListing);
+            ref = db.collection(RESELL_LISTING_COLLECTION).add(resellListing.getJson());
         } else if (listing instanceof AuctionListing) {
             Model.instance.auctionLoadingState.setValue(Model.LoadingState.loading);
             AuctionListing auctionListing = (AuctionListing) listing;
-            ref = db.collection(AUCTION_LISTING_COLLECTION).add(auctionListing);
+            ref = db.collection(AUCTION_LISTING_COLLECTION).add(auctionListing.getJson());
         } else if (listing instanceof PawnListing) {
             Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loading);
             PawnListing pawnListing = (PawnListing) listing;
-            ref = db.collection(PAWN_LISTING_COLLECTION).add(pawnListing);
+            ref = db.collection(PAWN_LISTING_COLLECTION).add(pawnListing.getJson());
         }
 
         if (ref != null) {
             ref.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
-                    MyApplication.mainThreadHandler.post(() -> {
-                        onCompleteListener.onComplete(documentReference.getId());
+                    documentReference.update("ListingID",documentReference.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            MyApplication.mainThreadHandler.post(() -> {
+                                onCompleteListener.onComplete(documentReference.getId());
+                            });
+                        }
                     });
                 }
             })
@@ -283,7 +290,7 @@ public class FirebaseModel {
     public static void saveUser(User user, userOnCompleteListener onCompleteListener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(USER_COLLECTION).document(user.getUid())
-                .set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                .set(user.toJson()).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 onCompleteListener.onComplete();

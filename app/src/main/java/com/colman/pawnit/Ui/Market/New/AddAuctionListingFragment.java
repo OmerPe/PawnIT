@@ -2,7 +2,12 @@ package com.colman.pawnit.Ui.Market.New;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -23,6 +29,8 @@ import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.R;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,7 +43,8 @@ public class AddAuctionListingFragment extends Fragment {
     private DatePickerDialog edatePickerDialog;// end date
     private Button sdateButton;
     private Button edateButton;
-
+    private ImageView imageView;
+    Bitmap imageBitmap;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -48,6 +57,7 @@ public class AddAuctionListingFragment extends Fragment {
         EditText description = view.findViewById(R.id.add_auction_description);
         ProgressBar progressBar = view.findViewById(R.id.add_auction_progressbar);
         ImageButton addImages = view.findViewById(R.id.add_auction_imageV);
+        imageView = view.findViewById(R.id.auction_first_image);
         initDatePicker();
         sdateButton = (Button) view.findViewById(R.id.auction_sdatebtn);
         sdateButton.setText(getTodaysDate());
@@ -97,7 +107,7 @@ public class AddAuctionListingFragment extends Fragment {
         addImages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "dor has covid", Toast.LENGTH_SHORT).show();
+                addImages();
             }
         });
 
@@ -254,7 +264,43 @@ public class AddAuctionListingFragment extends Fragment {
     public void eopenDatePicker(View view) {
         edatePickerDialog.show();
     }
-    public void addImages(){
 
+    static final int PICK_IMAGE = 1;
+    void addImages(){
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        startActivityForResult(chooserIntent, PICK_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode == getActivity().RESULT_OK) {
+//            this is for camera activity
+//            Bundle extras = data.getExtras();
+//            imageBitmap = (Bitmap) extras.get("dat");
+//            imageView.setImageBitmap(imageBitmap);
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -2,6 +2,10 @@ package com.colman.pawnit.Ui.Pawn.New;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -23,6 +28,8 @@ import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,6 +40,7 @@ public class AddPawnListingFragment extends Fragment {
     private AddPawnListingViewModel mViewModel;
     private DatePickerDialog datePickerDialog;
     private Button sdateButton;
+    ImageView imageView;
 
     public static AddPawnListingFragment newInstance() {
         return new AddPawnListingFragment();
@@ -49,12 +57,10 @@ public class AddPawnListingFragment extends Fragment {
         EditText interestRate = view.findViewById(R.id.add_pawn_interest);
         EditText description = view.findViewById(R.id.add_pawn_description);
         ProgressBar progressBar = view.findViewById(R.id.add_pawn_progressbar);
-        ImageButton addImages = view.findViewById(R.id.add_pawn_imageV);
-        addImages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "ABCD", Toast.LENGTH_SHORT).show();
-            }
+        ImageButton addImages = view.findViewById(R.id.add_pawn_imageB);
+        imageView = view.findViewById(R.id.add_pawn_imageV);
+        addImages.setOnClickListener(v -> {
+            addImages();
         });
         initDatePicker();
         sdateButton = (Button) view.findViewById(R.id.pawn_datebtn);
@@ -225,6 +231,45 @@ public class AddPawnListingFragment extends Fragment {
 
     public void openDatePicker(View view) {
         datePickerDialog.show();
+    }
+
+    static final int PICK_IMAGE = 1;
+    void addImages(){
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+        startActivityForResult(chooserIntent, PICK_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && resultCode == getActivity().RESULT_OK) {
+//            this is for camera activity
+//            Bundle extras = data.getExtras();
+//            imageBitmap = (Bitmap) extras.get("dat");
+//            imageView.setImageBitmap(imageBitmap);
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
     }
 
 }

@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,8 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
         leftDrawer = view.findViewById(R.id.nav_view_main_menu);
         rightDrawer = view.findViewById(R.id.nav_view_profile_menu);
         TextView welcome = view.findViewById(R.id.main_fragment_welcome_tv);
+        TextView userMenuDrawerWelcome = rightDrawer.getHeaderView(0).findViewById(R.id.profileDrawer_username);
+        ImageView profilePic = rightDrawer.getHeaderView(0).findViewById(R.id.profileDrawer_imageV);
 
         leftDrawer.bringToFront();
         rightDrawer.bringToFront();
@@ -50,7 +53,9 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
 
         if (Model.instance.isLoggedIn()) {
             Model.instance.getUserFromDB(user -> {
-                welcome.setText("Welcome, " + user.getUserName()+" !");
+                String tmp = "Welcome, " + user.getUserName()+" !";
+                welcome.setText(tmp);
+                userMenuDrawerWelcome.setText(tmp);
             });
             Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
             showUserOptions();
