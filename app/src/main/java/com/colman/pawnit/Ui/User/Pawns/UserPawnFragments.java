@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,13 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
-import com.colman.pawnit.Ui.Pawn.PawnFragment;
-import com.colman.pawnit.Ui.Pawn.PawnViewModel;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class UserPawnFragments extends Fragment {
 

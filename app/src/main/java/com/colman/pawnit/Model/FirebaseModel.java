@@ -1,10 +1,8 @@
 package com.colman.pawnit.Model;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 
 import com.colman.pawnit.MyApplication;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -84,10 +82,10 @@ public class FirebaseModel {
     }
 
     public interface getAllPawnsListener {
-        public void onComplete(List<PawnListing> resells);
+        void onComplete(List<PawnListing> resells);
     }
 
-    public static void getAllPawns(getAllPawnsListener listener) {
+    public static void getAllPawnListings(getAllPawnsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(PAWN_LISTING_COLLECTION)
                 .get()
@@ -97,8 +95,7 @@ public class FirebaseModel {
                         List<PawnListing> listings = new LinkedList<>();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                PawnListing listing = PawnListing.create(document.getData());
-                                listings.add(listing);
+                                listings.add(PawnListing.create(document.getData()));
                             }
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
@@ -144,6 +141,92 @@ public class FirebaseModel {
                     });
         }
 
+    }
+
+    public interface deleteOnCompleteListener{
+        void onComplete();
+    }
+
+    public static void deletePawnListing(String listingID,deleteOnCompleteListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(PAWN_LISTING_COLLECTION).document(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onComplete();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
+    public static void deleteAuctionListing(String listingID,deleteOnCompleteListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(AUCTION_LISTING_COLLECTION).document(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onComplete();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
+    public static void deleteResellListing(String listingID,deleteOnCompleteListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(RESELL_LISTING_COLLECTION).document(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onComplete();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+    }
+
+    public interface updateListingListener{
+        void onComplete();
+    }
+
+    public static void updateListing(String listingID, Listing listing, updateListingListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Task<Void> ref = null;
+
+        if (listing instanceof ResellListing) {
+            Model.instance.resellLoadingState.setValue(Model.LoadingState.loading);
+            ResellListing resellListing = (ResellListing) listing;
+            ref = db.collection(RESELL_LISTING_COLLECTION).document(listingID).update(resellListing.getJson());
+        } else if (listing instanceof AuctionListing) {
+            Model.instance.auctionLoadingState.setValue(Model.LoadingState.loading);
+            AuctionListing auctionListing = (AuctionListing) listing;
+            ref = db.collection(AUCTION_LISTING_COLLECTION).document(listingID).update(auctionListing.getJson());
+        } else if (listing instanceof PawnListing) {
+            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loading);
+            PawnListing pawnListing = (PawnListing) listing;
+            ref = db.collection(PAWN_LISTING_COLLECTION).document(listingID).update(pawnListing.getJson());
+        }
+
+        if (ref != null) {
+            ref.addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    listener.onComplete();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("TAG","error updating listing "+listingID);
+                }
+            });
+        }
     }
 
     public static void getAllPawnsForUser(String Uid, getAllPawnsListener listener) {

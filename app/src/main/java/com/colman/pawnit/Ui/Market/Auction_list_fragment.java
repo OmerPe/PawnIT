@@ -12,12 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.colman.pawnit.Model.AuctionListing;
-import com.colman.pawnit.Model.Listing;
 import com.colman.pawnit.R;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class Auction_list_fragment extends Fragment {
 

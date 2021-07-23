@@ -1,19 +1,12 @@
 package com.colman.pawnit.Model;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
-import com.colman.pawnit.MyApplication;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -142,13 +135,16 @@ public class Model {
     MutableLiveData<List<PawnListing>> allPawnListings = new MutableLiveData<List<PawnListing>>(new LinkedList<PawnListing>());
     public LiveData<List<PawnListing>> getAllPawnListings() {
         pawnListingLoadingState.setValue(LoadingState.loading);
-        FirebaseModel.getAllPawns((pawns) -> {
+
+        FirebaseModel.getAllPawnListings((pawns) -> {
+
             Collections.sort(pawns, (listing1, listing2) -> {
                 if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
                     return 0;
                 }
                 return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
             });
+
             allPawnListings.setValue(pawns);
             pawnListingLoadingState.setValue(LoadingState.loaded);
         });
@@ -172,7 +168,23 @@ public class Model {
     }
 
     public void saveListing(Listing listing, myOnCompleteListener onCompleteListener) {
+        if (listing instanceof ResellListing) {
+            Model.instance.resellLoadingState.setValue(Model.LoadingState.loading);
+        } else if (listing instanceof AuctionListing) {
+            Model.instance.auctionLoadingState.setValue(Model.LoadingState.loading);
+        } else if (listing instanceof PawnListing) {
+            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loading);
+        }
+
         FirebaseModel.saveListing(listing, onCompleteListener);
+
+        if (listing instanceof ResellListing) {
+            getResellData();
+        } else if (listing instanceof AuctionListing) {
+            getAuctionData();
+        } else if (listing instanceof PawnListing) {
+            getAllPawnListings();
+        }
     }
 
     public interface createUserDataOnCompleteListener{
@@ -203,6 +215,7 @@ public class Model {
     public interface updateUserDataOnCompleteListener{
         void onComplete();
     }
+
     public void updateUserData(User user,updateUserDataOnCompleteListener listener) {
         userLoadingState.setValue(LoadingState.loading);
         FirebaseModel.updateUser(user,listener);
@@ -252,5 +265,21 @@ public class Model {
         });
 
         return allUserPawns;
+    }
+
+    public void deletePawnListing(String listingID, FirebaseModel.deleteOnCompleteListener listener){
+        FirebaseModel.deletePawnListing(listingID,listener);
+    }
+
+    public void deleteAuctionListing(String listingID, FirebaseModel.deleteOnCompleteListener listener){
+        FirebaseModel.deleteAuctionListing(listingID,listener);
+    }
+
+    public void deleteResellListing(String listingID, FirebaseModel.deleteOnCompleteListener listener){
+        FirebaseModel.deleteResellListing(listingID,listener);
+    }
+
+    public void updateListing(String listingID, Listing listing, FirebaseModel.updateListingListener listener){
+        FirebaseModel.updateListing(listingID,listing,listener);
     }
 }

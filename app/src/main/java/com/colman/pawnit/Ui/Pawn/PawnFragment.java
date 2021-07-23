@@ -17,12 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.pawnit.Model.Model;
-import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class PawnFragment extends Fragment {
 
@@ -36,6 +32,12 @@ public class PawnFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        mViewModel = new ViewModelProvider(this).get(PawnViewModel.class);
+
+        mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
+            adapter.notifyDataSetChanged();
+        });
+
         View view = inflater.inflate(R.layout.pawn_fragment, container, false);
 
         FloatingActionButton addBtn = view.findViewById(R.id.pawn_fab);
@@ -51,20 +53,11 @@ public class PawnFragment extends Fragment {
         }
 
         RecyclerView list = view.findViewById(R.id.PawnList_recyclerView);
-
-        mViewModel = new ViewModelProvider(this).get(PawnViewModel.class);
-
-        mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
-            adapter.notifyDataSetChanged();
-        });
-
-        list.setLayoutManager(new LinearLayoutManager(getContext()));
-        list.setHasFixedSize(true);
         adapter = new MyAdapter();
+
+        list.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        list.setHasFixedSize(true);
         list.setAdapter(adapter);
-
-
-
         ProgressBar progressBar = view.findViewById(R.id.pawn_list_pb);
         progressBar.setVisibility(View.GONE);
 

@@ -3,7 +3,6 @@ package com.colman.pawnit.Ui.Market;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
 

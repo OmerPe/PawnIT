@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.colman.pawnit.Model.Model;
-import com.colman.pawnit.Model.User;
 import com.colman.pawnit.R;
 import com.google.android.material.navigation.NavigationView;
 
