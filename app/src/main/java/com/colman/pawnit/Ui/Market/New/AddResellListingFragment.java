@@ -78,6 +78,21 @@ public class AddResellListingFragment extends Fragment {
 
                 Model.instance.saveListing(listing,(listingId)->{
                     if(listingId != null){
+                        if(selectedImages != null){
+                            Model.instance.uploadImage(selectedImages.get(0),listingId,Model.LISTINGS_DIR,url -> {
+                                LinkedList<String> list = new LinkedList<>();
+                                list.add(url);
+                                listing.setImages(list);
+                                listing.setListingID(listingId);
+                                Model.instance.updateListing(listingId,listing,()->{
+                                    Navigation.findNavController(v).navigateUp();
+                                    Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                                });
+                            });
+                        }else{
+                            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                            Navigation.findNavController(v).navigateUp();
+                        }
                         Model.instance.getUserFromDB(user -> {
                             if(user != null){
                                 user.addResellListing(listingId);
@@ -88,7 +103,6 @@ public class AddResellListingFragment extends Fragment {
                         });
                     }
                 });
-                Navigation.findNavController(v).navigateUp();
             }
         });
         addImages.setOnClickListener(new View.OnClickListener() {
@@ -104,11 +118,11 @@ public class AddResellListingFragment extends Fragment {
     static final int PICK_IMAGE = 1;
     void addImages(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+        //getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         getIntent.setType("image/*");
 
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+        //pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         pickIntent.setType("image/*");
 
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
@@ -124,7 +138,7 @@ public class AddResellListingFragment extends Fragment {
         if (requestCode == PICK_IMAGE && resultCode == getActivity().RESULT_OK) {
             try {
                 selectedImages = new LinkedList<>();
-                ClipData clipData = data.getClipData();
+                /*ClipData clipData = data.getClipData();
                 if(clipData != null){//multiplte images
                     for (int i =0; i<clipData.getItemCount();i++){
                         Uri imageUri = clipData.getItemAt(i).getUri();
@@ -133,11 +147,12 @@ public class AddResellListingFragment extends Fragment {
                         selectedImages.add(image);
                     }
                 }else {//single image
-                    final Uri imageUri = data.getData();
-                    final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                    Bitmap image = BitmapFactory.decodeStream(imageStream);
-                    selectedImages.add(image);
-                }
+
+                }*/
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                Bitmap image = BitmapFactory.decodeStream(imageStream);
+                selectedImages.add(image);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();

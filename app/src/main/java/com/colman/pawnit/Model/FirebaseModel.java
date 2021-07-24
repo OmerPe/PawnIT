@@ -309,7 +309,6 @@ public class FirebaseModel {
         });
     }
 
-
     /*---------------------------------------------------------------------------Auth---------------------------------------------------------------------------------------*/
     public static FirebaseAuth getAuth() {
         return FirebaseAuth.getInstance();

@@ -298,4 +298,8 @@ public class Model {
     public void getResellListing(String Uid, FirebaseModel.getListingOnCompleteListener listener){
         FirebaseModel.getResellListing(Uid,listener);
     }
+
+    public interface UploadImagesListener {
+        void onComplete(List<String> url);
+    }
 }
