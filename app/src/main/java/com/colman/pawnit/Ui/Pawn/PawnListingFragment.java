@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,11 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +35,7 @@ public class PawnListingFragment extends Fragment {
     TextView due;
     TextView interest;
     TextView description;
+    CollapsingToolbarLayout title;
     ImageButton popupMenu;
 
     public static PawnListingFragment newInstance() {
@@ -46,6 +51,24 @@ public class PawnListingFragment extends Fragment {
         interest = view.findViewById(R.id.pawn_listing_interest);
         description = view.findViewById(R.id.pawn_listing_description);
         popupMenu = view.findViewById(R.id.pawn_popup_menu);
+        title = view.findViewById(R.id.pawn_collapsing_toolbar);
+
+        String id = (String) getArguments().get("listingID");
+        if(id != null){
+            Model.instance.getPawnListing(id,(listing1 -> {
+                PawnListing listing = (PawnListing)listing1;
+
+                requested.setText(""+listing.getLoanAmountRequested());
+                description.setText(listing.getDescription());
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(listing.getWhenToGet());
+                due.setText(cal.get(Calendar.DAY_OF_MONTH)+"\\"+cal.get(Calendar.MONTH)+"\\"+cal.get(Calendar.YEAR));
+                title.setTitle(listing.getTitle());
+                interest.setText(""+listing.getInterestRate());
+
+            }));
+        }
+
         popupMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -136,7 +136,7 @@ public class FirebaseModel {
             ref.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(DocumentReference documentReference) {
-                    documentReference.update("ListingID",documentReference.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    documentReference.update("listingID", documentReference.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             MyApplication.mainThreadHandler.post(() -> {
@@ -157,11 +157,11 @@ public class FirebaseModel {
 
     }
 
-    public interface deleteOnCompleteListener{
+    public interface deleteOnCompleteListener {
         void onComplete();
     }
 
-    public static void deletePawnListing(String listingID,deleteOnCompleteListener listener){
+    public static void deletePawnListing(String listingID, deleteOnCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(PAWN_LISTING_COLLECTION).document(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -176,7 +176,7 @@ public class FirebaseModel {
         });
     }
 
-    public static void deleteAuctionListing(String listingID,deleteOnCompleteListener listener){
+    public static void deleteAuctionListing(String listingID, deleteOnCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(AUCTION_LISTING_COLLECTION).document(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -191,7 +191,7 @@ public class FirebaseModel {
         });
     }
 
-    public static void deleteResellListing(String listingID,deleteOnCompleteListener listener){
+    public static void deleteResellListing(String listingID, deleteOnCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RESELL_LISTING_COLLECTION).document(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -206,11 +206,11 @@ public class FirebaseModel {
         });
     }
 
-    public interface updateListingListener{
+    public interface updateListingListener {
         void onComplete();
     }
 
-    public static void updateListing(String listingID, Listing listing, updateListingListener listener){
+    public static void updateListing(String listingID, Listing listing, updateListingListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Task<Void> ref = null;
 
@@ -237,7 +237,7 @@ public class FirebaseModel {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.d("TAG","error updating listing "+listingID);
+                    Log.d("TAG", "error updating listing " + listingID);
                 }
             });
         }
@@ -245,19 +245,68 @@ public class FirebaseModel {
 
     public static void getAllPawnsForUser(String Uid, getAllPawnsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(PAWN_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID,Uid).get()
+        db.collection(PAWN_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID, Uid).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         List<PawnListing> listings = new LinkedList<>();
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()){
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 listings.add(PawnListing.create(document.getData()));
                             }
                         }
                         listener.onComplete(listings);
                     }
                 });
+    }
+
+    public interface getListingOnCompleteListener{
+        void onComplete(Listing listing);
+    }
+
+    public static void getPawnListing(String Uid, getListingOnCompleteListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(PAWN_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
+           if(task.isSuccessful()){
+               DocumentSnapshot document = task.getResult();
+               if(document.exists()){
+                   PawnListing listing = PawnListing.create(document.getData());
+                   listener.onComplete(listing);
+               }else{
+                   listener.onComplete(null);
+               }
+           }
+        });
+    }
+
+    public static void getAuctionListing(String Uid, getListingOnCompleteListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(PAWN_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                if(document.exists()){
+                    AuctionListing listing = AuctionListing.create(document.getData());
+                    listener.onComplete(listing);
+                }else{
+                    listener.onComplete(null);
+                }
+            }
+        });
+    }
+
+    public static void getResellListing(String Uid, getListingOnCompleteListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(PAWN_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                if(document.exists()){
+                    ResellListing listing = ResellListing.create(document.getData());
+                    listener.onComplete(listing);
+                }else{
+                    listener.onComplete(null);
+                }
+            }
+        });
     }
 
 
@@ -327,7 +376,7 @@ public class FirebaseModel {
                             User user = User.create(document.getData());
                             listener.onComplete(user);
                         }
-                    }else {
+                    } else {
                         listener.onComplete(null);
                     }
                 }
@@ -353,7 +402,7 @@ public class FirebaseModel {
         listener.onComplete();
     }
 
-    public static void uploadImage(Bitmap imageBmp, String name, String dir, final Model.UploadImageListener listener){
+    public static void uploadImage(Bitmap imageBmp, String name, String dir, final Model.UploadImageListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final StorageReference imagesRef = storage.getReference().child(dir).child(name);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

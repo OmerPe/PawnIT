@@ -7,29 +7,30 @@
     tools:context=".Ui.Market.New.AddAuctionListingFragment">
 
     <HorizontalScrollView
-        android:id="@+id/add_auction_addimage"
+        android:id="@+id/add_auction_addimage_SV"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:clickable="true"
-        android:focusable="true"
+        android:background="@drawable/placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/auction_gallery"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <ImageView
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <!--<ImageView
                 android:id="@+id/auction_first_image"
-                android:layout_width="410dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
                 android:src="@drawable/placeholder" />
 
             <ImageView
                 android:layout_width="410dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/placeholder" />
+                android:src="@drawable/placeholder" /> -->
+
 
         </LinearLayout>
     </HorizontalScrollView>
@@ -56,7 +57,7 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_auction_addimage" />
+        app:layout_constraintTop_toBottomOf="@+id/add_auction_addimage_SV" />
 
     <TextView
         android:id="@+id/add_auction_sdate"
@@ -175,6 +176,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/add_auction_addimage" />
+        app:layout_constraintTop_toTopOf="@+id/add_auction_addimage_SV" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

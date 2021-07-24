@@ -286,4 +286,16 @@ public class Model {
     public void uploadImage(Bitmap imageBmp, String name, String dir, final UploadImageListener listener) {
         FirebaseModel.uploadImage(imageBmp, name, dir, listener);
     }
+
+    public void getPawnListing(String Uid, FirebaseModel.getListingOnCompleteListener listener){
+        FirebaseModel.getPawnListing(Uid,listener);
+    }
+
+    public void getAuctionListing(String Uid, FirebaseModel.getListingOnCompleteListener listener){
+        FirebaseModel.getAuctionListing(Uid,listener);
+    }
+
+    public void getResellListing(String Uid, FirebaseModel.getListingOnCompleteListener listener){
+        FirebaseModel.getResellListing(Uid,listener);
+    }
 }

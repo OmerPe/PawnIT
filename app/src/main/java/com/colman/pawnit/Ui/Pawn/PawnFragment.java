@@ -24,6 +24,7 @@ public class PawnFragment extends Fragment {
 
     private PawnViewModel mViewModel;
     MyAdapter adapter;
+    RecyclerView list;
 
     public static PawnFragment newInstance() {
         return new PawnFragment();
@@ -52,12 +53,14 @@ public class PawnFragment extends Fragment {
             addBtn.setVisibility(View.VISIBLE);
         }
 
-        RecyclerView list = view.findViewById(R.id.PawnList_recyclerView);
+        list = view.findViewById(R.id.PawnList_recyclerView);
         adapter = new MyAdapter();
 
         list.setLayoutManager(new LinearLayoutManager(view.getContext()));
         list.setHasFixedSize(true);
         list.setAdapter(adapter);
+
+
         ProgressBar progressBar = view.findViewById(R.id.pawn_list_pb);
         progressBar.setVisibility(View.GONE);
 
@@ -79,6 +82,8 @@ public class PawnFragment extends Fragment {
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
+        private final View.OnClickListener mOnClickListener = new MyOnClickListener();
+
         public MyAdapter(){
         }
 
@@ -86,6 +91,7 @@ public class PawnFragment extends Fragment {
         @Override
         public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.pawn_list_row,parent,false);
+            itemView.setOnClickListener(mOnClickListener);
             return new MyAdapter.MyViewHolder(itemView);
         }
 
@@ -102,7 +108,7 @@ public class PawnFragment extends Fragment {
             return mViewModel.getData().getValue().size();
         }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
+        public class MyViewHolder extends RecyclerView.ViewHolder{
             TextView title;
             TextView requested;
             ImageView image;
@@ -111,13 +117,20 @@ public class PawnFragment extends Fragment {
                 title = itemView.findViewById(R.id.pawn_row_title);
                 requested = itemView.findViewById(R.id.pawn_row_price);
                 image = itemView.findViewById(R.id.pawn_row_picture);
+            }
 
-                image.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view) {
-                        Navigation.findNavController(view).navigate(R.id.action_pawnFragment_to_pawnListingFragment);
-                    }
-                });
+        }
+
+        public class MyOnClickListener implements View.OnClickListener{
+
+            @Override
+            public void onClick(View v) {
+                int itemPosition = list.getChildLayoutPosition(v);
+                String id = mViewModel.getData().getValue().get(itemPosition).getListingID();
+
+                PawnFragmentDirections.ActionPawnFragmentToPawnListingFragment action =
+                        PawnFragmentDirections.actionPawnFragmentToPawnListingFragment(id);
+                Navigation.findNavController(v).navigate(action);
             }
         }
     }

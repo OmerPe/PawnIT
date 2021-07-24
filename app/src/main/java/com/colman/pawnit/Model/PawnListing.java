@@ -92,8 +92,8 @@ public class PawnListing extends Listing {
 
     public static PawnListing create(Map<String, Object> json) {
         Listing listing = Listing.createListing(json);
-
-        return new PawnListing(listing.getOwnerId(),
+        PawnListing pl = new PawnListing(
+                listing.getOwnerId(),
                 listing.getTitle(),
                 listing.getDescription(),
                 listing.getLocation(),
@@ -104,5 +104,7 @@ public class PawnListing extends Listing {
                 ((Timestamp)json.get(WHEN_TO_GET)).toDate(),
                 (int)((long)json.get(NUM_OF_PAYMENTS)),
                 (String) json.get(PAYMENT_DAY));
+        pl.setListingID(listing.getListingID());
+        return pl;
     }
 }

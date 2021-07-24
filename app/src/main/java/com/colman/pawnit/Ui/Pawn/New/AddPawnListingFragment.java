@@ -2,6 +2,7 @@ package com.colman.pawnit.Ui.Pawn.New;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -26,6 +28,7 @@ import androidx.navigation.Navigation;
 
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
+import com.colman.pawnit.MyApplication;
 import com.colman.pawnit.R;
 
 import java.io.FileNotFoundException;
@@ -34,13 +37,18 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AddPawnListingFragment extends Fragment {
 
     private AddPawnListingViewModel mViewModel;
     private DatePickerDialog datePickerDialog;
     private Button sdateButton;
-    ImageView imageView;
+
+    LayoutInflater inf;
+    LinearLayout gallery;
+    List<Bitmap> selectedImages;
 
     public static AddPawnListingFragment newInstance() {
         return new AddPawnListingFragment();
@@ -51,6 +59,9 @@ public class AddPawnListingFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_pawn_listing_fragment, container, false);
 
+        gallery = view.findViewById(R.id.pawn_gallery);
+        inf = inflater;
+
         HorizontalScrollView images = view.findViewById(R.id.add_pawn_addimage);
         EditText title = view.findViewById(R.id.add_pawn_title);
         EditText requested = view.findViewById(R.id.add_pawn_requested);
@@ -58,7 +69,6 @@ public class AddPawnListingFragment extends Fragment {
         EditText description = view.findViewById(R.id.add_pawn_description);
         ProgressBar progressBar = view.findViewById(R.id.add_pawn_progressbar);
         ImageButton addImages = view.findViewById(R.id.add_pawn_imageB);
-        imageView = view.findViewById(R.id.add_pawn_imageV);
         addImages.setOnClickListener(v -> {
             addImages();
         });
@@ -240,12 +250,12 @@ public class AddPawnListingFragment extends Fragment {
     static final int PICK_IMAGE = 1;
     void addImages(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         getIntent.setType("image/*");
 
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         pickIntent.setType("image/*");
-
-        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
@@ -253,23 +263,45 @@ public class AddPawnListingFragment extends Fragment {
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == getActivity().RESULT_OK) {
-//            this is for camera activity
-//            Bundle extras = data.getExtras();
-//            imageBitmap = (Bitmap) extras.get("dat");
-//            imageView.setImageBitmap(imageBitmap);
             try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView.setImageBitmap(selectedImage);
+                selectedImages = new LinkedList<>();
+                ClipData clipData = data.getClipData();
+                if(clipData != null){//multiplte images
+                    for (int i =0; i<clipData.getItemCount();i++){
+                        Uri imageUri = clipData.getItemAt(i).getUri();
+                        InputStream is = getActivity().getContentResolver().openInputStream(imageUri);
+                        Bitmap image = BitmapFactory.decodeStream(is);
+                        selectedImages.add(image);
+                    }
+                }else {//single image
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                    Bitmap image = BitmapFactory.decodeStream(imageStream);
+                    selectedImages.add(image);
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
+            new Thread(()->{
+                for (final Bitmap image : selectedImages){
+                    MyApplication.mainThreadHandler.post(()->{
+                        View im = inf.inflate(R.layout.image_item,gallery,false);
+                        ImageView imV = im.findViewById(R.id.imageItem_imageV);
+                        imV.setImageBitmap(image);
+                        if(imV.getParent() != null){
+                            ((ViewGroup)imV.getParent()).removeView(imV);
+                        }
+                        gallery.addView(imV);
+                    });
+                }
+
+            }).start();
 
         }else {
             Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();

@@ -135,6 +135,9 @@
         <action
             android:id="@+id/action_pawnListingFragment_to_userPawnFragments"
             app:destination="@id/userPawnFragments" />
+        <argument
+            android:name="listingID"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/resell_listFragment"

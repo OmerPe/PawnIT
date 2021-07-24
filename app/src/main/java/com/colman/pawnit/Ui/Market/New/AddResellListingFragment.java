@@ -1,5 +1,6 @@
 package com.colman.pawnit.Ui.Market.New;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -22,16 +24,22 @@ import androidx.navigation.Navigation;
 
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
+import com.colman.pawnit.MyApplication;
 import com.colman.pawnit.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AddResellListingFragment extends Fragment {
 
     private AddResellListingViewModel mViewModel;
     ImageView imageView;
+    LayoutInflater inf;
+    LinearLayout gallery;
+    List<Bitmap> selectedImages;
 
     public static AddResellListingFragment newInstance() {
         return new AddResellListingFragment();
@@ -42,6 +50,9 @@ public class AddResellListingFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_resell_listing_fragment, container, false);
 
+        gallery = view.findViewById(R.id.resell_gallery);
+        inf = inflater;
+
         EditText title = view.findViewById(R.id.add_resell_title);
         EditText price = view.findViewById(R.id.add_resell_price);
         EditText desc = view.findViewById(R.id.add_resell_description);
@@ -50,7 +61,6 @@ public class AddResellListingFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
 
         ImageButton addImages = view.findViewById(R.id.add_resell_imageB);
-        imageView = view.findViewById(R.id.add_resell_imageV);
 
 
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -94,12 +104,12 @@ public class AddResellListingFragment extends Fragment {
     static final int PICK_IMAGE = 1;
     void addImages(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         getIntent.setType("image/*");
 
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         pickIntent.setType("image/*");
-
-        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
@@ -107,23 +117,45 @@ public class AddResellListingFragment extends Fragment {
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == getActivity().RESULT_OK) {
-//            this is for camera activity
-//            Bundle extras = data.getExtras();
-//            imageBitmap = (Bitmap) extras.get("dat");
-//            imageView.setImageBitmap(imageBitmap);
             try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView.setImageBitmap(selectedImage);
+                selectedImages = new LinkedList<>();
+                ClipData clipData = data.getClipData();
+                if(clipData != null){//multiplte images
+                    for (int i =0; i<clipData.getItemCount();i++){
+                        Uri imageUri = clipData.getItemAt(i).getUri();
+                        InputStream is = getActivity().getContentResolver().openInputStream(imageUri);
+                        Bitmap image = BitmapFactory.decodeStream(is);
+                        selectedImages.add(image);
+                    }
+                }else {//single image
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                    Bitmap image = BitmapFactory.decodeStream(imageStream);
+                    selectedImages.add(image);
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
+            new Thread(()->{
+                for (final Bitmap image : selectedImages){
+                    MyApplication.mainThreadHandler.post(()->{
+                        View im = inf.inflate(R.layout.image_item,gallery,false);
+                        ImageView imV = im.findViewById(R.id.imageItem_imageV);
+                        imV.setImageBitmap(image);
+                        if(imV.getParent() != null){
+                            ((ViewGroup)imV.getParent()).removeView(imV);
+                        }
+                        gallery.addView(imV);
+                    });
+                }
+
+            }).start();
 
         }else {
             Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();

@@ -84,7 +84,7 @@ public class AuctionListing extends Listing {
 
     static public AuctionListing create(@NonNull Map<String, Object> json) {
         Listing listing = Listing.createListing(json);
-        return new AuctionListing(listing.getOwnerId(),
+        AuctionListing al = new AuctionListing(listing.getOwnerId(),
                 listing.getTitle(),
                 listing.getDescription(),
                 listing.getLocation(),
@@ -94,5 +94,7 @@ public class AuctionListing extends Listing {
                 ((Timestamp)json.get(END_DATE)).toDate(),
                 (double)json.get(STARTING_PRICE),
                 (double) json.get(CURRENT_PRICE));
+        al.setListingID(listing.getListingID());
+        return al;
     }
 }

@@ -41,13 +41,14 @@ public class ResellListing extends Listing {
 
     public static ResellListing create(Map<String, Object> json) {
         Listing listing = Listing.createListing(json);
-
-        return new ResellListing(listing.getOwnerId(),
+        ResellListing tl = new ResellListing(listing.getOwnerId(),
                 listing.getTitle(),
                 listing.getDescription(),
                 listing.getLocation(),
                 listing.getDateOpened(),
                 listing.getImages(),
                 (double)json.get(PRICE));
+        tl.setListingID(listing.getListingID());
+        return tl;
     }
 }

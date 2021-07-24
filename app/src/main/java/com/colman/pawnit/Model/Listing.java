@@ -135,7 +135,8 @@ public class Listing implements Serializable {
         Listing listing = new Listing((String) json.get(OWNER_ID),
                 (String) json.get(TITLE),
                 (String) json.get(DESCRIPTION),
-                (String) json.get(LOCATION), ((Timestamp)json.get(DATE_OPENED)).toDate(),
+                (String) json.get(LOCATION),
+                ((Timestamp)json.get(DATE_OPENED)).toDate(),
                 (ArrayList<String>)json.get(IMAGES),
                 (String) json.get(TYPE));
         listing.setListingID((String)json.get(ID));
