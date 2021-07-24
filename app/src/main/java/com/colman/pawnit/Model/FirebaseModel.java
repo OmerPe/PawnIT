@@ -281,7 +281,7 @@ public class FirebaseModel {
 
     public static void getAuctionListing(String Uid, getListingOnCompleteListener listener){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(PAWN_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
+        db.collection(AUCTION_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
                 if(document.exists()){
@@ -296,7 +296,7 @@ public class FirebaseModel {
 
     public static void getResellListing(String Uid, getListingOnCompleteListener listener){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(PAWN_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
+        db.collection(RESELL_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
                 if(document.exists()){

@@ -126,7 +126,11 @@
         android:id="@+id/auctionListingFragment"
         android:name="com.colman.pawnit.Ui.Market.AuctionListingFragment"
         android:label="auction_listing_fragment"
-        tools:layout="@layout/auction_listing_fragment" />
+        tools:layout="@layout/auction_listing_fragment" >
+        <argument
+            android:name="listingID"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/pawnListingFragment"
         android:name="com.colman.pawnit.Ui.Pawn.PawnListingFragment"
@@ -143,7 +147,11 @@
         android:id="@+id/resell_listFragment"
         android:name="com.colman.pawnit.Ui.Market.Resell_listing_Fragment"
         android:label="fragment_resell_list"
-        tools:layout="@layout/fragment_resell_listing" />
+        tools:layout="@layout/fragment_resell_listing" >
+        <argument
+            android:name="listingID"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/userPawnFragments"
         android:name="com.colman.pawnit.Ui.User.Pawns.UserPawnFragments"

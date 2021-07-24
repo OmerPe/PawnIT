@@ -9,22 +9,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.pawnit.R;
+import com.colman.pawnit.Ui.Pawn.PawnFragment;
+import com.colman.pawnit.Ui.Pawn.PawnFragmentDirections;
 
 
 public class Resell_list_fragment extends Fragment {
 
     private ResellListViewModel mViewModel;
+    RecyclerView list;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_resell_list_fragment, container, false);
 
-        RecyclerView list = view.findViewById(R.id.Resell_list_rv);
+        list = view.findViewById(R.id.Resell_list_rv);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.setHasFixedSize(true);
         MyAdapter adapter = new MyAdapter();
@@ -41,6 +45,8 @@ public class Resell_list_fragment extends Fragment {
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
+        private final View.OnClickListener mOnClickListener = new MyAdapter.MyOnClickListener();
+
         public MyAdapter(){
         }
 
@@ -48,6 +54,7 @@ public class Resell_list_fragment extends Fragment {
         @Override
         public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.resell_list_row,parent,false);
+            itemView.setOnClickListener(mOnClickListener);
             return new MyAdapter.MyViewHolder(itemView);
         }
 
@@ -71,6 +78,19 @@ public class Resell_list_fragment extends Fragment {
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 title = itemView.findViewById(R.id.Resell_row_title);
+            }
+        }
+
+        public class MyOnClickListener implements View.OnClickListener{
+
+            @Override
+            public void onClick(View v) {
+                int itemPosition = list.getChildLayoutPosition(v);
+                String id = mViewModel.getData().getValue().get(itemPosition).getListingID();
+
+                MarketFragmentDirections.ActionMarketFragmentToResellListFragment action =
+                        MarketFragmentDirections.actionMarketFragmentToResellListFragment(id);
+                Navigation.findNavController(v).navigate(action);
             }
         }
     }
