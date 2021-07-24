@@ -16,10 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.pawnit.R;
+import com.colman.pawnit.Ui.Pawn.PawnFragment;
+import com.colman.pawnit.Ui.Pawn.PawnFragmentDirections;
 
 public class UserPawnFragments extends Fragment {
 
     private UserPawnFragmentsViewModel mViewModel;
+    RecyclerView list;
 
     public static UserPawnFragments newInstance() {
         return new UserPawnFragments();
@@ -29,7 +32,7 @@ public class UserPawnFragments extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.user_pawn_fragment, container, false);
-        RecyclerView list = view.findViewById(R.id.PawnList_recyclerView);
+        list = view.findViewById(R.id.PawnList_recyclerView);
 
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.setHasFixedSize(true);
@@ -54,6 +57,7 @@ public class UserPawnFragments extends Fragment {
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
+        private final View.OnClickListener mOnClickListener = new MyAdapter.MyOnClickListener();
 
         public MyAdapter(){
         }
@@ -62,6 +66,7 @@ public class UserPawnFragments extends Fragment {
         @Override
         public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.pawn_list_row,parent,false);
+            itemView.setOnClickListener(mOnClickListener);
             return new MyAdapter.MyViewHolder(itemView);
         }
 
@@ -90,14 +95,18 @@ public class UserPawnFragments extends Fragment {
                 title = itemView.findViewById(R.id.pawn_row_title);
                 requested = itemView.findViewById(R.id.pawn_row_price);
                 image = itemView.findViewById(R.id.pawn_row_picture);
+            }
+        }
+        public class MyOnClickListener implements View.OnClickListener{
 
-                image.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                int itemPosition = list.getChildLayoutPosition(v);
+                String id = mViewModel.getData().getValue().get(itemPosition).getListingID();
 
-                    @Override
-                    public void onClick(View view) {
-                        Navigation.findNavController(view).navigate(R.id.action_userPawnFragments_to_pawnListingFragment);
-                    }
-                });
+                UserPawnFragmentsDirections.ActionUserPawnFragmentsToPawnListingFragment action =
+                        UserPawnFragmentsDirections.actionUserPawnFragmentsToPawnListingFragment(id);
+                Navigation.findNavController(v).navigate(action);
             }
         }
     }
