@@ -21,13 +21,15 @@ import com.colman.pawnit.R;
 public class Market_list_fragment extends Fragment {
 
     private MarketListViewModel mViewModel;
+    RecyclerView list;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_market_list_fragment, container, false);
 
-        RecyclerView list = view.findViewById(R.id.market_list_rv);
+        list = view.findViewById(R.id.market_list_rv);
+
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.setHasFixedSize(true);
         MyAdapter adapter = new MyAdapter();
@@ -45,6 +47,10 @@ public class Market_list_fragment extends Fragment {
 
     private class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+        private final View.OnClickListener mOnClickListenerResell = new MyAdapter.MyOnClickListenerResell();
+        private final View.OnClickListener mOnClickListenerAuction = new MyAdapter.MyOnClickListenerAuction();
+
+
         public MyAdapter(){
         }
 
@@ -53,9 +59,13 @@ public class Market_list_fragment extends Fragment {
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             switch (viewType){
                 case 0:
-                    return new ResellViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.resell_list_row,parent,false));
+                    View itemViewResell = LayoutInflater.from(parent.getContext()).inflate(R.layout.resell_list_row,parent,false);
+                    itemViewResell.setOnClickListener(mOnClickListenerResell);
+                    return new MyAdapter.ResellViewHolder(itemViewResell);
                 case 1:
-                    return new AuctionViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.auction_list_row,parent,false));
+                    View itemViewAuction = LayoutInflater.from(parent.getContext()).inflate(R.layout.auction_list_row,parent,false);
+                    itemViewAuction.setOnClickListener(mOnClickListenerAuction);
+                    return new MyAdapter.AuctionViewHolder(itemViewAuction);
                 default:
                     return null;
             }
@@ -109,14 +119,22 @@ public class Market_list_fragment extends Fragment {
                 title = itemView.findViewById(R.id.Resell_row_title);
                 price = itemView.findViewById(R.id.Resell_row_Price);
                 img = itemView.findViewById(R.id.Resell_row_picture);
-                img.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Navigation.findNavController(v).navigate(R.id.action_marketFragment_to_resell_listFragment);
-                    }
-                });
             }
         }
+
+        public class MyOnClickListenerResell implements View.OnClickListener{
+
+            @Override
+            public void onClick(View v) {
+                int itemPosition = list.getChildLayoutPosition(v);
+                String id = mViewModel.getData().getValue().get(itemPosition).getListingID();
+
+                MarketFragmentDirections.ActionMarketFragmentToResellListFragment action =
+                        MarketFragmentDirections.actionMarketFragmentToResellListFragment(id);
+                Navigation.findNavController(v).navigate(action);
+            }
+        }
+
         public class AuctionViewHolder extends RecyclerView.ViewHolder {
             private TextView title;
             private TextView startingPrice;
@@ -124,15 +142,23 @@ public class Market_list_fragment extends Fragment {
             public AuctionViewHolder(@NonNull View itemView) {
                 super(itemView);
                 title = itemView.findViewById(R.id.auctionlistrow_title);
-                startingPrice = itemView.findViewById(R.id.auctionlistrow_sPrice);
+                startingPrice = itemView.findViewById(R.id.auctionlistrow_price);
                 img = itemView.findViewById(R.id.auction_row_picture);
-                img.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Navigation.findNavController(v).navigate(R.id.action_marketFragment_to_auctionListingFragment);
-                    }
-                });
             }
         }
+
+        public class MyOnClickListenerAuction implements View.OnClickListener{
+
+            @Override
+            public void onClick(View v) {
+                int itemPosition = list.getChildLayoutPosition(v);
+                String id = mViewModel.getData().getValue().get(itemPosition).getListingID();
+
+                MarketFragmentDirections.ActionMarketFragmentToAuctionListingFragment action =
+                        MarketFragmentDirections.actionMarketFragmentToAuctionListingFragment(id);
+                Navigation.findNavController(v).navigate(action);
+            }
+        }
+
     }
 }

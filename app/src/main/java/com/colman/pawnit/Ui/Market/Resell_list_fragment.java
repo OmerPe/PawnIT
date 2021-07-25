@@ -34,7 +34,7 @@ public class Resell_list_fragment extends Fragment {
 
         mViewModel = new ViewModelProvider(this).get(ResellListViewModel.class);
 
-        mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
+        mViewModel.getData().observe(getViewLifecycleOwner(), (data) -> {
             adapter.notifyDataSetChanged();
         });
 
@@ -45,13 +45,13 @@ public class Resell_list_fragment extends Fragment {
 
         private final View.OnClickListener mOnClickListener = new MyAdapter.MyOnClickListener();
 
-        public MyAdapter(){
+        public MyAdapter() {
         }
 
         @NonNull
         @Override
         public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.resell_list_row,parent,false);
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.resell_list_row, parent, false);
             itemView.setOnClickListener(mOnClickListener);
             return new MyAdapter.MyViewHolder(itemView);
         }
@@ -64,22 +64,23 @@ public class Resell_list_fragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(mViewModel.getData().getValue() != null){
+            if (mViewModel.getData().getValue() != null) {
                 return mViewModel.getData().getValue().size();
-            }else{
+            } else {
                 return 0;
             }
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             private TextView title;
+
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 title = itemView.findViewById(R.id.Resell_row_title);
             }
         }
 
-        public class MyOnClickListener implements View.OnClickListener{
+        public class MyOnClickListener implements View.OnClickListener {
 
             @Override
             public void onClick(View v) {

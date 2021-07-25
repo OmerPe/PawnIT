@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.R;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
@@ -24,6 +26,7 @@ public class AuctionListingFragment extends Fragment {
     TextView countDown;
     TextView description;
     CollapsingToolbarLayout title;
+    ImageView image;
 
     private AuctionListingViewModel mViewModel;
 
@@ -39,7 +42,7 @@ public class AuctionListingFragment extends Fragment {
         countDown = view.findViewById(R.id.auction_listing_countdowntv);
         description = view.findViewById(R.id.auction_listing_descriptionTV);
         title = view.findViewById(R.id.auction_collapsing_toolbar);
-
+        image = view.findViewById(R.id.auction_listing_image);
         String id = (String) getArguments().get("listingID");
         if(id != null){
             Model.instance.getAuctionListing(id,(listing1 -> {
@@ -51,6 +54,9 @@ public class AuctionListingFragment extends Fragment {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(listing.getEndDate());
                     countDown.setText(cal.get(Calendar.DAY_OF_MONTH) + "\\" + cal.get(Calendar.MONTH) + "\\" + cal.get(Calendar.YEAR));
+                    if(listing.getImages() != null && listing.getImages().size() != 0 &&
+                            listing.getImages().get(0) != null && !listing.getImages().get(0).isEmpty())
+                        Picasso.get().load(listing.getImages().get(0)).placeholder(R.drawable.placeholder).into(image);
                 }
             }));
         }

@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_marketFragment_self"
             app:destination="@id/marketFragment" />
+        <argument
+            android:name="listingID"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/pawnFragment"

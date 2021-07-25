@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,6 +38,7 @@ public class PawnListingFragment extends Fragment {
     TextView description;
     CollapsingToolbarLayout title;
     ImageButton popupMenu;
+    ImageView image;
 
     public static PawnListingFragment newInstance() {
         return new PawnListingFragment();
@@ -51,6 +54,7 @@ public class PawnListingFragment extends Fragment {
         description = view.findViewById(R.id.pawn_listing_description);
         popupMenu = view.findViewById(R.id.pawn_popup_menu);
         title = view.findViewById(R.id.pawn_collapsing_toolbar);
+        image = view.findViewById(R.id.pawn_listing_imageV);
 
         String id = (String) getArguments().get("listingID");
         if(id != null){
@@ -64,6 +68,9 @@ public class PawnListingFragment extends Fragment {
                     due.setText(cal.get(Calendar.DAY_OF_MONTH) + "\\" + cal.get(Calendar.MONTH) + "\\" + cal.get(Calendar.YEAR));
                     title.setTitle(listing.getTitle());
                     interest.setText("" + listing.getInterestRate());
+                    if(listing.getImages() != null && listing.getImages().size() != 0 &&
+                            listing.getImages().get(0) != null && !listing.getImages().get(0).isEmpty())
+                        Picasso.get().load(listing.getImages().get(0)).placeholder(R.drawable.placeholder).into(image);
                 }
             }));
         }

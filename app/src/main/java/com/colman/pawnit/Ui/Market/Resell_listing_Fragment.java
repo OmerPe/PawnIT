@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -14,13 +15,14 @@ import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.squareup.picasso.Picasso;
 
 public class Resell_listing_Fragment extends Fragment {
 
     CollapsingToolbarLayout title;
     TextView price;
     TextView description;
-
+    ImageView image;
     private ResellListingViewModel mViewModel;
 
     @Override
@@ -30,6 +32,7 @@ public class Resell_listing_Fragment extends Fragment {
         price = view.findViewById(R.id.resell_listing_priceTv);
         description = view.findViewById(R.id.resell_listing_descriptionTV);
         title = view.findViewById(R.id.resell_collapsing_toolbar);
+        image = view.findViewById(R.id.resell_listing_image);
 
         String id = (String) getArguments().get("listingID");
         if(id != null){
@@ -40,6 +43,9 @@ public class Resell_listing_Fragment extends Fragment {
                     description.setText(listing.getDescription());
                     price.setText("" + listing.getPrice());
                     title.setTitle(listing.getTitle());
+                    if(listing.getImages() != null && listing.getImages().size() != 0 &&
+                            listing.getImages().get(0) != null && !listing.getImages().get(0).isEmpty())
+                        Picasso.get().load(listing.getImages().get(0)).placeholder(R.drawable.placeholder).into(image);
                 }
             }));
         }
