@@ -2,10 +2,10 @@ package com.colman.pawnit.Ui.Pawn.New;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,6 +30,10 @@ import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.MyApplication;
 import com.colman.pawnit.R;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -49,6 +53,10 @@ public class AddPawnListingFragment extends Fragment {
     LayoutInflater inf;
     LinearLayout gallery;
     List<Bitmap> selectedImages;
+
+    Button chooseLocation;
+    double lat,lng;
+    static final int PICK_LOCATION = 2;
 
     public static AddPawnListingFragment newInstance() {
         return new AddPawnListingFragment();
@@ -82,6 +90,20 @@ public class AddPawnListingFragment extends Fragment {
             }
         });
 
+        chooseLocation = view.findViewById(R.id.add_pawn_locationBtn);
+        chooseLocation.setOnClickListener(v -> {
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+            try {
+                startActivityForResult(builder.build(getActivity()),PICK_LOCATION);
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
+
+        });
+
         Button addBtn = view.findViewById(R.id.add_pawn_add_btn);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +119,10 @@ public class AddPawnListingFragment extends Fragment {
                 pawnListing.setDateOpened(Calendar.getInstance().getTime());
                 pawnListing.setWhenToGet(getDate(sdateButton.getText().toString().trim()));
                 pawnListing.setOwnerId(Model.instance.getLoggedUser().getUid());
+                Location location = new Location("");
+                location.setLatitude(lat);
+                location.setLongitude(lng);
+                pawnListing.setLocation(location);
 
                 Model.instance.saveListing(pawnListing,(listingId)->{
                     if(listingId != null){
@@ -318,8 +344,13 @@ public class AddPawnListingFragment extends Fragment {
 
             }).start();
 
-        }else {
-            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+
+        if (requestCode == PICK_LOCATION && resultCode == getActivity().RESULT_OK) {
+            Place place= PlacePicker.getPlace(data,getContext());
+            lat = place.getLatLng().latitude;
+            lng = place.getLatLng().longitude;
+
         }
     }
 

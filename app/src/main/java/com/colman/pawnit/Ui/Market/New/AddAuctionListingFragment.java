@@ -1,11 +1,13 @@
 package com.colman.pawnit.Ui.Market.New;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.ClipData;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,7 +31,10 @@ import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.MyApplication;
 import com.colman.pawnit.R;
-import com.squareup.picasso.Picasso;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -47,10 +51,12 @@ public class AddAuctionListingFragment extends Fragment {
     private DatePickerDialog datePickerDialog;
     private DatePickerDialog edatePickerDialog;// end date
     private Button sdateButton;
-    private Button edateButton , addBtn;
+    private Button edateButton , addBtn, chooseLocation;
     List<Bitmap> selectedImages;
     ProgressBar progressBar;
     EditText title,startingPrice,description;
+    double lat,lng;
+
 
     LayoutInflater inf;
     LinearLayout gallery;
@@ -86,6 +92,20 @@ public class AddAuctionListingFragment extends Fragment {
             }
         });
 
+        chooseLocation = view.findViewById(R.id.add_auction_locationBtn);
+        chooseLocation.setOnClickListener(v -> {
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+            try {
+                startActivityForResult(builder.build(getActivity()),PICK_LOCATION);
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
+
+        });
+
         addBtn = view.findViewById(R.id.add_auction_add_btn);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,45 +124,51 @@ public class AddAuctionListingFragment extends Fragment {
     }
 
     private void addAuction(View v){
-            progressBar.setVisibility(View.VISIBLE);
-            addBtn.setEnabled(false);
+        progressBar.setVisibility(View.VISIBLE);
+        addBtn.setEnabled(false);
+        chooseLocation.setEnabled(false);
 
-            AuctionListing auctionListing = new AuctionListing();
-            auctionListing.setTitle(title.getText().toString().trim());
-            auctionListing.setStartingPrice(Double.parseDouble(startingPrice.getText().toString().trim()));
-            auctionListing.setDescription(description.getText().toString().trim());
-            auctionListing.setDateOpened(Calendar.getInstance().getTime());
-            auctionListing.setStartDate(getDate(sdateButton.getText().toString().trim()));
-            auctionListing.setEndDate(getDate(edateButton.getText().toString().trim()));
-            auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
 
-            Model.instance.saveListing(auctionListing,(listingId)->{
-                if(listingId != null){
-                    if(selectedImages != null){
-                        Model.instance.uploadImage(selectedImages.get(0),listingId,Model.LISTINGS_DIR,url -> {
-                            LinkedList<String> list = new LinkedList<>();
-                            list.add(url);
-                            auctionListing.setImages(list);
-                            auctionListing.setListingID(listingId);
-                            Model.instance.updateListing(listingId,auctionListing,()->{
-                                Navigation.findNavController(v).navigateUp();
-                                Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                            });
+        AuctionListing auctionListing = new AuctionListing();
+        auctionListing.setTitle(title.getText().toString().trim());
+        auctionListing.setStartingPrice(Double.parseDouble(startingPrice.getText().toString().trim()));
+        auctionListing.setDescription(description.getText().toString().trim());
+        auctionListing.setDateOpened(Calendar.getInstance().getTime());
+        auctionListing.setStartDate(getDate(sdateButton.getText().toString().trim()));
+        auctionListing.setEndDate(getDate(edateButton.getText().toString().trim()));
+        auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
+        Location location = new Location("");
+        location.setLatitude(lat);
+        location.setLongitude(lng);
+        auctionListing.setLocation(location);
+
+        Model.instance.saveListing(auctionListing,(listingId)->{
+            if(listingId != null){
+                if(selectedImages != null){
+                    Model.instance.uploadImage(selectedImages.get(0),listingId,Model.LISTINGS_DIR,url -> {
+                        LinkedList<String> list = new LinkedList<>();
+                        list.add(url);
+                        auctionListing.setImages(list);
+                        auctionListing.setListingID(listingId);
+                        Model.instance.updateListing(listingId,auctionListing,()->{
+                            Navigation.findNavController(v).navigateUp();
+                            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
                         });
-                    }else{
-                        Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                        Navigation.findNavController(v).navigateUp();
-                    }
-                    Model.instance.getUserFromDB(user -> {
-                        if(user != null){
-                            user.addAuctionListing(listingId);
-                            Model.instance.updateUserData(user,()->{
-                                Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
-                            });
-                        }
                     });
+                }else{
+                    Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                    Navigation.findNavController(v).navigateUp();
                 }
-            });
+                Model.instance.getUserFromDB(user -> {
+                    if(user != null){
+                        user.addAuctionListing(listingId);
+                        Model.instance.updateUserData(user,()->{
+                            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                        });
+                    }
+                });
+            }
+        });
     }
 
     private void initDatePicker() {
@@ -297,6 +323,7 @@ public class AddAuctionListingFragment extends Fragment {
     }
 
     static final int PICK_IMAGE = 1;
+    static final int PICK_LOCATION = 2;
     void addImages(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         //getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
@@ -319,17 +346,6 @@ public class AddAuctionListingFragment extends Fragment {
         if (requestCode == PICK_IMAGE && resultCode == getActivity().RESULT_OK) {
             try {
                 selectedImages = new LinkedList<>();
-                /*ClipData clipData = data.getClipData();
-                if(clipData != null){//multiplte images
-                    for (int i =0; i<clipData.getItemCount();i++){
-                        Uri imageUri = clipData.getItemAt(i).getUri();
-                        InputStream is = getActivity().getContentResolver().openInputStream(imageUri);
-                        Bitmap image = BitmapFactory.decodeStream(is);
-                        selectedImages.add(image);
-                    }
-                }else {//single image
-
-                }*/
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                 Bitmap image = BitmapFactory.decodeStream(imageStream);
@@ -353,8 +369,13 @@ public class AddAuctionListingFragment extends Fragment {
 
             }).start();
 
-        }else {
-            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+
+        if (requestCode == PICK_LOCATION && resultCode == getActivity().RESULT_OK) {
+            Place place= PlacePicker.getPlace(data,getContext());
+            lat = place.getLatLng().latitude;
+            lng = place.getLatLng().longitude;
+
         }
     }
 }

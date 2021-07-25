@@ -14,8 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.pawnit.R;
-import com.colman.pawnit.Ui.Pawn.PawnFragment;
-import com.colman.pawnit.Ui.Pawn.PawnFragmentDirections;
 
 
 public class Resell_list_fragment extends Fragment {

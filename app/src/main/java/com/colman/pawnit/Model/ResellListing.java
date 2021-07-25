@@ -1,5 +1,7 @@
 package com.colman.pawnit.Model;
 
+import android.location.Location;
+
 import androidx.room.Entity;
 
 import java.util.Date;
@@ -14,7 +16,7 @@ public class ResellListing extends Listing {
     final static String PRICE = "price";
     final static String TYPE = "Resell";
 
-    public ResellListing(String owner, String title, String description, String location, Date dateOpened, List<String> images, double price) {
+    public ResellListing(String owner, String title, String description, Location location, Date dateOpened, List<String> images, double price) {
         super(owner, title, description, location, dateOpened, images, TYPE);
         this.price = price;
     }

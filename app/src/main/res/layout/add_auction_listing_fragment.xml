@@ -165,7 +165,7 @@
         android:text="Post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_auction_description" />
+        app:layout_constraintTop_toBottomOf="@+id/add_auction_locationBtn" />
 
     <ProgressBar
         android:id="@+id/add_auction_progressbar"
@@ -177,5 +177,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/add_auction_addimage_SV" />
+
+    <Button
+        android:id="@+id/add_auction_locationBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Where Are you?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_auction_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

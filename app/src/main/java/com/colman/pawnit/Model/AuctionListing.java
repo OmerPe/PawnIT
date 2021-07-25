@@ -1,5 +1,7 @@
 package com.colman.pawnit.Model;
 
+import android.location.Location;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
@@ -30,7 +32,7 @@ public class AuctionListing extends Listing {
         super.setType(TYPE);
     }
 
-    public AuctionListing(String owner, String title, String description, String location, Date dateOpened, List<String> images, Date endDate,Date startDate, double startingPrice, double currentPrice) {
+    public AuctionListing(String owner, String title, String description, Location location, Date dateOpened, List<String> images, Date endDate, Date startDate, double startingPrice, double currentPrice) {
         super(owner, title, description, location, dateOpened, images, TYPE);
         this.endDate = endDate;
         this.startingPrice = startingPrice;

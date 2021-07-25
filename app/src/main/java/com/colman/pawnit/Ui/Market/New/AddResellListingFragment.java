@@ -1,9 +1,9 @@
 package com.colman.pawnit.Ui.Market.New;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +26,10 @@ import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.MyApplication;
 import com.colman.pawnit.R;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -40,6 +44,10 @@ public class AddResellListingFragment extends Fragment {
     LayoutInflater inf;
     LinearLayout gallery;
     List<Bitmap> selectedImages;
+
+    Button chooseLocation;
+    double lat,lng;
+    static final int PICK_LOCATION = 2;
 
     public static AddResellListingFragment newInstance() {
         return new AddResellListingFragment();
@@ -62,6 +70,19 @@ public class AddResellListingFragment extends Fragment {
 
         ImageButton addImages = view.findViewById(R.id.add_resell_imageB);
 
+        chooseLocation = view.findViewById(R.id.add_resell_loactionBtn);
+        chooseLocation.setOnClickListener(v -> {
+            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+            try {
+                startActivityForResult(builder.build(getActivity()),PICK_LOCATION);
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
+
+        });
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +96,10 @@ public class AddResellListingFragment extends Fragment {
                 listing.setDescription(desc.getText().toString().trim());
                 listing.setDateOpened(Calendar.getInstance().getTime());
                 listing.setOwnerId(Model.instance.getLoggedUser().getUid());
+                Location location = new Location("");
+                location.setLatitude(lat);
+                location.setLongitude(lng);
+                listing.setLocation(location);
 
                 Model.instance.saveListing(listing,(listingId)->{
                     if(listingId != null){
@@ -172,8 +197,13 @@ public class AddResellListingFragment extends Fragment {
 
             }).start();
 
-        }else {
-            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+
+        if (requestCode == PICK_LOCATION && resultCode == getActivity().RESULT_OK) {
+            Place place= PlacePicker.getPlace(data,getContext());
+            lat = place.getLatLng().latitude;
+            lng = place.getLatLng().longitude;
+
         }
     }
 }

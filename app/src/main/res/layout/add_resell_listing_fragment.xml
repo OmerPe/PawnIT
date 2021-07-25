@@ -88,7 +88,7 @@
         android:text="Post"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_resell_description" />
+        app:layout_constraintTop_toBottomOf="@+id/add_resell_loactionBtn" />
 
     <ProgressBar
         android:id="@+id/add_resell_progressbar"
@@ -100,5 +100,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/add_resell_addimage" />
+
+    <Button
+        android:id="@+id/add_resell_loactionBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="64dp"
+        android:text="Where are You?"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_resell_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

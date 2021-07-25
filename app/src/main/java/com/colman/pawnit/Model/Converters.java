@@ -1,5 +1,7 @@
 package com.colman.pawnit.Model;
 
+import android.location.Location;
+
 import androidx.room.TypeConverter;
 
 import java.util.ArrayList;
@@ -40,4 +42,19 @@ public class Converters {
             return sb.toString();
         }
     }
+
+    @TypeConverter
+    public static String locationToString(Location location){
+        return location.getLatitude()+","+location.getLongitude();
+    }
+
+    @TypeConverter
+    public static Location stringToLocation(String latlng){
+        Location location = new Location("");
+        String[] split = latlng.split(",");
+        location.setLatitude(Double.parseDouble(split[0]));
+        location.setLatitude(Double.parseDouble(split[1]));
+        return location;
+    }
 }
+

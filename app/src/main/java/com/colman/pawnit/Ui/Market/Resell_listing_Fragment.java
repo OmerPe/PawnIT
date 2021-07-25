@@ -10,12 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
-
-import java.util.Calendar;
 
 public class Resell_listing_Fragment extends Fragment {
 

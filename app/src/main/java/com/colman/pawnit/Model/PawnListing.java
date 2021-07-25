@@ -1,5 +1,7 @@
 package com.colman.pawnit.Model;
 
+import android.location.Location;
+
 import androidx.room.Entity;
 
 import com.google.firebase.Timestamp;
@@ -24,7 +26,7 @@ public class PawnListing extends Listing {
     final static String PAYMENT_DAY = "dayOfPayment";
     final static String TYPE = "Pawn";
 
-    public PawnListing(String owner, String title, String description, String location, Date dateOpened, List<String> images, double loanAmountRequested, double interestRate, Date whenToGet, int numOfPayments, String dayOfPayment) {
+    public PawnListing(String owner, String title, String description, Location location, Date dateOpened, List<String> images, double loanAmountRequested, double interestRate, Date whenToGet, int numOfPayments, String dayOfPayment) {
         super(owner, title, description, location, dateOpened, images, TYPE);
         this.loanAmountRequested = loanAmountRequested;
         this.interestRate = interestRate;

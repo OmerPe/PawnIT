@@ -1,5 +1,7 @@
 package com.colman.pawnit.Model;
 
+import android.location.Location;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -24,7 +26,7 @@ public class Listing implements Serializable {
     private String ownerId;//owner id
     private String title;
     private String description;
-    private String location;
+    private Location location;
     private Date dateOpened;
     private List<String> images = new LinkedList<>();
     private String type;
@@ -39,7 +41,7 @@ public class Listing implements Serializable {
     final static String TYPE = "type";
 
 
-    public Listing(String ownerId, String title, String description, String location, Date dateOpened, List<String> images, String type) {
+    public Listing(String ownerId, String title, String description, Location location, Date dateOpened, List<String> images, String type) {
         this.ownerId = ownerId;
         this.title = title;
         this.description = description;
@@ -65,11 +67,11 @@ public class Listing implements Serializable {
         this.listingID = listingID;
     }
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -123,7 +125,7 @@ public class Listing implements Serializable {
         json.put(OWNER_ID, ownerId);
         json.put(TITLE, title);
         json.put(DESCRIPTION, description);
-        json.put(LOCATION, location);
+        json.put(LOCATION, location.getLatitude()+","+location.getLongitude());
         json.put(DATE_OPENED, dateOpened);
         json.put(IMAGES, images);
         json.put(TYPE, type);
@@ -132,10 +134,18 @@ public class Listing implements Serializable {
     }
 
     static public Listing createListing(@NonNull Map<String, Object> json) {
+        Location location = null;
+        if(json.get(LOCATION) != null){
+            location = new Location("");
+            String[] split = ((String)json.get(LOCATION)).split(",");
+            location.setLatitude(Double.parseDouble(split[0]));
+            location.setLatitude(Double.parseDouble(split[1]));
+        }
+
         Listing listing = new Listing((String) json.get(OWNER_ID),
                 (String) json.get(TITLE),
                 (String) json.get(DESCRIPTION),
-                (String) json.get(LOCATION),
+                location,
                 ((Timestamp)json.get(DATE_OPENED)).toDate(),
                 (ArrayList<String>)json.get(IMAGES),
                 (String) json.get(TYPE));
