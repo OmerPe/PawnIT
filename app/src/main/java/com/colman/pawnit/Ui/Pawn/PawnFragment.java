@@ -19,6 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class PawnFragment extends Fragment {
 
@@ -101,6 +104,13 @@ public class PawnFragment extends Fragment {
             String requested = Double.valueOf(mViewModel.getData().getValue().get(position).getLoanAmountRequested()).toString();
             holder.title.setText(title);
             holder.requested.setText(requested);
+
+            List<String> imagesList = mViewModel.getData().getValue().get(position).getImages();
+            String image = "";
+            if(imagesList != null && imagesList.size() != 0)
+                image = mViewModel.getData().getValue().get(position).getImages().get(0);
+            if(!image.isEmpty())
+                Picasso.get().load(image).placeholder(R.drawable.placeholder).into(holder.image);
         }
 
         @Override

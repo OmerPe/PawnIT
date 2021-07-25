@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.pawnit.R;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class Auction_list_fragment extends Fragment {
 
@@ -60,6 +64,13 @@ public class Auction_list_fragment extends Fragment {
         public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
             String title = mViewModel.getData().getValue().get(position).getTitle();
             holder.title.setText(title);
+
+            List<String> imagesList = mViewModel.getData().getValue().get(position).getImages();
+            String image = "";
+            if(imagesList != null && imagesList.size() != 0)
+                image = mViewModel.getData().getValue().get(position).getImages().get(0);
+            if(!image.isEmpty())
+                Picasso.get().load(image).placeholder(R.drawable.placeholder).into(holder.image);
         }
 
         @Override
@@ -73,10 +84,12 @@ public class Auction_list_fragment extends Fragment {
 
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            private TextView title;
+            TextView title;
+            ImageView image;
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 title = itemView.findViewById(R.id.auctionlistrow_title);
+                image = itemView.findViewById(R.id.auction_row_picture);
             }
         }
 

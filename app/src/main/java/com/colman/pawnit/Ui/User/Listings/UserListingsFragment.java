@@ -23,6 +23,9 @@ import com.colman.pawnit.Ui.Market.Market_list_fragment;
 import com.colman.pawnit.Ui.User.Pawns.UserPawnFragments;
 import com.colman.pawnit.Ui.User.Pawns.UserPawnFragmentsDirections;
 import com.colman.pawnit.Ui.User.Pawns.UserPawnFragmentsViewModel;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class UserListingsFragment extends Fragment {
 
@@ -88,16 +91,30 @@ public class UserListingsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            List<String> imagesList;
+            String image;
             switch (holder.getItemViewType()){
                 case 0:
                     MyAdapter.ResellViewHolder viewHolder = (MyAdapter.ResellViewHolder) holder;
                     viewHolder.title.setText(mViewModel.getData().getValue().get(position).getTitle());
                     viewHolder.price.setText("" +((ResellListing)mViewModel.getData().getValue().get(position)).getPrice());
+                    imagesList = mViewModel.getData().getValue().get(position).getImages();
+                    image = "";
+                    if(imagesList != null && imagesList.size() != 0)
+                        image = mViewModel.getData().getValue().get(position).getImages().get(0);
+                    if(!image.isEmpty())
+                        Picasso.get().load(image).placeholder(R.drawable.placeholder).into(((MyAdapter.ResellViewHolder)holder).image);
                     break;
                 case 1:
                     MyAdapter.AuctionViewHolder viewHolder1 = (MyAdapter.AuctionViewHolder) holder;
                     viewHolder1.title.setText(mViewModel.getData().getValue().get(position).getTitle());
                     viewHolder1.startingPrice.setText(""+((AuctionListing)mViewModel.getData().getValue().get(position)).getStartingPrice());
+                    imagesList = mViewModel.getData().getValue().get(position).getImages();
+                    image = "";
+                    if(imagesList != null && imagesList.size() != 0)
+                        image = mViewModel.getData().getValue().get(position).getImages().get(0);
+                    if(!image.isEmpty())
+                        Picasso.get().load(image).placeholder(R.drawable.placeholder).into(((MyAdapter.AuctionViewHolder)holder).image);
                     break;
                 default:
                     break;
@@ -123,12 +140,12 @@ public class UserListingsFragment extends Fragment {
         public class ResellViewHolder extends RecyclerView.ViewHolder {
             private TextView title;
             private TextView price;
-            private ImageView img;
+            private ImageView image;
             public ResellViewHolder(@NonNull View itemView) {
                 super(itemView);
                 title = itemView.findViewById(R.id.Resell_row_title);
                 price = itemView.findViewById(R.id.Resell_row_Price);
-                img = itemView.findViewById(R.id.Resell_row_picture);
+                image = itemView.findViewById(R.id.Resell_row_picture);
             }
         }
 
@@ -148,12 +165,12 @@ public class UserListingsFragment extends Fragment {
         public class AuctionViewHolder extends RecyclerView.ViewHolder {
             private TextView title;
             private TextView startingPrice;
-            private ImageView img;
+            private ImageView image;
             public AuctionViewHolder(@NonNull View itemView) {
                 super(itemView);
                 title = itemView.findViewById(R.id.auctionlistrow_title);
                 startingPrice = itemView.findViewById(R.id.auctionlistrow_price);
-                img = itemView.findViewById(R.id.auction_row_picture);
+                image = itemView.findViewById(R.id.auction_row_picture);
             }
         }
 
