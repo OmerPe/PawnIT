@@ -64,7 +64,7 @@ public class FirebaseModel {
     }
 
     public interface getAllAuctionsListener {
-        void onComplete(List<AuctionListing> resells);
+        void onComplete(List<AuctionListing> auctions);
     }
 
     public static void getAllAuctions(getAllAuctionsListener listener) {
@@ -90,7 +90,7 @@ public class FirebaseModel {
     }
 
     public interface getAllPawnsListener {
-        void onComplete(List<PawnListing> resells);
+        void onComplete(List<PawnListing> pawns);
     }
 
     public static void getAllPawnListings(getAllPawnsListener listener) {
@@ -253,6 +253,40 @@ public class FirebaseModel {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 listings.add(PawnListing.create(document.getData()));
+                            }
+                        }
+                        listener.onComplete(listings);
+                    }
+                });
+    }
+
+    public static void getAllAuctionsForUser(String Uid, getAllAuctionsListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(AUCTION_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID, Uid).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<AuctionListing> listings = new LinkedList<>();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                listings.add(AuctionListing.create(document.getData()));
+                            }
+                        }
+                        listener.onComplete(listings);
+                    }
+                });
+    }
+
+    public static void getAllResellsForUser(String Uid, getAllResellsListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(RESELL_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID, Uid).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<ResellListing> listings = new LinkedList<>();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                listings.add(ResellListing.create(document.getData()));
                             }
                         }
                         listener.onComplete(listings);

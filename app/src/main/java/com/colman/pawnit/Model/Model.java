@@ -56,10 +56,20 @@ public class Model {
         historyDao = dataBase.historyDao();
     }
 
-    public LiveData<List<Listing>> getMarketList() {
+    public LiveData<List<Listing>> getMarketList(String Uid) {
+        LiveData<List<AuctionListing>> auctionList;
+        LiveData<List<ResellListing>> resellList;
+        if(Uid != null){
+            auctionList = getAllUserAuctions();
+            resellList = getAllUserResells();
+        }else{
+            auctionList = getAuctionData();
+            resellList = getResellData();
+        }
+
         return ZipLiveData.create(
-                getAuctionData(),
-                getResellData(),
+                auctionList,
+                resellList,
                 (auction, resell) -> {
                     final List<Listing> listings = new LinkedList<>();
                     if (auction != null) {
@@ -80,7 +90,7 @@ public class Model {
 
     public LiveData<List<Listing>> getAllListings() {
         return ZipLiveData.create(
-                getMarketList(),
+                getMarketList(null),
                 getAllPawnListings(),
                 (market, pawn) -> {
                     final List<Listing> listings = new LinkedList<>();
@@ -262,6 +272,40 @@ public class Model {
         });
 
         return allUserPawns;
+    }
+
+    MutableLiveData<List<AuctionListing>> allUserAuctions = new MutableLiveData<List<AuctionListing>>(new LinkedList<AuctionListing>());
+    public LiveData<List<AuctionListing>> getAllUserAuctions(){
+        auctionLoadingState.setValue(LoadingState.loading);
+        FirebaseModel.getAllAuctionsForUser(FirebaseModel.getUser().getUid(),(auctions) -> {
+            Collections.sort(auctions, (listing1, listing2) -> {
+                if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
+                    return 0;
+                }
+                return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
+            });
+            allUserAuctions.setValue(auctions);
+            pawnListingLoadingState.setValue(LoadingState.loaded);
+        });
+
+        return allUserAuctions;
+    }
+
+    MutableLiveData<List<ResellListing>> allUserResells = new MutableLiveData<List<ResellListing>>(new LinkedList<ResellListing>());
+    public LiveData<List<ResellListing>> getAllUserResells(){
+        resellLoadingState.setValue(LoadingState.loading);
+        FirebaseModel.getAllResellsForUser(FirebaseModel.getUser().getUid(),(resells) -> {
+            Collections.sort(resells, (listing1, listing2) -> {
+                if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
+                    return 0;
+                }
+                return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
+            });
+            allUserResells.setValue(resells);
+            pawnListingLoadingState.setValue(LoadingState.loaded);
+        });
+
+        return allUserResells;
     }
 
     public void deletePawnListing(String listingID, FirebaseModel.deleteOnCompleteListener listener){

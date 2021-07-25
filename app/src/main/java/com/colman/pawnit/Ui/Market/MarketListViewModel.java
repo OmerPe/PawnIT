@@ -13,7 +13,7 @@ public class MarketListViewModel extends ViewModel {
     LiveData<List<Listing>> data;
 
     public MarketListViewModel() {
-        data = Model.instance.getMarketList();
+        data = Model.instance.getMarketList(null);
     }
 
     public LiveData<List<Listing>> getData(){
