@@ -16,7 +16,6 @@ public class UserPawnFragmentsViewModel extends ViewModel {
     }
 
     public LiveData<List<PawnListing>> getData() {
-        //List<PawnListing> pl = data.getValue();
         return data;
     }
 }

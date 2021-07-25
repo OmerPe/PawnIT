@@ -168,7 +168,14 @@
         android:id="@+id/userListingsFragment"
         android:name="com.colman.pawnit.Ui.User.Listings.UserListingsFragment"
         android:label="user_listings_fragment"
-        tools:layout="@layout/user_listings_fragment" />
+        tools:layout="@layout/user_listings_fragment" >
+        <action
+            android:id="@+id/action_userListingsFragment_to_resell_listFragment"
+            app:destination="@id/resell_listFragment" />
+        <action
+            android:id="@+id/action_userListingsFragment_to_auctionListingFragment"
+            app:destination="@id/auctionListingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.colman.pawnit.Ui.User.History.HistoryFragment"

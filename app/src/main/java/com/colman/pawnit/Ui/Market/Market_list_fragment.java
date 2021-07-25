@@ -27,7 +27,6 @@ public class Market_list_fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_market_list_fragment, container, false);
-
         list = view.findViewById(R.id.market_list_rv);
 
         list.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -88,9 +87,7 @@ public class Market_list_fragment extends Fragment {
                 default:
                     break;
             }
-
         }
-
 
         @Override
         public int getItemCount() {
