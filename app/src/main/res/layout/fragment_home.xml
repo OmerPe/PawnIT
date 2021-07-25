@@ -22,11 +22,13 @@
         android:layout_height="match_parent"
         android:layout_gravity="end"
         app:headerLayout="@layout/profile_menu_header"
-        app:menu="@menu/profile_menu" />
+        app:menu="@menu/profile_menu" >
+
+    </com.google.android.material.navigation.NavigationView>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <com.google.android.material.appbar.AppBarLayout
@@ -108,22 +110,32 @@
                             android:lines="1"
                             android:singleLine="true"
                             android:textSize="24sp" />
+
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <EditText
+                        android:id="@+id/main_fragment_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="50dp"
+                        android:ems="10"
+                        android:fontFamily="@font/oleo_script"
+                        android:gravity="start|top"
+                        android:inputType="textMultiLine"
+                        android:text="Hey and welcome to PawnIT!\nPawnIT is your place for:\n#buying and selling things 2nd hand.\n#buying and selling items in an auction!\n#pawning your items and giving pawning services to other community members.\n\n\nfor any inquiries you can contact us at: PawnIT297@gmail.com!"
+                        android:textSize="24sp"
+                        android:textStyle="bold|italic"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/main_fragment_searchbox"
+                        android:background="@null" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/homeFragment_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            tools:listitem="@layout/auction_list_row"/>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
