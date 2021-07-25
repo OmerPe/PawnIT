@@ -13,10 +13,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 public class Resell_listing_Fragment extends Fragment {
 
-    TextView title;
+    CollapsingToolbarLayout title;
     TextView price;
     TextView description;
 
@@ -25,20 +26,20 @@ public class Resell_listing_Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_resell_listing, container, false);
-
         price = view.findViewById(R.id.resell_listing_priceTv);
         description = view.findViewById(R.id.resell_listing_descriptionTV);
+        title = view.findViewById(R.id.resell_collapsing_toolbar);
 
         String id = (String) getArguments().get("listingID");
         if(id != null){
             Model.instance.getResellListing(id,(listing1 -> {
-                if(listing1 !=null) {
+                if(listing1 != null) {
                     ResellListing listing = (ResellListing) listing1;
-                    title.setText(listing.getTitle());
+
                     description.setText(listing.getDescription());
                     price.setText("" + listing.getPrice());
+                    title.setTitle(listing.getTitle());
                 }
             }));
         }

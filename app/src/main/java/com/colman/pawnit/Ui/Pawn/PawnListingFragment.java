@@ -55,16 +55,16 @@ public class PawnListingFragment extends Fragment {
         String id = (String) getArguments().get("listingID");
         if(id != null){
             Model.instance.getPawnListing(id,(listing1 -> {
-                PawnListing listing = (PawnListing)listing1;
-
-                requested.setText(""+listing.getLoanAmountRequested());
-                description.setText(listing.getDescription());
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(listing.getWhenToGet());
-                due.setText(cal.get(Calendar.DAY_OF_MONTH)+"\\"+cal.get(Calendar.MONTH)+"\\"+cal.get(Calendar.YEAR));
-                title.setTitle(listing.getTitle());
-                interest.setText(""+listing.getInterestRate());
-
+                if(listing1 !=null) {
+                    PawnListing listing = (PawnListing) listing1;
+                    requested.setText("" + listing.getLoanAmountRequested());
+                    description.setText(listing.getDescription());
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(listing.getWhenToGet());
+                    due.setText(cal.get(Calendar.DAY_OF_MONTH) + "\\" + cal.get(Calendar.MONTH) + "\\" + cal.get(Calendar.YEAR));
+                    title.setTitle(listing.getTitle());
+                    interest.setText("" + listing.getInterestRate());
+                }
             }));
         }
 

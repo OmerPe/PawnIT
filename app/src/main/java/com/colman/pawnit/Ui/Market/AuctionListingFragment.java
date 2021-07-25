@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.R;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.Calendar;
 
@@ -22,6 +23,7 @@ public class AuctionListingFragment extends Fragment {
     TextView price;
     TextView countDown;
     TextView description;
+    CollapsingToolbarLayout title;
 
     private AuctionListingViewModel mViewModel;
 
@@ -32,21 +34,20 @@ public class AuctionListingFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.auction_listing_fragment, container, false);
-
         price = view.findViewById(R.id.auction_listing_priceTv);
         countDown = view.findViewById(R.id.auction_listing_countdowntv);
         description = view.findViewById(R.id.auction_listing_descriptionTV);
+        title = view.findViewById(R.id.auction_collapsing_toolbar);
 
         String id = (String) getArguments().get("listingID");
         if(id != null){
             Model.instance.getAuctionListing(id,(listing1 -> {
-                if(listing1 !=null) {
+                if(listing1 != null) {
                     AuctionListing listing = (AuctionListing) listing1;
                     description.setText(listing.getDescription());
                     price.setText("" + listing.getCurrentPrice());
-
+                    title.setTitle(listing.getTitle());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(listing.getEndDate());
                     countDown.setText(cal.get(Calendar.DAY_OF_MONTH) + "\\" + cal.get(Calendar.MONTH) + "\\" + cal.get(Calendar.YEAR));
