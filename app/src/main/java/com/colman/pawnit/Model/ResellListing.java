@@ -4,6 +4,8 @@ import android.location.Location;
 
 import androidx.room.Entity;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,14 +45,22 @@ public class ResellListing extends Listing {
 
     public static ResellListing create(Map<String, Object> json) {
         Listing listing = Listing.createListing(json);
-        ResellListing tl = new ResellListing(listing.getOwnerId(),
+        ResellListing rl = new ResellListing(listing.getOwnerId(),
                 listing.getTitle(),
                 listing.getDescription(),
                 listing.getLocation(),
                 listing.getDateOpened(),
                 listing.getImages(),
                 (double)json.get(PRICE));
-        tl.setListingID(listing.getListingID());
-        return tl;
+        rl.setListingID(listing.getListingID());
+
+        Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
+        if(ts != null){
+            rl.setLastUpdated(ts.getSeconds());
+        }else {
+            rl.setLastUpdated((long)0);
+        }
+
+        return rl;
     }
 }

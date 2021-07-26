@@ -1,12 +1,16 @@
 package com.colman.pawnit.Model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.colman.pawnit.MyApplication;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +34,7 @@ public class Listing implements Serializable {
     private Date dateOpened;
     private List<String> images = new LinkedList<>();
     private String type;
+    private Long lastUpdated;
 
     final static String ID = "listingID";
     final static String OWNER_ID = "ownerId";
@@ -39,6 +44,8 @@ public class Listing implements Serializable {
     final static String DATE_OPENED = "dateOpened";
     final static String IMAGES = "images";
     final static String TYPE = "type";
+    final static String LAST_UPDATED = "lastUpdated";
+    final static String LAST_UPDATED_TIME = "ListingLastUpdate";
 
 
     public Listing(String ownerId, String title, String description, Location location, Date dateOpened, List<String> images, String type) {
@@ -53,6 +60,14 @@ public class Listing implements Serializable {
 
     public Listing() {
 
+    }
+
+    public Long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public String getType() {
@@ -129,6 +144,7 @@ public class Listing implements Serializable {
         json.put(DATE_OPENED, dateOpened);
         json.put(IMAGES, images);
         json.put(TYPE, type);
+        json.put(LAST_UPDATED, FieldValue.serverTimestamp());
 
         return json;
     }
@@ -150,6 +166,25 @@ public class Listing implements Serializable {
                 (ArrayList<String>)json.get(IMAGES),
                 (String) json.get(TYPE));
         listing.setListingID((String)json.get(ID));
+
+        Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
+        if(ts != null){
+            listing.setLastUpdated(ts.getSeconds());
+        }else {
+            listing.setLastUpdated((long)0);
+        }
+
+
         return listing;
+    }
+
+    public static void setLocalLastUpdateTime(Long ts){
+        SharedPreferences.Editor editor = MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE).edit();
+        editor.putLong(LAST_UPDATED_TIME,ts);
+        editor.commit();
+    }
+
+    public static Long getLocalLastUpdateTime(){
+        return MyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong(LAST_UPDATED_TIME,0);
     }
 }

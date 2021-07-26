@@ -41,7 +41,8 @@ public class FirebaseModel {
         public void onComplete(List<ResellListing> resells);
     }
 
-    public static void getAllResells(getAllResellsListener listener) {
+    //TODO : add since logic
+    public static void getAllResells(Long since, getAllResellsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RESELL_LISTING_COLLECTION)
                 .get()
@@ -67,7 +68,7 @@ public class FirebaseModel {
         void onComplete(List<AuctionListing> auctions);
     }
 
-    public static void getAllAuctions(getAllAuctionsListener listener) {
+    public static void getAllAuctions(Long since, getAllAuctionsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(AUCTION_LISTING_COLLECTION)
                 .get()
@@ -93,7 +94,7 @@ public class FirebaseModel {
         void onComplete(List<PawnListing> pawns);
     }
 
-    public static void getAllPawnListings(getAllPawnsListener listener) {
+    public static void getAllPawnListings(Long since, getAllPawnsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(PAWN_LISTING_COLLECTION)
                 .get()

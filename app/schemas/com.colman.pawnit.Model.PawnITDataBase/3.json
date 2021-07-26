@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "d17aaa126d8e51877fdff075d1fb4d10",
+    "identityHash": "10c277d8fe00e4a2472ccf09f936be8e",
     "entities": [
       {
         "tableName": "listings_Table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`listingID` TEXT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT, PRIMARY KEY(`listingID`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`listingID` TEXT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT, `lastUpdated` INTEGER, PRIMARY KEY(`listingID`))",
         "fields": [
           {
             "fieldPath": "listingID",
@@ -55,6 +55,12 @@
             "columnName": "type",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "lastUpdated",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -68,7 +74,7 @@
       },
       {
         "tableName": "auction_listings_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`startDate` INTEGER, `endDate` INTEGER, `startingPrice` REAL NOT NULL, `currentPrice` REAL NOT NULL, `listingID` TEXT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT, PRIMARY KEY(`listingID`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`startDate` INTEGER, `endDate` INTEGER, `startingPrice` REAL NOT NULL, `currentPrice` REAL NOT NULL, `listingID` TEXT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT, `lastUpdated` INTEGER, PRIMARY KEY(`listingID`))",
         "fields": [
           {
             "fieldPath": "startDate",
@@ -141,6 +147,12 @@
             "columnName": "type",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "lastUpdated",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -154,7 +166,7 @@
       },
       {
         "tableName": "Resell_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`price` REAL NOT NULL, `listingID` TEXT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT, PRIMARY KEY(`listingID`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`price` REAL NOT NULL, `listingID` TEXT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT, `lastUpdated` INTEGER, PRIMARY KEY(`listingID`))",
         "fields": [
           {
             "fieldPath": "price",
@@ -209,6 +221,12 @@
             "columnName": "type",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "lastUpdated",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -222,7 +240,7 @@
       },
       {
         "tableName": "Pawn_Listings_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`loanAmountRequested` REAL NOT NULL, `interestRate` REAL NOT NULL, `whenToGet` INTEGER, `numOfPayments` INTEGER NOT NULL, `dayOfPayment` TEXT, `listingID` TEXT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT, PRIMARY KEY(`listingID`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`loanAmountRequested` REAL NOT NULL, `interestRate` REAL NOT NULL, `whenToGet` INTEGER, `numOfPayments` INTEGER NOT NULL, `dayOfPayment` TEXT, `listingID` TEXT NOT NULL, `ownerId` TEXT, `title` TEXT, `description` TEXT, `location` TEXT, `dateOpened` INTEGER, `images` TEXT, `type` TEXT, `lastUpdated` INTEGER, PRIMARY KEY(`listingID`))",
         "fields": [
           {
             "fieldPath": "loanAmountRequested",
@@ -301,6 +319,12 @@
             "columnName": "type",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "lastUpdated",
+            "affinity": "INTEGER",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -354,7 +378,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd17aaa126d8e51877fdff075d1fb4d10')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '10c277d8fe00e4a2472ccf09f936be8e')"
     ]
   }
 }

@@ -97,6 +97,13 @@ public class AuctionListing extends Listing {
                 (double)json.get(STARTING_PRICE),
                 (double) json.get(CURRENT_PRICE));
         al.setListingID(listing.getListingID());
+
+        Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
+        if(ts != null){
+            al.setLastUpdated(ts.getSeconds());
+        }else {
+            al.setLastUpdated((long)0);
+        }
         return al;
     }
 }

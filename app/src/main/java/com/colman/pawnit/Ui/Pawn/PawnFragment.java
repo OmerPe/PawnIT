@@ -115,7 +115,11 @@ public class PawnFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mViewModel.getData().getValue().size();
+            if(mViewModel.getData().getValue() == null){
+                return 0;
+            }else{
+                return mViewModel.getData().getValue().size();
+            }
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder{
