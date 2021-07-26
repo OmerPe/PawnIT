@@ -27,4 +27,7 @@ public interface PawnListingDao {
 
     @Query("SELECT * FROM pawn_listings_table WHERE listingID = :id ORDER BY dateOpened DESC")
     PawnListing getPawnListing(String id);
+
+    @Query("SELECT * FROM pawn_listings_table WHERE ownerId = :uid ORDER BY dateOpened DESC")
+    LiveData<List<PawnListing>> getAllPawnsPerUser(String uid);
 }

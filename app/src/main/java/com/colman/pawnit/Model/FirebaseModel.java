@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -45,6 +46,7 @@ public class FirebaseModel {
     public static void getAllResells(Long since, getAllResellsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RESELL_LISTING_COLLECTION)
+                .whereGreaterThanOrEqualTo(Listing.LAST_UPDATED, new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -71,6 +73,7 @@ public class FirebaseModel {
     public static void getAllAuctions(Long since, getAllAuctionsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(AUCTION_LISTING_COLLECTION)
+                .whereGreaterThanOrEqualTo(Listing.LAST_UPDATED, new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -97,6 +100,7 @@ public class FirebaseModel {
     public static void getAllPawnListings(Long since, getAllPawnsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(PAWN_LISTING_COLLECTION)
+                .whereGreaterThanOrEqualTo(Listing.LAST_UPDATED, new Timestamp(since, 0))
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -242,9 +246,9 @@ public class FirebaseModel {
         }
     }
 
-    public static void getAllPawnsForUser(String Uid, getAllPawnsListener listener) {
+    public static void getAllPawnsForUser(String Uid, Long since, getAllPawnsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(PAWN_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID, Uid).get()
+        db.collection(PAWN_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID, Uid).whereGreaterThanOrEqualTo(Listing.LAST_UPDATED, new Timestamp(since,0)).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -259,9 +263,9 @@ public class FirebaseModel {
                 });
     }
 
-    public static void getAllAuctionsForUser(String Uid, getAllAuctionsListener listener) {
+    public static void getAllAuctionsForUser(String Uid, Long since, getAllAuctionsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(AUCTION_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID, Uid).get()
+        db.collection(AUCTION_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID, Uid).whereGreaterThanOrEqualTo(Listing.LAST_UPDATED, new Timestamp(since,0)).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -276,9 +280,9 @@ public class FirebaseModel {
                 });
     }
 
-    public static void getAllResellsForUser(String Uid, getAllResellsListener listener) {
+    public static void getAllResellsForUser(String Uid, Long since, getAllResellsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(RESELL_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID, Uid).get()
+        db.collection(RESELL_LISTING_COLLECTION).whereEqualTo(Listing.OWNER_ID, Uid).whereGreaterThanOrEqualTo(Listing.LAST_UPDATED, new Timestamp(since,0)).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -293,49 +297,51 @@ public class FirebaseModel {
                 });
     }
 
-    public interface getListingOnCompleteListener{
+    public interface getListingOnCompleteListener {
         void onComplete(Listing listing);
     }
 
-    public static void getPawnListing(String listingID, getListingOnCompleteListener listener){
+    public static void getPawnListing(String listingID, getListingOnCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(PAWN_LISTING_COLLECTION).document(listingID).get().addOnCompleteListener(task -> {
-           if(task.isSuccessful()){
-               DocumentSnapshot document = task.getResult();
-               if(document.exists()){
-                   PawnListing listing = PawnListing.create(document.getData());
-                   listener.onComplete(listing);
-               }else{
-                   listener.onComplete(null);
-               }
-           }
-        });
-    }
-
-    public static void getAuctionListing(String listingID, getListingOnCompleteListener listener){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(AUCTION_LISTING_COLLECTION).document(listingID).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
+            if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                if(document.exists()){
-                    AuctionListing listing = AuctionListing.create(document.getData());
+                if (document.exists()) {
+                    PawnListing listing = PawnListing.create(document.getData());
                     listener.onComplete(listing);
-                }else{
+                } else {
                     listener.onComplete(null);
                 }
             }
         });
     }
 
-    public static void getResellListing(String listingID, getListingOnCompleteListener listener){
+    public static void getAuctionListing(String listingID, getListingOnCompleteListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(AUCTION_LISTING_COLLECTION).document(listingID).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    AuctionListing listing = AuctionListing.create(document.getData());
+                    listener.onComplete(listing);
+                } else {
+                    listener.onComplete(null);
+                }
+            }else{
+                listener.onComplete(null);
+            }
+        });
+    }
+
+    public static void getResellListing(String listingID, getListingOnCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(RESELL_LISTING_COLLECTION).document(listingID).get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
+            if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
-                if(document.exists()){
+                if (document.exists()) {
                     ResellListing listing = ResellListing.create(document.getData());
                     listener.onComplete(listing);
-                }else{
+                } else {
                     listener.onComplete(null);
                 }
             }

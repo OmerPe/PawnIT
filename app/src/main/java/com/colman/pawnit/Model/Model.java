@@ -324,73 +324,155 @@ public class Model {
         return FirebaseModel.isLoggedIn();
     }
 
-    MutableLiveData<List<PawnListing>> allUserPawns = new MutableLiveData<List<PawnListing>>(new LinkedList<PawnListing>());
-
+    LiveData<List<PawnListing>> allUserPawns;
     public LiveData<List<PawnListing>> getAllUserPawns() {
+        allUserPawns = PawnITDataBase.getInstance().pawnListingDao().getAllPawnsPerUser(FirebaseModel.getUser().getUid());
         pawnListingLoadingState.setValue(LoadingState.loading);
-        FirebaseModel.getAllPawnsForUser(FirebaseModel.getUser().getUid(), (pawns) -> {
-            Collections.sort(pawns, (listing1, listing2) -> {
-                if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
-                    return 0;
+
+        Long localLastUpdate = Listing.getLocalLastUpdateTime();
+
+        FirebaseModel.getAllPawnsForUser(FirebaseModel.getUser().getUid(), localLastUpdate, (pawns) -> {
+            executorService.execute(()->{
+                Log.d("TAG", "fb returned " +pawns.size()+" pawns");
+                Long last = 0L;
+                Collections.sort(pawns, (listing1, listing2) -> {
+                    if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
+                        return 0;
+                    }
+                    return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
+                });
+
+                for(PawnListing listing : pawns){
+                    pawnListingDao.insertAll(listing);
+
+                    if(last < listing.getLastUpdated()){
+                        last = listing.getLastUpdated();
+                    }
                 }
-                return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
+
+                Listing.setLocalLastUpdateTime(last);
+                pawnListingLoadingState.postValue(LoadingState.loaded);
             });
-            allUserPawns.setValue(pawns);
-            pawnListingLoadingState.setValue(LoadingState.loaded);
         });
 
         return allUserPawns;
     }
 
-    MutableLiveData<List<AuctionListing>> allUserAuctions = new MutableLiveData<List<AuctionListing>>(new LinkedList<AuctionListing>());
+    LiveData<List<AuctionListing>> allUserAuctions;
 
     public LiveData<List<AuctionListing>> getAllUserAuctions() {
+        allUserAuctions = PawnITDataBase.getInstance().auctionListingDao().getAllAuctionsPerUser(FirebaseModel.getUser().getUid());
         auctionLoadingState.setValue(LoadingState.loading);
-        FirebaseModel.getAllAuctionsForUser(FirebaseModel.getUser().getUid(), (auctions) -> {
-            Collections.sort(auctions, (listing1, listing2) -> {
-                if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
-                    return 0;
+
+        Long localLastUpdate = Listing.getLocalLastUpdateTime();
+
+        FirebaseModel.getAllAuctionsForUser(FirebaseModel.getUser().getUid(), localLastUpdate, (auctions) -> {
+            executorService.execute(()->{
+                Log.d("TAG", "fb returned " +auctions.size()+" pawns");
+                Long last = 0L;
+                Collections.sort(auctions, (listing1, listing2) -> {
+                    if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
+                        return 0;
+                    }
+                    return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
+                });
+
+                for(AuctionListing listing : auctions){
+                    auctionListingDao.insertAll(listing);
+
+                    if(last < listing.getLastUpdated()){
+                        last = listing.getLastUpdated();
+                    }
                 }
-                return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
+
+                Listing.setLocalLastUpdateTime(last);
+                auctionLoadingState.postValue(LoadingState.loaded);
             });
-            allUserAuctions.setValue(auctions);
-            pawnListingLoadingState.setValue(LoadingState.loaded);
         });
 
         return allUserAuctions;
     }
 
-    MutableLiveData<List<ResellListing>> allUserResells = new MutableLiveData<List<ResellListing>>(new LinkedList<ResellListing>());
+    LiveData<List<ResellListing>> allUserResells;
 
     public LiveData<List<ResellListing>> getAllUserResells() {
+        allUserResells = PawnITDataBase.getInstance().resellListingDao().getAllResellsPerUser(FirebaseModel.getUser().getUid());
         resellLoadingState.setValue(LoadingState.loading);
-        FirebaseModel.getAllResellsForUser(FirebaseModel.getUser().getUid(), (resells) -> {
-            Collections.sort(resells, (listing1, listing2) -> {
-                if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
-                    return 0;
+
+        Long localLastUpdate = Listing.getLocalLastUpdateTime();
+
+        FirebaseModel.getAllResellsForUser(FirebaseModel.getUser().getUid(), localLastUpdate, (resells) -> {
+            executorService.execute(()->{
+                Log.d("TAG", "fb returned " +resells.size()+" pawns");
+                Long last = 0L;
+                Collections.sort(resells, (listing1, listing2) -> {
+                    if (listing1.getDateOpened() == null || listing2.getDateOpened() == null) {
+                        return 0;
+                    }
+                    return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
+                });
+
+                for(ResellListing listing : resells){
+                    resellListingDao.insertAll(listing);
+
+                    if(last < listing.getLastUpdated()){
+                        last = listing.getLastUpdated();
+                    }
                 }
-                return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
+
+                Listing.setLocalLastUpdateTime(last);
+                resellLoadingState.postValue(LoadingState.loaded);
             });
-            allUserResells.setValue(resells);
-            pawnListingLoadingState.setValue(LoadingState.loaded);
         });
 
         return allUserResells;
     }
 
     public void deletePawnListing(String listingID, FirebaseModel.deleteOnCompleteListener listener) {
-        FirebaseModel.deletePawnListing(listingID, listener);
+        FirebaseModel.getPawnListing(listingID,(listing)->{
+            executorService.execute(()->{
+                pawnListingDao.delete((PawnListing)listing);
+                FirebaseModel.deletePawnListing(listingID, listener);
+            });
+        });
+
     }
 
     public void deleteAuctionListing(String listingID, FirebaseModel.deleteOnCompleteListener listener) {
-        FirebaseModel.deleteAuctionListing(listingID, listener);
+        FirebaseModel.getAuctionListing(listingID,(listing -> {
+            executorService.execute(()->{
+                auctionListingDao.delete((AuctionListing)listing);
+                FirebaseModel.deleteAuctionListing(listingID, listener);
+            });
+        }));
     }
 
     public void deleteResellListing(String listingID, FirebaseModel.deleteOnCompleteListener listener) {
-        FirebaseModel.deleteResellListing(listingID, listener);
+        FirebaseModel.getResellListing(listingID,listing -> {
+            executorService.execute(()->{
+                resellListingDao.delete((ResellListing)listing);
+                FirebaseModel.deleteResellListing(listingID, listener);
+            });
+        });
     }
 
     public void updateListing(String listingID, Listing listing, FirebaseModel.updateListingListener listener) {
+        executorService.execute(()->{
+            if(listing instanceof ResellListing){
+                executorService.execute(()->{
+                    resellListingDao.delete((ResellListing)listing);
+                });
+            }else if(listing instanceof  AuctionListing){
+                executorService.execute(()->{
+                    auctionListingDao.delete((AuctionListing)listing);
+                });
+            }else if(listing instanceof PawnListing){
+                executorService.execute(()->{
+                    pawnListingDao.delete((PawnListing)listing);
+                });
+            }
+        });
+
         FirebaseModel.updateListing(listingID, listing, listener);
     }
 
@@ -403,15 +485,36 @@ public class Model {
     }
 
     public void getPawnListing(String listingID, FirebaseModel.getListingOnCompleteListener listener) {
-        FirebaseModel.getPawnListing(listingID, listener);
+        FirebaseModel.getPawnListing(listingID, listing -> {
+            if(listing != null){
+                listener.onComplete(listing);
+            }else{
+                PawnListing listing1 =pawnListingDao.getPawnListing(listingID);
+                pawnListingDao.delete(listing1);
+            }
+        });
     }
 
     public void getAuctionListing(String listingID, FirebaseModel.getListingOnCompleteListener listener) {
-        FirebaseModel.getAuctionListing(listingID, listener);
+        FirebaseModel.getAuctionListing(listingID, listing -> {
+            if(listing != null){
+                listener.onComplete(listing);
+            }else{
+                AuctionListing listing1 =auctionListingDao.getAuctionListing(listingID);
+                auctionListingDao.delete(listing1);
+            }
+        });
     }
 
     public void getResellListing(String listingID, FirebaseModel.getListingOnCompleteListener listener) {
-        FirebaseModel.getResellListing(listingID, listener);
+        FirebaseModel.getResellListing(listingID, listing -> {
+            if(listing != null){
+                listener.onComplete(listing);
+            }else{
+                ResellListing listing1 =resellListingDao.getResellListing(listingID);
+                resellListingDao.delete(listing1);
+            }
+        });
     }
 
     public interface UploadImagesListener {
