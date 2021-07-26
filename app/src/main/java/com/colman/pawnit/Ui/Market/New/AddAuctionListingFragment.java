@@ -134,8 +134,19 @@ public class AddAuctionListingFragment extends Fragment {
         auctionListing.setStartingPrice(Double.parseDouble(startingPrice.getText().toString().trim()));
         auctionListing.setDescription(description.getText().toString().trim());
         auctionListing.setDateOpened(Calendar.getInstance().getTime());
-        auctionListing.setStartDate(getDate(sdateButton.getText().toString().trim()));
-        auctionListing.setEndDate(getDate(edateButton.getText().toString().trim()));
+        Date start = getDate(sdateButton.getText().toString().trim());
+        Date end = getDate(edateButton.getText().toString().trim());
+        if(start.after(end)){
+            sdateButton.setError("start date can't be after end date");
+            Toast.makeText(getActivity(), "start date can't be after end date", Toast.LENGTH_SHORT).show();
+            sdateButton.requestFocus();
+            progressBar.setVisibility(View.GONE);
+            addBtn.setEnabled(true);
+            chooseLocation.setEnabled(true);
+            return;
+        }
+        auctionListing.setStartDate(start);
+        auctionListing.setEndDate(end);
         auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
         Location location = new Location("");
         location.setLatitude(lat);
@@ -201,7 +212,6 @@ public class AddAuctionListingFragment extends Fragment {
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
         datePickerDialog = new DatePickerDialog(getContext(), style, dateSetListener, syear, smonth, sday);
-        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         edatePickerDialog = new DatePickerDialog(getContext(), style, edateSetListener, year, month, day);
         edatePickerDialog.getDatePicker().setMinDate(startcal.getTimeInMillis());
     }

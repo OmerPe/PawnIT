@@ -93,21 +93,6 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
             case R.id.my_pawns:
                 Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_userPawnFragments);
                 break;
-            case R.id.history:
-                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_historyFragment);
-                break;
-//            case R.id.user_settings:
-//                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_userSettingsFragment);
-//                break;
-//            case R.id.app_settings:
-//                Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_appSettingsFragment);
-//                break;
-//            case R.id.MainMenu_share:
-//                Toast.makeText(getActivity(), "Share", Toast.LENGTH_SHORT).show();
-//                break;
-//            case R.id.MainMenu_rate:
-//                Toast.makeText(getActivity(), "Rate", Toast.LENGTH_SHORT).show();
-//                break;
             case R.id.logout:
                 Model.instance.logOut();
                 Toast.makeText(getActivity(), "Logged out", Toast.LENGTH_SHORT).show();
@@ -132,10 +117,6 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
         listings.setVisible(false);
         MenuItem pawns = rightDrawer.getMenu().findItem(R.id.my_pawns);
         pawns.setVisible(false);
-        MenuItem hist = rightDrawer.getMenu().findItem(R.id.history);
-        hist.setVisible(false);
-//        MenuItem us = rightDrawer.getMenu().findItem(R.id.user_settings);
-//        us.setVisible(false);
 
         MenuItem login = rightDrawer.getMenu().findItem(R.id.login);
         login.setVisible(true);
@@ -148,11 +129,6 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
         listings.setVisible(true);
         MenuItem pawns = rightDrawer.getMenu().findItem(R.id.my_pawns);
         pawns.setVisible(true);
-        MenuItem hist = rightDrawer.getMenu().findItem(R.id.history);
-        ;
-        hist.setVisible(true);
-//        MenuItem us = rightDrawer.getMenu().findItem(R.id.user_settings);
-//        us.setVisible(true);
 
         MenuItem login = rightDrawer.getMenu().findItem(R.id.login);
         login.setVisible(false);
