@@ -490,7 +490,10 @@ public class Model {
                 listener.onComplete(listing);
             }else{
                 PawnListing listing1 =pawnListingDao.getPawnListing(listingID);
-                pawnListingDao.delete(listing1);
+                executorService.execute(()->{
+                    pawnListingDao.delete(listing1);
+                });
+                listener.onComplete(null);
             }
         });
     }
@@ -501,7 +504,11 @@ public class Model {
                 listener.onComplete(listing);
             }else{
                 AuctionListing listing1 =auctionListingDao.getAuctionListing(listingID);
-                auctionListingDao.delete(listing1);
+                executorService.execute(()->{
+                    auctionListingDao.delete(listing1);
+                });
+
+                listener.onComplete(null);
             }
         });
     }
@@ -512,7 +519,10 @@ public class Model {
                 listener.onComplete(listing);
             }else{
                 ResellListing listing1 =resellListingDao.getResellListing(listingID);
-                resellListingDao.delete(listing1);
+                executorService.execute(()->{
+                    resellListingDao.delete(listing1);
+                });
+                listener.onComplete(null);
             }
         });
     }
