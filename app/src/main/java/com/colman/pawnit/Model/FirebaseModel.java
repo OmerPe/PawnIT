@@ -466,4 +466,26 @@ public class FirebaseModel {
         });
     }
 
+    public interface getUserOnCompleteListener {
+        void onComplete(User user);
+    }
+
+
+    public static void getUserDataByID(String Uid, getUserOnCompleteListener listener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(USER_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                if(document.exists()){
+                    User user = User.create(document.getData());
+                    listener.onComplete(user);
+                }else {
+                    listener.onComplete(null);
+                }
+            }else {
+                listener.onComplete(null);
+            }
+        });
+    }
+
 }

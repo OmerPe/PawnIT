@@ -1,9 +1,13 @@
 package com.colman.pawnit.Ui.Market;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,16 +19,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.pawnit.Model.AuctionListing;
+import com.colman.pawnit.Model.Listing;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
+import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Market_list_fragment extends Fragment {
 
     private MarketListViewModel mViewModel;
     RecyclerView list;
+    MyAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,27 +43,91 @@ public class Market_list_fragment extends Fragment {
 
         list.setLayoutManager(new LinearLayoutManager(getContext()));
         list.setHasFixedSize(true);
-        MyAdapter adapter = new MyAdapter();
+        adapter = new MyAdapter();
         list.setAdapter(adapter);
 
         mViewModel = new ViewModelProvider(this).get(MarketListViewModel.class);
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
-            adapter.notifyDataSetChanged();
+            adapter.setData(data);
+        });
+
+        MarketFragment frag = ((MarketFragment)this.getParentFragment());
+        TextInputEditText sb = frag.searchBox;
+
+        sb.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.getFilter().filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                adapter.getFilter().filter(s.toString());
+            }
         });
 
         return view;
     }
 
 
-    private class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
         private final View.OnClickListener mOnClickListenerResell = new MyAdapter.MyOnClickListenerResell();
         private final View.OnClickListener mOnClickListenerAuction = new MyAdapter.MyOnClickListenerAuction();
 
+        List<Listing> listingsFiltered;
 
         public MyAdapter(){
+            listingsFiltered = new LinkedList<>();
         }
+
+        public void setData(List<Listing> listings){
+            listingsFiltered = listings;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence) {
+                    String charString = charSequence.toString();
+                    if (charString.isEmpty()) {
+                        listingsFiltered = mViewModel.getData().getValue();
+                    } else {
+                        List<Listing> filteredList = new LinkedList<>();
+                        if(mViewModel.getData().getValue() != null){
+                            for (Listing listing : mViewModel.getData().getValue()) {
+                                if(listing.getTitle().toLowerCase().contains(charString.toLowerCase())
+                                        || listing.getDescription().toLowerCase().contains(charString.toLowerCase())){
+                                    filteredList.add(listing);
+                                }
+                            }
+                        }
+
+
+                        listingsFiltered = filteredList;
+                    }
+
+                    FilterResults filterResults = new FilterResults();
+                    filterResults.values = listingsFiltered;
+                    return filterResults;
+                }
+
+                @Override
+                protected void publishResults(CharSequence constraint, FilterResults results) {
+                    listingsFiltered = (LinkedList<Listing>) results.values;
+                    notifyDataSetChanged();
+                }
+            };
+        }
+
 
         @NonNull
         @Override
@@ -78,26 +151,29 @@ public class Market_list_fragment extends Fragment {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             List<String> imagesList;
             String image;
+            Listing listing = listingsFiltered.get(position);
             switch (holder.getItemViewType()){
                 case 0:
                     ResellViewHolder viewHolder = (ResellViewHolder) holder;
-                    viewHolder.title.setText(mViewModel.getData().getValue().get(position).getTitle());
-                    viewHolder.price.setText("" +((ResellListing)mViewModel.getData().getValue().get(position)).getPrice());
-                    imagesList = mViewModel.getData().getValue().get(position).getImages();
+                    ResellListing rl = (ResellListing) listing;
+                    viewHolder.title.setText(rl.getTitle());
+                    viewHolder.price.setText("" + rl.getPrice());
+                    imagesList = rl.getImages();
                     image = "";
                     if(imagesList != null && imagesList.size() != 0)
-                        image = mViewModel.getData().getValue().get(position).getImages().get(0);
+                        image = rl.getImages().get(0);
                     if(!image.isEmpty())
                         Picasso.get().load(image).placeholder(R.drawable.placeholder).into(((ResellViewHolder) holder).image);
                     break;
                 case 1:
                     AuctionViewHolder viewHolder1 = (AuctionViewHolder) holder;
-                    viewHolder1.title.setText(mViewModel.getData().getValue().get(position).getTitle());
-                    viewHolder1.startingPrice.setText(""+((AuctionListing)mViewModel.getData().getValue().get(position)).getStartingPrice());
-                    imagesList = mViewModel.getData().getValue().get(position).getImages();
+                    AuctionListing al = (AuctionListing) listing;
+                    viewHolder1.title.setText(al.getTitle());
+                    viewHolder1.startingPrice.setText(""+ al.getStartingPrice());
+                    imagesList = al.getImages();
                     image = "";
                     if(imagesList != null && imagesList.size() != 0)
-                        image = mViewModel.getData().getValue().get(position).getImages().get(0);
+                        image = al.getImages().get(0);
                     if(!image.isEmpty())
                         Picasso.get().load(image).placeholder(R.drawable.placeholder).into(((AuctionViewHolder)holder).image);
                     break;
@@ -108,16 +184,12 @@ public class Market_list_fragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(mViewModel.getData().getValue() != null){
-                return mViewModel.getData().getValue().size();
-            }else{
-                return 0;
-            }
+            return listingsFiltered.size();
         }
 
         @Override
         public int getItemViewType(int position) {
-            if(mViewModel.getData().getValue().get(position) instanceof ResellListing){
+            if(listingsFiltered.get(position) instanceof ResellListing){
                 return 0;
             }else {
                 return 1;
@@ -141,7 +213,7 @@ public class Market_list_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int itemPosition = list.getChildLayoutPosition(v);
-                String id = mViewModel.getData().getValue().get(itemPosition).getListingID();
+                String id = listingsFiltered.get(itemPosition).getListingID();
 
                 MarketFragmentDirections.ActionMarketFragmentToResellListFragment action =
                         MarketFragmentDirections.actionMarketFragmentToResellListFragment(id);
@@ -166,7 +238,7 @@ public class Market_list_fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int itemPosition = list.getChildLayoutPosition(v);
-                String id = mViewModel.getData().getValue().get(itemPosition).getListingID();
+                String id = listingsFiltered.get(itemPosition).getListingID();
 
                 MarketFragmentDirections.ActionMarketFragmentToAuctionListingFragment action =
                         MarketFragmentDirections.actionMarketFragmentToAuctionListingFragment(id);

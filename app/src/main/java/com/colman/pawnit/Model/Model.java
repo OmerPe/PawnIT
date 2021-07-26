@@ -536,4 +536,8 @@ public class Model {
     public interface UploadImagesListener {
         void onComplete(List<String> url);
     }
+
+    public void getUserByID(String uid, FirebaseModel.getUserOnCompleteListener listener){
+        FirebaseModel.getUserDataByID(uid,listener);
+    }
 }

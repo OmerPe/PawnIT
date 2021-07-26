@@ -1,6 +1,8 @@
 package com.colman.pawnit.Ui.Market;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class MarketFragment extends Fragment {
 
@@ -28,6 +31,7 @@ public class MarketFragment extends Fragment {
 
     TabLayout tabLayout;
     ViewPager2 viewPager;
+    public TextInputEditText searchBox;
 
     public static MarketFragment newInstance() {
         return new MarketFragment();
@@ -46,6 +50,9 @@ public class MarketFragment extends Fragment {
 
         viewPager = view.findViewById(R.id.market_view_pager);
         viewPager.setAdapter(new MyAdapter(getChildFragmentManager(),getLifecycle()));
+
+
+        searchBox = view.findViewById(R.id.market_Searchbox);
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
