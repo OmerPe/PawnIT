@@ -1,5 +1,6 @@
 package com.colman.pawnit.Ui.Market.New;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.colman.pawnit.Model.Model;
+import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.MyApplication;
 import com.colman.pawnit.R;
@@ -30,6 +32,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -39,13 +42,21 @@ import java.util.List;
 
 public class AddResellListingFragment extends Fragment {
 
+    String id;
+
     private AddResellListingViewModel mViewModel;
     ImageView imageView;
     LayoutInflater inf;
     LinearLayout gallery;
     List<Bitmap> selectedImages;
 
-    Button chooseLocation;
+    DatePickerDialog datePickerDialog;
+    Button sdateButton;
+    EditText title, price, desc;
+    Button chooseLocation, addBtn;
+    ProgressBar progressBar;
+    ImageButton addImages;
+
     double lat,lng;
     static final int PICK_LOCATION = 2;
 
@@ -58,19 +69,54 @@ public class AddResellListingFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_resell_listing_fragment, container, false);
 
-        gallery = view.findViewById(R.id.resell_gallery);
         inf = inflater;
-
-        EditText title = view.findViewById(R.id.add_resell_title);
-        EditText price = view.findViewById(R.id.add_resell_price);
-        EditText desc = view.findViewById(R.id.add_resell_description);
-        Button addBtn = view.findViewById(R.id.add_resell_add_btn);
-        ProgressBar progressBar = view.findViewById(R.id.add_resell_progressbar);
-        progressBar.setVisibility(View.GONE);
-
-        ImageButton addImages = view.findViewById(R.id.add_resell_imageB);
-
         chooseLocation = view.findViewById(R.id.add_resell_loactionBtn);
+        title = view.findViewById(R.id.add_resell_title);
+        price = view.findViewById(R.id.add_resell_price);
+        desc = view.findViewById(R.id.add_resell_description);
+        progressBar = view.findViewById(R.id.add_resell_progressbar);
+        gallery = view.findViewById(R.id.resell_gallery);
+        addImages = view.findViewById(R.id.add_resell_imageB);
+        addBtn = view.findViewById(R.id.add_resell_add_btn);
+
+        id = (String) getArguments().get("listingID");
+        if(id != null){
+            chooseLocation.setEnabled(false);
+            addImages.setEnabled(false);
+            Model.instance.getResellListing(id,(listing)->{
+                ResellListing rl = (ResellListing) listing;
+                title.setText(rl.getTitle());
+                price.setText("" + rl.getPrice());
+                desc.setText(rl.getDescription());
+                if(rl.getImages() != null && rl.getImages().size() != 0 &&
+                        rl.getImages().get(0) != null && !rl.getImages().get(0).isEmpty()) {
+                    View im = inf.inflate(R.layout.image_item, gallery, false);
+                    ImageView imV = im.findViewById(R.id.imageItem_imageV);
+                    Picasso.get().load(rl.getImages().get(0)).placeholder(R.drawable.placeholder).into(imV);
+                    if (imV.getParent() != null) {
+                        ((ViewGroup) imV.getParent()).removeView(imV);
+                    }
+                    gallery.addView(imV);
+                }
+            });
+        }
+
+        addImages.setOnClickListener(v -> {
+            addImages();
+        });
+
+        /*initDatePicker();
+        sdateButton.setText(getTodaysDate());
+        sdateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDatePicker(v);
+            }
+        });*/
+
+
+
+
         chooseLocation.setOnClickListener(v -> {
             PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 

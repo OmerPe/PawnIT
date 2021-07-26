@@ -489,8 +489,8 @@ public class Model {
             if(listing != null){
                 listener.onComplete(listing);
             }else{
-                PawnListing listing1 =pawnListingDao.getPawnListing(listingID);
                 executorService.execute(()->{
+                    PawnListing listing1 = pawnListingDao.getPawnListing(listingID);
                     pawnListingDao.delete(listing1);
                 });
                 listener.onComplete(null);
@@ -503,8 +503,8 @@ public class Model {
             if(listing != null){
                 listener.onComplete(listing);
             }else{
-                AuctionListing listing1 =auctionListingDao.getAuctionListing(listingID);
                 executorService.execute(()->{
+                    AuctionListing listing1 =auctionListingDao.getAuctionListing(listingID);
                     auctionListingDao.delete(listing1);
                 });
 
@@ -518,8 +518,8 @@ public class Model {
             if(listing != null){
                 listener.onComplete(listing);
             }else{
-                ResellListing listing1 =resellListingDao.getResellListing(listingID);
                 executorService.execute(()->{
+                    ResellListing listing1 =resellListingDao.getResellListing(listingID);
                     resellListingDao.delete(listing1);
                 });
                 listener.onComplete(null);

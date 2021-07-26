@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
@@ -59,9 +60,9 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
         title = view.findViewById(R.id.auction_collapsing_toolbar);
         image = view.findViewById(R.id.auction_listing_image);
         String id = (String) getArguments().get("listingID");
-        if(id != null){
-            Model.instance.getAuctionListing(id,(listing1 -> {
-                if(listing1 != null) {
+        if (id != null) {
+            Model.instance.getAuctionListing(id, (listing1 -> {
+                if (listing1 != null) {
                     AuctionListing listing = (AuctionListing) listing1;
                     description.setText(listing.getDescription());
                     price.setText("" + listing.getCurrentPrice());
@@ -69,15 +70,17 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(listing.getEndDate());
                     countDown.setText(cal.get(Calendar.DAY_OF_MONTH) + "\\" + cal.get(Calendar.MONTH) + "\\" + cal.get(Calendar.YEAR));
-                    if(listing.getImages() != null && listing.getImages().size() != 0 &&
+                    if (listing.getImages() != null && listing.getImages().size() != 0 &&
                             listing.getImages().get(0) != null && !listing.getImages().get(0).isEmpty())
                         Picasso.get().load(listing.getImages().get(0)).placeholder(R.drawable.placeholder).into(image);
 
-                    LatLng latLng = new LatLng(listing.getLocation().getLatitude(),listing.getLocation().getLongitude());
+                    LatLng latLng = new LatLng(listing.getLocation().getLatitude(), listing.getLocation().getLongitude());
                     MarkerOptions a = new MarkerOptions().position(latLng);
                     Marker m = mMap.addMarker(a);
                     m.setPosition(latLng);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                } else {
+                    Navigation.findNavController(view).navigateUp();
                 }
             }));
         }
@@ -133,7 +136,7 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
 
     @Override
     public void onMapReady(GoogleMap map) {
-        mMap=map;
+        mMap = map;
     }
 
     @Override

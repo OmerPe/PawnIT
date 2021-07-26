@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/pawn_popup_edit"
+        android:id="@+id/listing_popup_edit"
         android:title="Edit" />
     <item
-        android:id="@+id/pawn_popup_delete"
+        android:id="@+id/listing_popup_delete"
         android:title="Delete" />
 
 </menu>

@@ -31,7 +31,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PawnListingFragment extends Fragment implements OnMapReadyCallback {
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
@@ -89,41 +88,42 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
                         Picasso.get().load(listing.getImages().get(0)).placeholder(R.drawable.placeholder).into(image);
 
                     String uId = listing.getOwnerId();
-                    if(Model.instance.isLoggedIn()){
-                        if(uId != null && Model.instance.getLoggedUser().getUid().equals(uId)){
+                    if (Model.instance.isLoggedIn()) {
+                        if (uId != null && Model.instance.getLoggedUser().getUid().equals(uId)) {
                             popupMenu.setVisibility(View.VISIBLE);
                         }
                     }
 
-                    LatLng latLng = new LatLng(listing.getLocation().getLatitude(),listing.getLocation().getLongitude());
+                    LatLng latLng = new LatLng(listing.getLocation().getLatitude(), listing.getLocation().getLongitude());
                     MarkerOptions a = new MarkerOptions().position(latLng);
                     Marker m = mMap.addMarker(a);
                     m.setPosition(latLng);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                     progressBar.setVisibility(View.GONE);
+                } else {
+                    Navigation.findNavController(view).navigateUp();
                 }
             });
         }
+
         popupMenu.setVisibility(View.GONE);
-
-
         popupMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popup = new PopupMenu(getActivity(), popupMenu);
-                popup.getMenuInflater().inflate(R.menu.pawn_popup_menu, popup.getMenu());
+                popup.getMenuInflater().inflate(R.menu.listing_popup_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         progressBar.setVisibility(View.VISIBLE);
                         switch (item.getItemId()) {
-                            case R.id.pawn_popup_edit:
+                            case R.id.listing_popup_edit:
                                 PawnListingFragmentDirections.ActionPawnListingFragmentToAddPawnListingFragment action =
                                         PawnListingFragmentDirections.actionPawnListingFragmentToAddPawnListingFragment(id);
                                 Navigation.findNavController(v).navigate(action);
                                 break;
-                            case R.id.pawn_popup_delete:
-                                Model.instance.deletePawnListing(id, ()->{
+                            case R.id.listing_popup_delete:
+                                Model.instance.deletePawnListing(id, () -> {
                                     Navigation.findNavController(view).navigate(R.id.action_pawnListingFragment_to_userPawnFragments);
                                 });
                                 break;
@@ -134,7 +134,6 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
                 popup.show();
             }
         });
-
 
         return view;
     }

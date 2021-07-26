@@ -170,6 +170,9 @@
         <action
             android:id="@+id/action_resell_listFragment_to_addResellListingFragment"
             app:destination="@id/addResellListingFragment" />
+        <action
+            android:id="@+id/action_resell_listFragment_to_userListingsFragment"
+            app:destination="@id/userListingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/userPawnFragments"

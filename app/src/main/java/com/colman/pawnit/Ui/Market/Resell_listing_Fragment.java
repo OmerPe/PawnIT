@@ -2,18 +2,24 @@ package com.colman.pawnit.Ui.Market;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
+import com.colman.pawnit.Ui.Pawn.PawnListingFragmentDirections;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -25,16 +31,18 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.squareup.picasso.Picasso;
 
 public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallback {
-
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     GoogleMap mMap;
 
-    private ResellListingViewModel mViewModel;
+    String id;
+    ResellListingViewModel mViewModel;
     CollapsingToolbarLayout title;
     TextView price;
     TextView description;
     ImageView image;
-    MapView mMapView;
+    MapView mMapView = null;
+    ProgressBar progressBar;
+    ImageButton popupMenu;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,28 +56,69 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
         description = view.findViewById(R.id.resell_listing_descriptionTV);
         title = view.findViewById(R.id.resell_collapsing_toolbar);
         image = view.findViewById(R.id.resell_listing_image);
+        progressBar = view.findViewById(R.id.resell_listing_pb);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.bringToFront();
 
-        String id = (String) getArguments().get("listingID");
-        if(id != null){
-            Model.instance.getResellListing(id,(listing1 -> {
-                if(listing1 != null) {
+        id = (String) getArguments().get("listingID");
+        if (id != null) {
+            Model.instance.getResellListing(id, (listing1 -> {
+                if (listing1 != null) {
                     ResellListing listing = (ResellListing) listing1;
-
                     description.setText(listing.getDescription());
                     price.setText("" + listing.getPrice());
                     title.setTitle(listing.getTitle());
-                    if(listing.getImages() != null && listing.getImages().size() != 0 &&
+                    if (listing.getImages() != null && listing.getImages().size() != 0 &&
                             listing.getImages().get(0) != null && !listing.getImages().get(0).isEmpty())
                         Picasso.get().load(listing.getImages().get(0)).placeholder(R.drawable.placeholder).into(image);
 
-                    LatLng latLng = new LatLng(listing.getLocation().getLatitude(),listing.getLocation().getLongitude());
+                    String uId = listing.getOwnerId();
+                    if (Model.instance.isLoggedIn()) {
+                        if (uId != null && Model.instance.getLoggedUser().getUid().equals(uId)) {
+                            popupMenu.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    LatLng latLng = new LatLng(listing.getLocation().getLatitude(), listing.getLocation().getLongitude());
                     MarkerOptions a = new MarkerOptions().position(latLng);
                     Marker m = mMap.addMarker(a);
                     m.setPosition(latLng);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                } else {
+                    Navigation.findNavController(view).navigateUp();
                 }
             }));
         }
+
+        popupMenu.setVisibility(View.GONE);
+        popupMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getActivity(), popupMenu);
+                popup.getMenuInflater().inflate(R.menu.listing_popup_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        switch (item.getItemId()) {
+                            case R.id.listing_popup_edit:
+                                Resell_listing_FragmentDirections.ActionResellListFragmentToAddResellListingFragment action =
+                                        Resell_listing_FragmentDirections.actionResellListFragmentToAddResellListingFragment(id);
+                                Navigation.findNavController(v).navigate(action);
+                                break;
+                            case R.id.listing_popup_delete:
+                                Model.instance.deleteResellListing(id, () -> {
+                                    Navigation.findNavController(view).navigate(R.id.action_resell_listFragment_to_userListingsFragment);
+                                });
+                                break;
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+            }
+        });
+
         return view;
     }
 

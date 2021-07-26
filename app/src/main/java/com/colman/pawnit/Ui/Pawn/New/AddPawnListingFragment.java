@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,11 +49,10 @@ public class AddPawnListingFragment extends Fragment {
     String id;
 
     private AddPawnListingViewModel mViewModel;
-    private DatePickerDialog datePickerDialog;
-    private Button sdateButton;
-
+    DatePickerDialog datePickerDialog;
+    Button sdateButton;
     ImageButton addImages;
-    EditText title, requested,interestRate,description;
+    EditText title, requested, interestRate, description;
     ProgressBar progressBar;
 
     LayoutInflater inf;
@@ -87,24 +85,28 @@ public class AddPawnListingFragment extends Fragment {
         Button addBtn = view.findViewById(R.id.add_pawn_add_btn);
 
         id = (String) getArguments().get("listingID");
-        if(id != null){
+        if (id != null) {
             chooseLocation.setEnabled(false);
             addImages.setEnabled(false);
-            Model.instance.getPawnListing(id,(listing)->{
-                PawnListing pl = (PawnListing) listing;
-                title.setText(pl.getTitle());
-                requested.setText("" + pl.getLoanAmountRequested());
-                interestRate.setText("" + pl.getInterestRate());
-                description.setText(pl.getDescription());
-                if(pl.getImages() != null && pl.getImages().size() != 0 &&
-                        pl.getImages().get(0) != null && !pl.getImages().get(0).isEmpty()) {
-                    View im = inf.inflate(R.layout.image_item, gallery, false);
-                    ImageView imV = im.findViewById(R.id.imageItem_imageV);
-                    Picasso.get().load(pl.getImages().get(0)).placeholder(R.drawable.placeholder).into(imV);
-                    if (imV.getParent() != null) {
-                        ((ViewGroup) imV.getParent()).removeView(imV);
+            Model.instance.getPawnListing(id, (listing) -> {
+                if(listing != null){
+                    PawnListing pl = (PawnListing) listing;
+                    title.setText(pl.getTitle());
+                    requested.setText("" + pl.getLoanAmountRequested());
+                    interestRate.setText("" + pl.getInterestRate());
+                    description.setText(pl.getDescription());
+                    if (pl.getImages() != null && pl.getImages().size() != 0 &&
+                            pl.getImages().get(0) != null && !pl.getImages().get(0).isEmpty()) {
+                        View im = inf.inflate(R.layout.image_item, gallery, false);
+                        ImageView imV = im.findViewById(R.id.imageItem_imageV);
+                        Picasso.get().load(pl.getImages().get(0)).placeholder(R.drawable.placeholder).into(imV);
+                        if (imV.getParent() != null) {
+                            ((ViewGroup) imV.getParent()).removeView(imV);
+                        }
+                        gallery.addView(imV);
                     }
-                    gallery.addView(imV);
+                }else {
+                    Navigation.findNavController(view).navigateUp();
                 }
             });
         }
@@ -112,8 +114,8 @@ public class AddPawnListingFragment extends Fragment {
         addImages.setOnClickListener(v -> {
             addImages();
         });
-        initDatePicker();
 
+        initDatePicker();
         sdateButton.setText(getTodaysDate());
         sdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +168,7 @@ public class AddPawnListingFragment extends Fragment {
     }
 
     private void updateListing(PawnListing pawnListing, View v) {
-        Model.instance.getPawnListing(id,listing -> {
+        Model.instance.getPawnListing(id, listing -> {
             PawnListing pl = (PawnListing) listing;
             pl.setTitle(pawnListing.getTitle());
             pl.setLoanAmountRequested(pawnListing.getLoanAmountRequested());
@@ -174,7 +176,7 @@ public class AddPawnListingFragment extends Fragment {
             pl.setWhenToGet(pawnListing.getWhenToGet());
             pl.setDescription(pawnListing.getDescription());
 
-            Model.instance.updateListing(id,pl,()->{
+            Model.instance.updateListing(id, pl, () -> {
                 Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
                 Navigation.findNavController(v).navigateUp();
             });
