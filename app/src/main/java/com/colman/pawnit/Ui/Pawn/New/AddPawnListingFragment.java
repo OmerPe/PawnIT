@@ -138,8 +138,11 @@ public class AddPawnListingFragment extends Fragment {
                                 });
                             });
                         }else{
-                            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                            Navigation.findNavController(v).navigateUp();
+                            pawnListing.setListingID(listingId);
+                            Model.instance.updateListing(listingId,pawnListing,()->{
+                                Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                                Navigation.findNavController(v).navigateUp();
+                            });
                         }
 
                         Model.instance.getUserFromDB(user -> {

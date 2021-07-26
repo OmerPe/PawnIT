@@ -166,6 +166,7 @@ public class Model {
                     }
                     return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
                 });
+
                 for (AuctionListing listing : auctions) {
                     Log.d("TAG","- auction "+listing.getListingID() +"\n LuD : " + listing.getLastUpdated());
 
@@ -204,6 +205,7 @@ public class Model {
                     }
                     return (-1) * listing1.getDateOpened().compareTo(listing2.getDateOpened());
                 });
+
                 for (PawnListing listing : pawns) {
                     Log.d("TAG","- pawn "+listing.getListingID() +"\n LuD : " + listing.getLastUpdated());
 
@@ -240,15 +242,25 @@ public class Model {
             Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loading);
         }
 
-        FirebaseModel.saveListing(listing, onCompleteListener);
+        FirebaseModel.saveListing(listing, listingID -> {
+            onCompleteListener.onComplete(listingID);
 
-        if (listing instanceof ResellListing) {
+            if (listing instanceof ResellListing) {
+                getResellData();
+            } else if (listing instanceof AuctionListing) {
+                getAuctionData();
+            } else if (listing instanceof PawnListing) {
+                getAllPawnListings();
+            }
+        });
+
+        /*if (listing instanceof ResellListing) {
             getResellData();
         } else if (listing instanceof AuctionListing) {
             getAuctionData();
         } else if (listing instanceof PawnListing) {
             getAllPawnListings();
-        }
+        }*/
     }
 
     public interface createUserDataOnCompleteListener {

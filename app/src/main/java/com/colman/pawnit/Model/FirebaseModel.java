@@ -140,9 +140,7 @@ public class FirebaseModel {
                     documentReference.update("listingID", documentReference.getId()).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            MyApplication.mainThreadHandler.post(() -> {
-                                onCompleteListener.onComplete(documentReference.getId());
-                            });
+                            onCompleteListener.onComplete(documentReference.getId());
                         }
                     });
                 }

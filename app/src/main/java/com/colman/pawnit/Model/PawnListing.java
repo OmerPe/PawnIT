@@ -106,6 +106,7 @@ public class PawnListing extends Listing {
                 ((Timestamp)json.get(WHEN_TO_GET)).toDate(),
                 (int)((long)json.get(NUM_OF_PAYMENTS)),
                 (String) json.get(PAYMENT_DAY));
+
         pl.setListingID(listing.getListingID());
 
         Timestamp ts = (Timestamp)json.get(LAST_UPDATED);
