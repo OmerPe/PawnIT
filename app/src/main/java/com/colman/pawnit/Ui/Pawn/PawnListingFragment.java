@@ -124,7 +124,7 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
                                 break;
                             case R.id.listing_popup_delete:
                                 Model.instance.deletePawnListing(id, () -> {
-                                    Navigation.findNavController(view).navigate(R.id.action_pawnListingFragment_to_userPawnFragments);
+                                    Navigation.findNavController(view).navigateUp();
                                 });
                                 break;
                         }

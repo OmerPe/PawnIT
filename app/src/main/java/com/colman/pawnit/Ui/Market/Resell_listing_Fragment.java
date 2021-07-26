@@ -56,9 +56,11 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
         description = view.findViewById(R.id.resell_listing_descriptionTV);
         title = view.findViewById(R.id.resell_collapsing_toolbar);
         image = view.findViewById(R.id.resell_listing_image);
+        popupMenu = view.findViewById(R.id.resell_popup_menu);
         progressBar = view.findViewById(R.id.resell_listing_pb);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.bringToFront();
+
 
         id = (String) getArguments().get("listingID");
         if (id != null) {
@@ -84,6 +86,7 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
                     Marker m = mMap.addMarker(a);
                     m.setPosition(latLng);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                    progressBar.setVisibility(View.GONE);
                 } else {
                     Navigation.findNavController(view).navigateUp();
                 }
@@ -108,7 +111,7 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
                                 break;
                             case R.id.listing_popup_delete:
                                 Model.instance.deleteResellListing(id, () -> {
-                                    Navigation.findNavController(view).navigate(R.id.action_resell_listFragment_to_userListingsFragment);
+                                    Navigation.findNavController(view).navigateUp();
                                 });
                                 break;
                         }

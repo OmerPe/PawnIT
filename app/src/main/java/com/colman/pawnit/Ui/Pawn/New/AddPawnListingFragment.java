@@ -50,7 +50,7 @@ public class AddPawnListingFragment extends Fragment {
 
     private AddPawnListingViewModel mViewModel;
     DatePickerDialog datePickerDialog;
-    Button sdateButton;
+    Button sdateButton, addBtn, chooseLocation;
     ImageButton addImages;
     EditText title, requested, interestRate, description;
     ProgressBar progressBar;
@@ -59,7 +59,6 @@ public class AddPawnListingFragment extends Fragment {
     LinearLayout gallery;
     List<Bitmap> selectedImages;
 
-    Button chooseLocation;
     double lat, lng;
     static final int PICK_LOCATION = 2;
 
@@ -82,7 +81,7 @@ public class AddPawnListingFragment extends Fragment {
         addImages = view.findViewById(R.id.add_pawn_imageB);
         gallery = view.findViewById(R.id.pawn_gallery);
         sdateButton = (Button) view.findViewById(R.id.pawn_datebtn);
-        Button addBtn = view.findViewById(R.id.add_pawn_add_btn);
+        addBtn = view.findViewById(R.id.add_pawn_add_btn);
 
         id = (String) getArguments().get("listingID");
         if (id != null) {
@@ -134,9 +133,7 @@ public class AddPawnListingFragment extends Fragment {
             } catch (GooglePlayServicesNotAvailableException e) {
                 e.printStackTrace();
             }
-
         });
-
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,7 +232,6 @@ public class AddPawnListingFragment extends Fragment {
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
         datePickerDialog = new DatePickerDialog(getContext(), style, dateSetListener, year, month, day);
-        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
     }
 
     private String makeDateString(int day, int month, int year) {
@@ -355,11 +351,9 @@ public class AddPawnListingFragment extends Fragment {
 
     void addImages() {
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        //getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         getIntent.setType("image/*");
 
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        //pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         pickIntent.setType("image/*");
 
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
@@ -375,17 +369,7 @@ public class AddPawnListingFragment extends Fragment {
         if (requestCode == PICK_IMAGE && resultCode == getActivity().RESULT_OK) {
             try {
                 selectedImages = new LinkedList<>();
-                /*ClipData clipData = data.getClipData();
-                if(clipData != null){//multiplte images
-                    for (int i =0; i<clipData.getItemCount();i++){
-                        Uri imageUri = clipData.getItemAt(i).getUri();
-                        InputStream is = getActivity().getContentResolver().openInputStream(imageUri);
-                        Bitmap image = BitmapFactory.decodeStream(is);
-                        selectedImages.add(image);
-                    }
-                }else {//single image
 
-                }*/
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                 Bitmap image = BitmapFactory.decodeStream(imageStream);
@@ -406,7 +390,6 @@ public class AddPawnListingFragment extends Fragment {
                         gallery.addView(imV);
                     });
                 }
-
             }).start();
 
         }
@@ -415,7 +398,6 @@ public class AddPawnListingFragment extends Fragment {
             Place place = PlacePicker.getPlace(data, getContext());
             lat = place.getLatLng().latitude;
             lng = place.getLatLng().longitude;
-
         }
     }
 

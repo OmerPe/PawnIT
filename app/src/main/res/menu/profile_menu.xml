@@ -17,10 +17,6 @@
                     android:icon="@drawable/ic_pwn"
                     android:title="@string/my_pawns" />
                 <item
-                    android:id="@+id/history"
-                    android:icon="@drawable/ic_history"
-                    android:title="@string/history" />
-                <item
                     android:id="@+id/logout"
                     android:icon="@drawable/ic_logout"
                     android:title="@string/logout" />
@@ -28,20 +24,4 @@
         </item>
 
     </group>
-
-    <!-- <item android:title="@string/settings">
-        <menu>
-            <item
-                android:id="@+id/user_settings"
-                android:icon="@drawable/ic_user_settings"
-                android:title="@string/user_settings" />
-            <item
-                android:id="@+id/app_settings"
-                android:icon="@drawable/ic_app_settings"
-                android:title="@string/app_settings" />
-        </menu>
-    </item>-->
-
-
-
 </menu>
