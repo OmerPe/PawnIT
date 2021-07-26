@@ -24,8 +24,12 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.google.geo.API_KEY"
-            android:value="AIzaSyDwAxOrNSzbQ1TJ-zPSiq3lKF7-vY2-3zI"/>
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBZa5Y30ykytGYBMGUvxc_ZysYkb5zbXGI"/>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <meta-data
             android:name="preloaded_fonts"

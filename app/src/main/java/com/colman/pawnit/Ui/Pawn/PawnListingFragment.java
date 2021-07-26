@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,23 +16,29 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.squareup.picasso.Picasso;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class PawnListingFragment extends Fragment {
+public class PawnListingFragment extends Fragment implements OnMapReadyCallback {
+    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+    GoogleMap mMap;
 
-    private PawnListingViewModel mViewModel;
+    String id;
+    PawnListingViewModel mViewModel;
     TextView requested;
     TextView due;
     TextView interest;
@@ -39,6 +46,8 @@ public class PawnListingFragment extends Fragment {
     CollapsingToolbarLayout title;
     ImageButton popupMenu;
     ImageView image;
+    MapView mMapView = null;
+    ProgressBar progressBar;
 
     public static PawnListingFragment newInstance() {
         return new PawnListingFragment();
@@ -48,6 +57,10 @@ public class PawnListingFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.pawn_listing_fragment, container, false);
+
+        mMapView = (MapView) view.findViewById(R.id.pawn_listing_mapView);
+        initGoogleMap(savedInstanceState);
+
         requested = view.findViewById(R.id.pawn_listing_requested);
         due = view.findViewById(R.id.pawn_listing_due);
         interest = view.findViewById(R.id.pawn_listing_interest);
@@ -55,11 +68,14 @@ public class PawnListingFragment extends Fragment {
         popupMenu = view.findViewById(R.id.pawn_popup_menu);
         title = view.findViewById(R.id.pawn_collapsing_toolbar);
         image = view.findViewById(R.id.pawn_listing_imageV);
+        progressBar = view.findViewById(R.id.pawn_listing_pb);
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.bringToFront();
 
-        String id = (String) getArguments().get("listingID");
-        if(id != null){
-            Model.instance.getPawnListing(id,(listing1 -> {
-                if(listing1 !=null) {
+        id = (String) getArguments().get("listingID");
+        if (id != null) {
+            Model.instance.getPawnListing(id, listing1 -> {
+                if (listing1 != null) {
                     PawnListing listing = (PawnListing) listing1;
                     requested.setText("" + listing.getLoanAmountRequested());
                     description.setText(listing.getDescription());
@@ -68,28 +84,48 @@ public class PawnListingFragment extends Fragment {
                     due.setText(cal.get(Calendar.DAY_OF_MONTH) + "\\" + cal.get(Calendar.MONTH) + "\\" + cal.get(Calendar.YEAR));
                     title.setTitle(listing.getTitle());
                     interest.setText("" + listing.getInterestRate());
-                    if(listing.getImages() != null && listing.getImages().size() != 0 &&
+                    if (listing.getImages() != null && listing.getImages().size() != 0 &&
                             listing.getImages().get(0) != null && !listing.getImages().get(0).isEmpty())
                         Picasso.get().load(listing.getImages().get(0)).placeholder(R.drawable.placeholder).into(image);
+
+                    String uId = listing.getOwnerId();
+                    if(Model.instance.isLoggedIn()){
+                        if(uId != null && Model.instance.getLoggedUser().getUid().equals(uId)){
+                            popupMenu.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    LatLng latLng = new LatLng(listing.getLocation().getLatitude(),listing.getLocation().getLongitude());
+                    MarkerOptions a = new MarkerOptions().position(latLng);
+                    Marker m = mMap.addMarker(a);
+                    m.setPosition(latLng);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+                    progressBar.setVisibility(View.GONE);
                 }
-            }));
+            });
         }
+        popupMenu.setVisibility(View.GONE);
+
 
         popupMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(getActivity(),popupMenu);
-                popup.getMenuInflater().inflate(R.menu.pawn_popup_menu,popup.getMenu());
+                PopupMenu popup = new PopupMenu(getActivity(), popupMenu);
+                popup.getMenuInflater().inflate(R.menu.pawn_popup_menu, popup.getMenu());
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
+                        progressBar.setVisibility(View.VISIBLE);
+                        switch (item.getItemId()) {
                             case R.id.pawn_popup_edit:
-                                //Navigation.findNavController(view).navigate(R.id.action_marketFragment_to_addResellListingFragment);
+                                PawnListingFragmentDirections.ActionPawnListingFragmentToAddPawnListingFragment action =
+                                        PawnListingFragmentDirections.actionPawnListingFragmentToAddPawnListingFragment(id);
+                                Navigation.findNavController(v).navigate(action);
                                 break;
                             case R.id.pawn_popup_delete:
-                                // to do delete func
-                                Navigation.findNavController(view).navigate(R.id.action_pawnListingFragment_to_userPawnFragments);
+                                Model.instance.deletePawnListing(id, ()->{
+                                    Navigation.findNavController(view).navigate(R.id.action_pawnListingFragment_to_userPawnFragments);
+                                });
                                 break;
                         }
                         return true;
@@ -110,38 +146,67 @@ public class PawnListingFragment extends Fragment {
         // TODO: Use the ViewModel
     }
 
-    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-        List<PawnListing> data = new LinkedList<>();
+    //-------------------------MapView-------------------------------------------------------
+    private void initGoogleMap(Bundle savedInstanceState) {
+        Bundle mapViewBundle = null;
+        if (savedInstanceState != null)
+            mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
+        mMapView.onCreate(mapViewBundle);
+        mMapView.getMapAsync(this);
+    }
 
-        public MyAdapter(){
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Bundle mapViewBundle = outState.getBundle(MAPVIEW_BUNDLE_KEY);
+        if (mapViewBundle == null) {
+            mapViewBundle = new Bundle();
+            outState.putBundle(MAPVIEW_BUNDLE_KEY, mapViewBundle);
         }
 
-        @NonNull
-        @Override
-        public MyAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.pawn_list_row,parent,false);
-            return new MyAdapter.MyViewHolder(itemView);
-        }
+        mMapView.onSaveInstanceState(mapViewBundle);
+    }
 
-        @Override
-        public void onBindViewHolder(@NonNull MyAdapter.MyViewHolder holder, int position) {
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
 
-        @Override
-        public int getItemCount() {
-            return data.size();
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mMapView.onStart();
+    }
 
-        public void setData(List<PawnListing> list){
-            this.data = list;
-            notifyDataSetChanged();
-        }
+    @Override
+    public void onStop() {
+        super.onStop();
+        mMapView.onStop();
+    }
 
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public MyViewHolder(@NonNull @NotNull View itemView) {
-                super(itemView);
-            }
-        }
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
+    }
+
+    @Override
+    public void onPause() {
+        mMapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mMapView.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
     }
 
 }

@@ -34,6 +34,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -46,16 +47,22 @@ import java.util.List;
 
 public class AddPawnListingFragment extends Fragment {
 
+    String id;
+
     private AddPawnListingViewModel mViewModel;
     private DatePickerDialog datePickerDialog;
     private Button sdateButton;
+
+    ImageButton addImages;
+    EditText title, requested,interestRate,description;
+    ProgressBar progressBar;
 
     LayoutInflater inf;
     LinearLayout gallery;
     List<Bitmap> selectedImages;
 
     Button chooseLocation;
-    double lat,lng;
+    double lat, lng;
     static final int PICK_LOCATION = 2;
 
     public static AddPawnListingFragment newInstance() {
@@ -67,21 +74,46 @@ public class AddPawnListingFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_pawn_listing_fragment, container, false);
 
-        gallery = view.findViewById(R.id.pawn_gallery);
         inf = inflater;
+        chooseLocation = view.findViewById(R.id.add_pawn_locationBtn);
+        title = view.findViewById(R.id.add_pawn_title);
+        requested = view.findViewById(R.id.add_pawn_requested);
+        interestRate = view.findViewById(R.id.add_pawn_interest);
+        description = view.findViewById(R.id.add_pawn_description);
+        progressBar = view.findViewById(R.id.add_pawn_progressbar);
+        addImages = view.findViewById(R.id.add_pawn_imageB);
+        gallery = view.findViewById(R.id.pawn_gallery);
+        sdateButton = (Button) view.findViewById(R.id.pawn_datebtn);
+        Button addBtn = view.findViewById(R.id.add_pawn_add_btn);
 
-        HorizontalScrollView images = view.findViewById(R.id.add_pawn_addimage);
-        EditText title = view.findViewById(R.id.add_pawn_title);
-        EditText requested = view.findViewById(R.id.add_pawn_requested);
-        EditText interestRate = view.findViewById(R.id.add_pawn_interest);
-        EditText description = view.findViewById(R.id.add_pawn_description);
-        ProgressBar progressBar = view.findViewById(R.id.add_pawn_progressbar);
-        ImageButton addImages = view.findViewById(R.id.add_pawn_imageB);
+        id = (String) getArguments().get("listingID");
+        if(id != null){
+            chooseLocation.setEnabled(false);
+            addImages.setEnabled(false);
+            Model.instance.getPawnListing(id,(listing)->{
+                PawnListing pl = (PawnListing) listing;
+                title.setText(pl.getTitle());
+                requested.setText("" + pl.getLoanAmountRequested());
+                interestRate.setText("" + pl.getInterestRate());
+                description.setText(pl.getDescription());
+                if(pl.getImages() != null && pl.getImages().size() != 0 &&
+                        pl.getImages().get(0) != null && !pl.getImages().get(0).isEmpty()) {
+                    View im = inf.inflate(R.layout.image_item, gallery, false);
+                    ImageView imV = im.findViewById(R.id.imageItem_imageV);
+                    Picasso.get().load(pl.getImages().get(0)).placeholder(R.drawable.placeholder).into(imV);
+                    if (imV.getParent() != null) {
+                        ((ViewGroup) imV.getParent()).removeView(imV);
+                    }
+                    gallery.addView(imV);
+                }
+            });
+        }
+
         addImages.setOnClickListener(v -> {
             addImages();
         });
         initDatePicker();
-        sdateButton = (Button) view.findViewById(R.id.pawn_datebtn);
+
         sdateButton.setText(getTodaysDate());
         sdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,12 +122,11 @@ public class AddPawnListingFragment extends Fragment {
             }
         });
 
-        chooseLocation = view.findViewById(R.id.add_pawn_locationBtn);
         chooseLocation.setOnClickListener(v -> {
             PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
             try {
-                startActivityForResult(builder.build(getActivity()),PICK_LOCATION);
+                startActivityForResult(builder.build(getActivity()), PICK_LOCATION);
             } catch (GooglePlayServicesRepairableException e) {
                 e.printStackTrace();
             } catch (GooglePlayServicesNotAvailableException e) {
@@ -104,7 +135,7 @@ public class AddPawnListingFragment extends Fragment {
 
         });
 
-        Button addBtn = view.findViewById(R.id.add_pawn_add_btn);
+
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,42 +155,67 @@ public class AddPawnListingFragment extends Fragment {
                 location.setLongitude(lng);
                 pawnListing.setLocation(location);
 
-                Model.instance.saveListing(pawnListing,(listingId)->{
-                    if(listingId != null){
-                        if(selectedImages != null){
-                            Model.instance.uploadImage(selectedImages.get(0),listingId,Model.LISTINGS_DIR,url -> {
-                                LinkedList<String> list = new LinkedList<>();
-                                list.add(url);
-                                pawnListing.setImages(list);
-                                pawnListing.setListingID(listingId);
-                                Model.instance.updateListing(listingId,pawnListing,()->{
-                                    Navigation.findNavController(v).navigateUp();
-                                    Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                                });
-                            });
-                        }else{
-                            pawnListing.setListingID(listingId);
-                            Model.instance.updateListing(listingId,pawnListing,()->{
-                                Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                                Navigation.findNavController(v).navigateUp();
-                            });
-                        }
-
-                        Model.instance.getUserFromDB(user -> {
-                            if(user != null){
-                                user.addPawnListing(listingId);
-                                Model.instance.updateUserData(user,()->{
-                                    Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
-                                });
-                            }
-                        });
-                    }
-                });
+                if (id == null)
+                    createListing(pawnListing, v);
+                else
+                    updateListing(pawnListing, v);
             }
         });
 
         return view;
     }
+
+    private void updateListing(PawnListing pawnListing, View v) {
+        Model.instance.getPawnListing(id,listing -> {
+            PawnListing pl = (PawnListing) listing;
+            pl.setTitle(pawnListing.getTitle());
+            pl.setLoanAmountRequested(pawnListing.getLoanAmountRequested());
+            pl.setInterestRate(pawnListing.getInterestRate());
+            pl.setWhenToGet(pawnListing.getWhenToGet());
+            pl.setDescription(pawnListing.getDescription());
+
+            Model.instance.updateListing(id,pl,()->{
+                Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                Navigation.findNavController(v).navigateUp();
+            });
+        });
+
+    }
+
+    private void createListing(PawnListing pawnListing, View v) {
+        Model.instance.saveListing(pawnListing, (listingId) -> {
+            if (listingId != null) {
+                if (selectedImages != null) {
+                    Model.instance.uploadImage(selectedImages.get(0), listingId, Model.LISTINGS_DIR, url -> {
+                        LinkedList<String> list = new LinkedList<>();
+                        list.add(url);
+                        pawnListing.setImages(list);
+                        pawnListing.setListingID(listingId);
+                        Model.instance.updateListing(listingId, pawnListing, () -> {
+                            Navigation.findNavController(v).navigateUp();
+                            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                        });
+                    });
+                } else {
+                    pawnListing.setListingID(listingId);
+                    Model.instance.updateListing(listingId, pawnListing, () -> {
+                        Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                        Navigation.findNavController(v).navigateUp();
+                    });
+                }
+
+                Model.instance.getUserFromDB(user -> {
+                    if (user != null) {
+                        user.addPawnListing(listingId);
+                        Model.instance.updateUserData(user, () -> {
+                            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                        });
+                    }
+                });
+            }
+        });
+    }
+
     private void initDatePicker() {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -179,6 +235,7 @@ public class AddPawnListingFragment extends Fragment {
         datePickerDialog = new DatePickerDialog(getContext(), style, dateSetListener, year, month, day);
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
     }
+
     private String makeDateString(int day, int month, int year) {
         String m = "JAN";
         switch (month) {
@@ -222,6 +279,7 @@ public class AddPawnListingFragment extends Fragment {
 
         return m + " " + day + " " + year;
     }
+
     private String getTodaysDate() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
@@ -230,6 +288,7 @@ public class AddPawnListingFragment extends Fragment {
         int day = cal.get(Calendar.DAY_OF_MONTH);
         return makeDateString(day, month, year);
     }
+
     private Date getDate(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String[] dateParsed = date.split(" ");
@@ -291,7 +350,8 @@ public class AddPawnListingFragment extends Fragment {
     }
 
     static final int PICK_IMAGE = 1;
-    void addImages(){
+
+    void addImages() {
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         //getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         getIntent.setType("image/*");
@@ -301,7 +361,7 @@ public class AddPawnListingFragment extends Fragment {
         pickIntent.setType("image/*");
 
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
@@ -332,14 +392,14 @@ public class AddPawnListingFragment extends Fragment {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
-            new Thread(()->{
-                for (final Bitmap image : selectedImages){
-                    MyApplication.mainThreadHandler.post(()->{
-                        View im = inf.inflate(R.layout.image_item,gallery,false);
+            new Thread(() -> {
+                for (final Bitmap image : selectedImages) {
+                    MyApplication.mainThreadHandler.post(() -> {
+                        View im = inf.inflate(R.layout.image_item, gallery, false);
                         ImageView imV = im.findViewById(R.id.imageItem_imageV);
                         imV.setImageBitmap(image);
-                        if(imV.getParent() != null){
-                            ((ViewGroup)imV.getParent()).removeView(imV);
+                        if (imV.getParent() != null) {
+                            ((ViewGroup) imV.getParent()).removeView(imV);
                         }
                         gallery.addView(imV);
                     });
@@ -350,7 +410,7 @@ public class AddPawnListingFragment extends Fragment {
         }
 
         if (requestCode == PICK_LOCATION && resultCode == getActivity().RESULT_OK) {
-            Place place= PlacePicker.getPlace(data,getContext());
+            Place place = PlacePicker.getPlace(data, getContext());
             lat = place.getLatLng().latitude;
             lng = place.getLatLng().longitude;
 

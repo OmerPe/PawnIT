@@ -88,7 +88,7 @@
             <com.google.android.gms.maps.MapView
                 android:id="@+id/resell_listing_mapView"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="350dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -72,9 +72,6 @@
         <action
             android:id="@+id/action_pawnFragment_to_pawnListingFragment"
             app:destination="@id/pawnListingFragment" />
-        <action
-            android:id="@+id/action_pawnFragment_self"
-            app:destination="@id/pawnFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -110,6 +107,9 @@
         <action
             android:id="@+id/action_addAuctionListingFragment_to_marketFragment"
             app:destination="@id/marketFragment" />
+        <argument
+            android:name="listingID"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/addResellListingFragment"
@@ -119,12 +119,19 @@
         <action
             android:id="@+id/action_addResellListingFragment_to_marketFragment"
             app:destination="@id/marketFragment" />
+        <argument
+            android:name="listingID"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/addPawnListingFragment"
         android:name="com.colman.pawnit.Ui.Pawn.New.AddPawnListingFragment"
         android:label="add_pawn_listing_fragment"
-        tools:layout="@layout/add_pawn_listing_fragment" />
+        tools:layout="@layout/add_pawn_listing_fragment" >
+        <argument
+            android:name="listingID"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/auctionListingFragment"
         android:name="com.colman.pawnit.Ui.Market.AuctionListingFragment"
@@ -133,6 +140,9 @@
         <argument
             android:name="listingID"
             app:argType="string" />
+        <action
+            android:id="@+id/action_auctionListingFragment_to_addAuctionListingFragment"
+            app:destination="@id/addAuctionListingFragment" />
     </fragment>
     <fragment
         android:id="@+id/pawnListingFragment"
@@ -145,6 +155,9 @@
         <argument
             android:name="listingID"
             app:argType="string" />
+        <action
+            android:id="@+id/action_pawnListingFragment_to_addPawnListingFragment"
+            app:destination="@id/addPawnListingFragment" />
     </fragment>
     <fragment
         android:id="@+id/resell_listFragment"
@@ -154,6 +167,9 @@
         <argument
             android:name="listingID"
             app:argType="string" />
+        <action
+            android:id="@+id/action_resell_listFragment_to_addResellListingFragment"
+            app:destination="@id/addResellListingFragment" />
     </fragment>
     <fragment
         android:id="@+id/userPawnFragments"
