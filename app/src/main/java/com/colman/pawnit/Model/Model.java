@@ -254,13 +254,6 @@ public class Model {
             }
         });
 
-        /*if (listing instanceof ResellListing) {
-            getResellData();
-        } else if (listing instanceof AuctionListing) {
-            getAuctionData();
-        } else if (listing instanceof PawnListing) {
-            getAllPawnListings();
-        }*/
     }
 
     public interface createUserDataOnCompleteListener {
@@ -409,16 +402,16 @@ public class Model {
         FirebaseModel.uploadImage(imageBmp, name, dir, listener);
     }
 
-    public void getPawnListing(String Uid, FirebaseModel.getListingOnCompleteListener listener) {
-        FirebaseModel.getPawnListing(Uid, listener);
+    public void getPawnListing(String listingID, FirebaseModel.getListingOnCompleteListener listener) {
+        FirebaseModel.getPawnListing(listingID, listener);
     }
 
-    public void getAuctionListing(String Uid, FirebaseModel.getListingOnCompleteListener listener) {
-        FirebaseModel.getAuctionListing(Uid, listener);
+    public void getAuctionListing(String listingID, FirebaseModel.getListingOnCompleteListener listener) {
+        FirebaseModel.getAuctionListing(listingID, listener);
     }
 
-    public void getResellListing(String Uid, FirebaseModel.getListingOnCompleteListener listener) {
-        FirebaseModel.getResellListing(Uid, listener);
+    public void getResellListing(String listingID, FirebaseModel.getListingOnCompleteListener listener) {
+        FirebaseModel.getResellListing(listingID, listener);
     }
 
     public interface UploadImagesListener {

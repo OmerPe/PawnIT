@@ -155,7 +155,7 @@ public class Listing implements Serializable {
             location = new Location("");
             String[] split = ((String)json.get(LOCATION)).split(",");
             location.setLatitude(Double.parseDouble(split[0]));
-            location.setLatitude(Double.parseDouble(split[1]));
+            location.setLongitude(Double.parseDouble(split[1]));
         }
 
         Listing listing = new Listing((String) json.get(OWNER_ID),

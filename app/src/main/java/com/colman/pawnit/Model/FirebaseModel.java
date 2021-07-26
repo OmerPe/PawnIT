@@ -297,9 +297,9 @@ public class FirebaseModel {
         void onComplete(Listing listing);
     }
 
-    public static void getPawnListing(String Uid, getListingOnCompleteListener listener){
+    public static void getPawnListing(String listingID, getListingOnCompleteListener listener){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(PAWN_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
+        db.collection(PAWN_LISTING_COLLECTION).document(listingID).get().addOnCompleteListener(task -> {
            if(task.isSuccessful()){
                DocumentSnapshot document = task.getResult();
                if(document.exists()){
@@ -312,9 +312,9 @@ public class FirebaseModel {
         });
     }
 
-    public static void getAuctionListing(String Uid, getListingOnCompleteListener listener){
+    public static void getAuctionListing(String listingID, getListingOnCompleteListener listener){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(AUCTION_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
+        db.collection(AUCTION_LISTING_COLLECTION).document(listingID).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
                 if(document.exists()){
@@ -327,9 +327,9 @@ public class FirebaseModel {
         });
     }
 
-    public static void getResellListing(String Uid, getListingOnCompleteListener listener){
+    public static void getResellListing(String listingID, getListingOnCompleteListener listener){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(RESELL_LISTING_COLLECTION).document(Uid).get().addOnCompleteListener(task -> {
+        db.collection(RESELL_LISTING_COLLECTION).document(listingID).get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
                 if(document.exists()){
