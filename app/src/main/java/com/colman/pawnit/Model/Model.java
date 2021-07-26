@@ -491,7 +491,9 @@ public class Model {
             }else{
                 executorService.execute(()->{
                     PawnListing listing1 = pawnListingDao.getPawnListing(listingID);
-                    pawnListingDao.delete(listing1);
+                    if(listing1 != null){
+                        pawnListingDao.delete(listing1);
+                    }
                 });
                 listener.onComplete(null);
             }
@@ -505,7 +507,9 @@ public class Model {
             }else{
                 executorService.execute(()->{
                     AuctionListing listing1 =auctionListingDao.getAuctionListing(listingID);
-                    auctionListingDao.delete(listing1);
+                    if(listing1 != null){
+                        auctionListingDao.delete(listing1);
+                    }
                 });
 
                 listener.onComplete(null);
@@ -520,7 +524,9 @@ public class Model {
             }else{
                 executorService.execute(()->{
                     ResellListing listing1 =resellListingDao.getResellListing(listingID);
-                    resellListingDao.delete(listing1);
+                    if(listing1 != null){
+                        resellListingDao.delete(listing1);
+                    }
                 });
                 listener.onComplete(null);
             }
