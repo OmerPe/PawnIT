@@ -29,12 +29,14 @@ import androidx.navigation.Navigation;
 
 import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
+import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.MyApplication;
 import com.colman.pawnit.R;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -47,35 +49,69 @@ import java.util.List;
 
 public class AddAuctionListingFragment extends Fragment {
 
+    String id;
+
     private AddAuctionListingViewModel mViewModel;
-    private DatePickerDialog datePickerDialog;
-    private DatePickerDialog edatePickerDialog;// end date
-    private Button sdateButton;
-    private Button edateButton , addBtn, chooseLocation;
+    DatePickerDialog datePickerDialog;
+    DatePickerDialog edatePickerDialog;// end date
+    Button sdateButton, edateButton , addBtn, chooseLocation;
+    ImageButton addImages;
+    LayoutInflater inf;
+    LinearLayout gallery;
     List<Bitmap> selectedImages;
     ProgressBar progressBar;
     EditText title,startingPrice,description;
+
     double lat,lng;
-
-
-    LayoutInflater inf;
-    LinearLayout gallery;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.add_auction_listing_fragment, container, false);
 
-        gallery = view.findViewById(R.id.auction_gallery);
         inf = inflater;
-
+        chooseLocation = view.findViewById(R.id.add_auction_locationBtn);
         title = view.findViewById(R.id.add_auction_title);
         startingPrice = view.findViewById(R.id.add_auction_sprice);
         description = view.findViewById(R.id.add_auction_description);
         progressBar = view.findViewById(R.id.add_auction_progressbar);
-        ImageButton addImages = view.findViewById(R.id.add_auction_imageV);
-        initDatePicker();
+        addImages = view.findViewById(R.id.add_auction_imageV);
+        gallery = view.findViewById(R.id.auction_gallery);
         sdateButton = (Button) view.findViewById(R.id.auction_sdatebtn);
+        edateButton = (Button) view.findViewById(R.id.auction_edatebtn);
+        addBtn = view.findViewById(R.id.add_auction_add_btn);
+
+        id = (String) getArguments().get("listingID");
+        if (id != null) {
+            chooseLocation.setEnabled(false);
+            addImages.setEnabled(false);
+            Model.instance.getAuctionListing(id, (listing) -> {
+                if(listing != null){
+                    AuctionListing al = (AuctionListing) listing;
+                    title.setText(al.getTitle());
+                    startingPrice.setText("" + al.getStartingPrice());
+                    description.setText(al.getDescription());
+                    if (al.getImages() != null && al.getImages().size() != 0 &&
+                            al.getImages().get(0) != null && !al.getImages().get(0).isEmpty()) {
+                        View im = inf.inflate(R.layout.image_item, gallery, false);
+                        ImageView imV = im.findViewById(R.id.imageItem_imageV);
+                        Picasso.get().load(al.getImages().get(0)).placeholder(R.drawable.placeholder).into(imV);
+                        if (imV.getParent() != null) {
+                            ((ViewGroup) imV.getParent()).removeView(imV);
+                        }
+                        gallery.addView(imV);
+                    }
+                }else {
+                    Navigation.findNavController(view).navigateUp();
+                }
+            });
+        }
+
+        addImages.setOnClickListener(v -> {
+            addImages();
+        });
+
+        initDatePicker();
         sdateButton.setText(getTodaysDate());
         sdateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +119,6 @@ public class AddAuctionListingFragment extends Fragment {
                 openDatePicker(v);
             }
         });
-        edateButton = (Button) view.findViewById(R.id.auction_edatebtn);
         edateButton.setText(getTodaysDate());
         edateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +127,6 @@ public class AddAuctionListingFragment extends Fragment {
             }
         });
 
-        chooseLocation = view.findViewById(R.id.add_auction_locationBtn);
         chooseLocation.setOnClickListener(v -> {
             PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
@@ -106,74 +140,78 @@ public class AddAuctionListingFragment extends Fragment {
 
         });
 
-        addBtn = view.findViewById(R.id.add_auction_add_btn);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addAuction(v);
-            }
-        });
-        addImages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addImages();
+                progressBar.setVisibility(View.VISIBLE);
+                addBtn.setEnabled(false);
+
+                AuctionListing auctionListing = new AuctionListing();
+                auctionListing.setTitle(title.getText().toString().trim());
+                auctionListing.setStartingPrice(Double.parseDouble(startingPrice.getText().toString().trim()));
+                auctionListing.setDescription(description.getText().toString().trim());
+                auctionListing.setDateOpened(Calendar.getInstance().getTime());
+                auctionListing.setStartDate(getDate(sdateButton.getText().toString().trim()));
+                auctionListing.setEndDate(getDate(edateButton.getText().toString().trim()));
+                auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
+                Location location = new Location("");
+                location.setLatitude(lat);
+                location.setLongitude(lng);
+                auctionListing.setLocation(location);
+
+                if (id == null)
+                    createListing(auctionListing, v);
+                else
+                    updateListing(auctionListing, v);
             }
         });
 
         return view;
     }
 
-    private void addAuction(View v){
-        progressBar.setVisibility(View.VISIBLE);
-        addBtn.setEnabled(false);
-        chooseLocation.setEnabled(false);
+    private void updateListing(AuctionListing auctionListing, View v) {
+        Model.instance.getAuctionListing(id, listing -> {
+            AuctionListing al = (AuctionListing) listing;
+            al.setTitle(auctionListing.getTitle());
+            al.setStartingPrice(auctionListing.getStartingPrice());
+            al.setStartDate(auctionListing.getStartDate());
+            al.setEndDate(auctionListing.getEndDate());
+            al.setDescription(auctionListing.getDescription());
 
+            Model.instance.updateListing(id, al, () -> {
+                Model.instance.auctionLoadingState.setValue(Model.LoadingState.loaded);
+                Navigation.findNavController(v).navigateUp();
+            });
+        });
 
-        AuctionListing auctionListing = new AuctionListing();
-        auctionListing.setTitle(title.getText().toString().trim());
-        auctionListing.setStartingPrice(Double.parseDouble(startingPrice.getText().toString().trim()));
-        auctionListing.setDescription(description.getText().toString().trim());
-        auctionListing.setDateOpened(Calendar.getInstance().getTime());
-        Date start = getDate(sdateButton.getText().toString().trim());
-        Date end = getDate(edateButton.getText().toString().trim());
-        if(start.after(end)){
-            sdateButton.setError("start date can't be after end date");
-            Toast.makeText(getActivity(), "start date can't be after end date", Toast.LENGTH_SHORT).show();
-            sdateButton.requestFocus();
-            progressBar.setVisibility(View.GONE);
-            addBtn.setEnabled(true);
-            chooseLocation.setEnabled(true);
-            return;
-        }
-        auctionListing.setStartDate(start);
-        auctionListing.setEndDate(end);
-        auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lng);
-        auctionListing.setLocation(location);
+    }
 
-        Model.instance.saveListing(auctionListing,(listingId)->{
-            if(listingId != null){
-                if(selectedImages != null){
-                    Model.instance.uploadImage(selectedImages.get(0),listingId,Model.LISTINGS_DIR,url -> {
+    private void createListing(AuctionListing auctionListing, View v) {
+        Model.instance.saveListing(auctionListing, (listingId) -> {
+            if (listingId != null) {
+                if (selectedImages != null) {
+                    Model.instance.uploadImage(selectedImages.get(0), listingId, Model.LISTINGS_DIR, url -> {
                         LinkedList<String> list = new LinkedList<>();
                         list.add(url);
                         auctionListing.setImages(list);
                         auctionListing.setListingID(listingId);
-                        Model.instance.updateListing(listingId,auctionListing,()->{
+                        Model.instance.updateListing(listingId, auctionListing, () -> {
                             Navigation.findNavController(v).navigateUp();
-                            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                            Model.instance.auctionLoadingState.setValue(Model.LoadingState.loaded);
                         });
                     });
-                }else{
-                    Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                    Navigation.findNavController(v).navigateUp();
+                } else {
+                    auctionListing.setListingID(listingId);
+                    Model.instance.updateListing(listingId, auctionListing, () -> {
+                        Model.instance.auctionLoadingState.setValue(Model.LoadingState.loaded);
+                        Navigation.findNavController(v).navigateUp();
+                    });
                 }
+
                 Model.instance.getUserFromDB(user -> {
-                    if(user != null){
+                    if (user != null) {
                         user.addAuctionListing(listingId);
-                        Model.instance.updateUserData(user,()->{
+                        Model.instance.updateUserData(user, () -> {
                             Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
                         });
                     }
@@ -336,11 +374,9 @@ public class AddAuctionListingFragment extends Fragment {
     static final int PICK_LOCATION = 2;
     void addImages(){
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        //getIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         getIntent.setType("image/*");
 
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        //pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
         pickIntent.setType("image/*");
 
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
@@ -376,16 +412,72 @@ public class AddAuctionListingFragment extends Fragment {
                         gallery.addView(imV);
                     });
                 }
-
             }).start();
-
         }
 
         if (requestCode == PICK_LOCATION && resultCode == getActivity().RESULT_OK) {
             Place place= PlacePicker.getPlace(data,getContext());
             lat = place.getLatLng().latitude;
             lng = place.getLatLng().longitude;
-
         }
     }
+
+    /*private void addAuction(View v){
+        progressBar.setVisibility(View.VISIBLE);
+        addBtn.setEnabled(false);
+        chooseLocation.setEnabled(false);
+
+
+        AuctionListing auctionListing = new AuctionListing();
+        auctionListing.setTitle(title.getText().toString().trim());
+        auctionListing.setStartingPrice(Double.parseDouble(startingPrice.getText().toString().trim()));
+        auctionListing.setDescription(description.getText().toString().trim());
+        auctionListing.setDateOpened(Calendar.getInstance().getTime());
+        Date start = getDate(sdateButton.getText().toString().trim());
+        Date end = getDate(edateButton.getText().toString().trim());
+        if(start.after(end)){
+            sdateButton.setError("start date can't be after end date");
+            Toast.makeText(getActivity(), "start date can't be after end date", Toast.LENGTH_SHORT).show();
+            sdateButton.requestFocus();
+            progressBar.setVisibility(View.GONE);
+            addBtn.setEnabled(true);
+            chooseLocation.setEnabled(true);
+            return;
+        }
+        auctionListing.setStartDate(start);
+        auctionListing.setEndDate(end);
+        auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
+        Location location = new Location("");
+        location.setLatitude(lat);
+        location.setLongitude(lng);
+        auctionListing.setLocation(location);
+
+        Model.instance.saveListing(auctionListing,(listingId)->{
+            if(listingId != null){
+                if(selectedImages != null){
+                    Model.instance.uploadImage(selectedImages.get(0),listingId,Model.LISTINGS_DIR,url -> {
+                        LinkedList<String> list = new LinkedList<>();
+                        list.add(url);
+                        auctionListing.setImages(list);
+                        auctionListing.setListingID(listingId);
+                        Model.instance.updateListing(listingId,auctionListing,()->{
+                            Navigation.findNavController(v).navigateUp();
+                            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                        });
+                    });
+                }else{
+                    Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
+                    Navigation.findNavController(v).navigateUp();
+                }
+                Model.instance.getUserFromDB(user -> {
+                    if(user != null){
+                        user.addAuctionListing(listingId);
+                        Model.instance.updateUserData(user,()->{
+                            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
+                        });
+                    }
+                });
+            }
+        });
+    }*/
 }

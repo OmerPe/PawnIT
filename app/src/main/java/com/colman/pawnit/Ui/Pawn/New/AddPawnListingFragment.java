@@ -50,17 +50,15 @@ public class AddPawnListingFragment extends Fragment {
 
     private AddPawnListingViewModel mViewModel;
     DatePickerDialog datePickerDialog;
-    Button sdateButton;
+    Button sdateButton, addBtn, chooseLocation;
     ImageButton addImages;
     EditText title, requested, interestRate, description;
     ProgressBar progressBar;
-    Button addBtn;
 
     LayoutInflater inf;
     LinearLayout gallery;
     List<Bitmap> selectedImages;
 
-    Button chooseLocation;
     double lat, lng;
     static final int PICK_LOCATION = 2;
 
@@ -392,7 +390,6 @@ public class AddPawnListingFragment extends Fragment {
                         gallery.addView(imV);
                     });
                 }
-
             }).start();
 
         }
@@ -401,7 +398,6 @@ public class AddPawnListingFragment extends Fragment {
             Place place = PlacePicker.getPlace(data, getContext());
             lat = place.getLatLng().latitude;
             lng = place.getLatLng().longitude;
-
         }
     }
 
