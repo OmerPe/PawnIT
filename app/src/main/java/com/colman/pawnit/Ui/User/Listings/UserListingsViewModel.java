@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 import com.colman.pawnit.Model.Listing;
 import com.colman.pawnit.Model.Model;
 
-
 import java.util.List;
 
 public class UserListingsViewModel extends ViewModel {

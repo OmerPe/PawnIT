@@ -22,7 +22,7 @@ public interface ResellListingDao {
     @Delete
     void delete(ResellListing listing);
 
-    @Query("SELECT * FROM resell_table")
+    @Query("SELECT * FROM resell_table ORDER BY dateOpened DESC")
     LiveData<List<ResellListing>> getAllResells();
 
     @Query("SELECT * FROM resell_table WHERE listingID = :id ORDER BY dateOpened DESC")

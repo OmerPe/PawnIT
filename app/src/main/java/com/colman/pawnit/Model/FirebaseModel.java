@@ -6,7 +6,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.colman.pawnit.MyApplication;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -169,7 +168,13 @@ public class FirebaseModel {
         db.collection(PAWN_LISTING_COLLECTION).document(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                listener.onComplete();
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                storage.getReference().child(Model.LISTINGS_DIR).child(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onComplete();
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -184,7 +189,13 @@ public class FirebaseModel {
         db.collection(AUCTION_LISTING_COLLECTION).document(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                listener.onComplete();
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                storage.getReference().child(Model.LISTINGS_DIR).child(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onComplete();
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -199,7 +210,13 @@ public class FirebaseModel {
         db.collection(RESELL_LISTING_COLLECTION).document(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                listener.onComplete();
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                storage.getReference().child(Model.LISTINGS_DIR).child(listingID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        listener.onComplete();
+                    }
+                });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

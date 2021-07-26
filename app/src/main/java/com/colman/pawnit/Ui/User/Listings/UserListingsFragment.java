@@ -18,11 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
-import com.colman.pawnit.Ui.Market.MarketFragmentDirections;
-import com.colman.pawnit.Ui.Market.Market_list_fragment;
-import com.colman.pawnit.Ui.User.Pawns.UserPawnFragments;
-import com.colman.pawnit.Ui.User.Pawns.UserPawnFragmentsDirections;
-import com.colman.pawnit.Ui.User.Pawns.UserPawnFragmentsViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

@@ -1,6 +1,5 @@
 package com.colman.pawnit.Ui.Market.New;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.colman.pawnit.Model.Model;
-import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.MyApplication;
 import com.colman.pawnit.R;
@@ -38,10 +35,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -49,7 +43,6 @@ public class AddResellListingFragment extends Fragment {
 
     String id;
 
-    private AddResellListingViewModel mViewModel;
     ImageView imageView;
     LayoutInflater inf;
     LinearLayout gallery;
@@ -126,6 +119,7 @@ public class AddResellListingFragment extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Model.instance.resellLoadingState.setValue(Model.LoadingState.loading);
                 progressBar.setVisibility(View.VISIBLE);
                 addBtn.setEnabled(false);
 
@@ -144,34 +138,6 @@ public class AddResellListingFragment extends Fragment {
                     createListing(listing, v);
                 else
                     updateListing(listing, v);
-
-                /*Model.instance.saveListing(listing,(listingId)->{
-                    if(listingId != null){
-                        if(selectedImages != null){
-                            Model.instance.uploadImage(selectedImages.get(0),listingId,Model.LISTINGS_DIR,url -> {
-                                LinkedList<String> list = new LinkedList<>();
-                                list.add(url);
-                                listing.setImages(list);
-                                listing.setListingID(listingId);
-                                Model.instance.updateListing(listingId,listing,()->{
-                                    Navigation.findNavController(v).navigateUp();
-                                    Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                                });
-                            });
-                        }else{
-                            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                            Navigation.findNavController(v).navigateUp();
-                        }
-                        Model.instance.getUserFromDB(user -> {
-                            if(user != null){
-                                user.addResellListing(listingId);
-                                Model.instance.updateUserData(user,()->{
-                                    Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
-                                });
-                            }
-                        });
-                    }
-                });*/
             }
         });
 

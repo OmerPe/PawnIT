@@ -58,8 +58,6 @@ public class HomeFragment extends Fragment implements NavigationView.OnNavigatio
                     String tmp = "Welcome, " + user.getUserName()+" !";
                     welcome.setText(tmp);
                     userMenuDrawerWelcome.setText(tmp);
-                    //incase we use this in a recycler view we need to reset the image to the default one, not relevant here.
-                    //profilePic.setImageResource(R.drawable.avatar_placeholder_foreground);
                     if (user.getProfilePic() != null && !user.getProfilePic().isEmpty()){
                         Picasso.get().load(user.getProfilePic()).placeholder(R.mipmap.avatar_placeholder_foreground).into(profilePic);
                     }

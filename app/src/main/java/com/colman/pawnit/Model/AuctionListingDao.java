@@ -22,7 +22,7 @@ public interface AuctionListingDao {
     @Delete
     void delete(AuctionListing listing);
 
-    @Query("SELECT * FROM auction_listings_table")
+    @Query("SELECT * FROM auction_listings_table ORDER BY dateOpened DESC")
     LiveData<List<AuctionListing>> getAllAuctions();
 
     @Query("SELECT * FROM auction_listings_table WHERE listingID = :id ORDER BY dateOpened DESC")

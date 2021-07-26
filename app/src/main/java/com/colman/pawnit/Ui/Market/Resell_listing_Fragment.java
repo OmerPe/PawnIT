@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,7 +21,6 @@ import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
 import com.colman.pawnit.Ui.ContactPopup;
-import com.colman.pawnit.Ui.Pawn.PawnListingFragmentDirections;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -37,7 +37,6 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
     GoogleMap mMap;
 
     String id;
-    ResellListingViewModel mViewModel;
     CollapsingToolbarLayout title;
     TextView price;
     TextView description;
@@ -97,6 +96,7 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
                         email = user.getEmail();
                     });
                 } else {
+                    Toast.makeText(getActivity(), "Item deleted by user", Toast.LENGTH_SHORT).show();
                     Navigation.findNavController(view).navigateUp();
                 }
             }));
@@ -144,13 +144,6 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
     public void openContact(String email){
         ContactPopup popup = new ContactPopup(email);
         popup.show(getActivity().getSupportFragmentManager(), "Email Popup");
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ResellListingViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     //-------------------------MapView-------------------------------------------------------

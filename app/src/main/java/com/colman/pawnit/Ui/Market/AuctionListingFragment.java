@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +22,6 @@ import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.R;
 import com.colman.pawnit.Ui.ContactPopup;
-import com.colman.pawnit.Ui.Pawn.PawnListingFragmentDirections;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -40,7 +40,6 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
     GoogleMap mMap;
 
     String id;
-    AuctionListingViewModel mViewModel;
     TextView price;
     TextView countDown;
     TextView description;
@@ -81,7 +80,7 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
                 if (listing1 != null) {
                     AuctionListing listing = (AuctionListing) listing1;
                     description.setText(listing.getDescription());
-                    price.setText("" + listing.getCurrentPrice());
+                    price.setText("" + listing.getStartingPrice());
                     title.setTitle(listing.getTitle());
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(listing.getEndDate());
@@ -107,6 +106,7 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
                         email = user.getEmail();
                     });
                 } else {
+                    Toast.makeText(getActivity(), "Item deleted by user", Toast.LENGTH_SHORT).show();
                     Navigation.findNavController(view).navigateUp();
                 }
             }));
@@ -154,13 +154,6 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
     public void openContact(String email){
         ContactPopup popup = new ContactPopup(email);
         popup.show(getActivity().getSupportFragmentManager(), "Email Popup");
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(AuctionListingViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     //-------------------------MapView-------------------------------------------------------

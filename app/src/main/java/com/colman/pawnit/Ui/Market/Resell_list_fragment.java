@@ -18,7 +18,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
 import com.google.android.material.textfield.TextInputEditText;
@@ -49,6 +48,7 @@ public class Resell_list_fragment extends Fragment {
 
         mViewModel.getData().observe(getViewLifecycleOwner(), (data) -> {
             adapter.setData(data);
+            adapter.notifyDataSetChanged();
         });
 
         MarketFragment frag = ((MarketFragment)this.getParentFragment());

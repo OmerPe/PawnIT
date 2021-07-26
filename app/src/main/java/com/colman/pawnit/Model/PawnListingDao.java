@@ -22,7 +22,7 @@ public interface PawnListingDao {
     @Delete
     void delete(PawnListing listing);
 
-    @Query("SELECT * FROM pawn_listings_table")
+    @Query("SELECT * FROM pawn_listings_table ORDER BY dateOpened DESC")
     LiveData<List<PawnListing>> getAllPawns();
 
     @Query("SELECT * FROM pawn_listings_table WHERE listingID = :id ORDER BY dateOpened DESC")

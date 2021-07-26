@@ -48,7 +48,6 @@ public class AddPawnListingFragment extends Fragment {
 
     String id;
 
-    private AddPawnListingViewModel mViewModel;
     DatePickerDialog datePickerDialog;
     Button sdateButton, addBtn, chooseLocation;
     ImageButton addImages;

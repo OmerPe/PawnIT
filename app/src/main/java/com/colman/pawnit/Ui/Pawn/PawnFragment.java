@@ -20,7 +20,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
@@ -69,6 +68,7 @@ public class PawnFragment extends Fragment {
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
             adapter.setData(data);
+            adapter.notifyDataSetChanged();
         });
 
         TextInputEditText searchbox = view.findViewById(R.id.pawn_Searchbox);

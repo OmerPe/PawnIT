@@ -1,17 +1,16 @@
 package com.colman.pawnit.Ui.Pawn;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,8 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.colman.pawnit.Model.FirebaseModel;
-import com.colman.pawnit.Model.Listing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
@@ -43,7 +40,6 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
     GoogleMap mMap;
 
     String id;
-    PawnListingViewModel mViewModel;
     TextView requested;
     TextView due;
     TextView interest;
@@ -115,6 +111,7 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
                     });
 
                 } else {
+                    Toast.makeText(getActivity(), "Item deleted by user", Toast.LENGTH_SHORT).show();
                     Navigation.findNavController(view).navigateUp();
                 }
             });
@@ -162,13 +159,6 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
     public void openContact(String email){
         ContactPopup popup = new ContactPopup(email);
         popup.show(getActivity().getSupportFragmentManager(), "Email Popup");
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(PawnListingViewModel.class);
-        // TODO: Use the ViewModel
     }
 
     //-------------------------MapView-------------------------------------------------------

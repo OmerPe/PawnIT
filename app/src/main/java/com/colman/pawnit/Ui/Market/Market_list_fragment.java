@@ -25,7 +25,6 @@ import com.colman.pawnit.R;
 import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,6 +49,7 @@ public class Market_list_fragment extends Fragment {
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
             adapter.setData(data);
+            adapter.notifyDataSetChanged();
         });
 
         MarketFragment frag = ((MarketFragment)this.getParentFragment());

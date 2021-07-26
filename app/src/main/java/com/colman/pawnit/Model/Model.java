@@ -17,15 +17,10 @@ import java.util.concurrent.Executors;
 
 public class Model {
 
-    public interface OnCompleteListener {
-        void onComplete();
-    }
-
     private ListingDao listingDao;
     private AuctionListingDao auctionListingDao;
     private ResellListingDao resellListingDao;
     private PawnListingDao pawnListingDao;
-    private HistoryDao historyDao;
 
     public static final String PROFILE_DIR = "profilePics";
     public static final String LISTINGS_DIR = "listingsImages";
@@ -52,7 +47,6 @@ public class Model {
         auctionListingDao = dataBase.auctionListingDao();
         resellListingDao = dataBase.resellListingDao();
         pawnListingDao = dataBase.pawnListingDao();
-        historyDao = dataBase.historyDao();
     }
 
     public LiveData<List<Listing>> getMarketList(String Uid) {
@@ -225,10 +219,6 @@ public class Model {
         return allPawnListings;
     }
 
-    public LiveData<List<History>> getAllHistoryForUser(String uid) {
-        return historyDao.getAllHistoryForUser(uid);
-    }
-
     public interface myOnCompleteListener {
         void onComplete(String listingID);
     }
@@ -244,16 +234,8 @@ public class Model {
 
         FirebaseModel.saveListing(listing, listingID -> {
             onCompleteListener.onComplete(listingID);
-
-            if (listing instanceof ResellListing) {
-                getResellData();
-            } else if (listing instanceof AuctionListing) {
-                getAuctionData();
-            } else if (listing instanceof PawnListing) {
-                getAllPawnListings();
-            }
+            getAllListings();
         });
-
     }
 
     public interface createUserDataOnCompleteListener {

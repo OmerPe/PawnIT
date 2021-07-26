@@ -1,10 +1,8 @@
 package com.colman.pawnit.Ui.Market.New;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -29,7 +27,6 @@ import androidx.navigation.Navigation;
 
 import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
-import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.MyApplication;
 import com.colman.pawnit.R;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -51,7 +48,6 @@ public class AddAuctionListingFragment extends Fragment {
 
     String id;
 
-    private AddAuctionListingViewModel mViewModel;
     DatePickerDialog datePickerDialog;
     DatePickerDialog edatePickerDialog;// end date
     Button sdateButton, edateButton , addBtn, chooseLocation;
@@ -143,6 +139,7 @@ public class AddAuctionListingFragment extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Model.instance.auctionLoadingState.setValue(Model.LoadingState.loading);
                 progressBar.setVisibility(View.VISIBLE);
                 addBtn.setEnabled(false);
 
@@ -422,62 +419,5 @@ public class AddAuctionListingFragment extends Fragment {
         }
     }
 
-    /*private void addAuction(View v){
-        progressBar.setVisibility(View.VISIBLE);
-        addBtn.setEnabled(false);
-        chooseLocation.setEnabled(false);
 
-
-        AuctionListing auctionListing = new AuctionListing();
-        auctionListing.setTitle(title.getText().toString().trim());
-        auctionListing.setStartingPrice(Double.parseDouble(startingPrice.getText().toString().trim()));
-        auctionListing.setDescription(description.getText().toString().trim());
-        auctionListing.setDateOpened(Calendar.getInstance().getTime());
-        Date start = getDate(sdateButton.getText().toString().trim());
-        Date end = getDate(edateButton.getText().toString().trim());
-        if(start.after(end)){
-            sdateButton.setError("start date can't be after end date");
-            Toast.makeText(getActivity(), "start date can't be after end date", Toast.LENGTH_SHORT).show();
-            sdateButton.requestFocus();
-            progressBar.setVisibility(View.GONE);
-            addBtn.setEnabled(true);
-            chooseLocation.setEnabled(true);
-            return;
-        }
-        auctionListing.setStartDate(start);
-        auctionListing.setEndDate(end);
-        auctionListing.setOwnerId(Model.instance.getLoggedUser().getUid());
-        Location location = new Location("");
-        location.setLatitude(lat);
-        location.setLongitude(lng);
-        auctionListing.setLocation(location);
-
-        Model.instance.saveListing(auctionListing,(listingId)->{
-            if(listingId != null){
-                if(selectedImages != null){
-                    Model.instance.uploadImage(selectedImages.get(0),listingId,Model.LISTINGS_DIR,url -> {
-                        LinkedList<String> list = new LinkedList<>();
-                        list.add(url);
-                        auctionListing.setImages(list);
-                        auctionListing.setListingID(listingId);
-                        Model.instance.updateListing(listingId,auctionListing,()->{
-                            Navigation.findNavController(v).navigateUp();
-                            Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                        });
-                    });
-                }else{
-                    Model.instance.pawnListingLoadingState.setValue(Model.LoadingState.loaded);
-                    Navigation.findNavController(v).navigateUp();
-                }
-                Model.instance.getUserFromDB(user -> {
-                    if(user != null){
-                        user.addAuctionListing(listingId);
-                        Model.instance.updateUserData(user,()->{
-                            Model.instance.userLoadingState.setValue(Model.LoadingState.loaded);
-                        });
-                    }
-                });
-            }
-        });
-    }*/
 }

@@ -1,12 +1,10 @@
 package com.colman.pawnit.Ui;
 
-import androidx.appcompat.app.AppCompatDialogFragment;
-
 import android.app.AlertDialog;
-import android.os.Bundle;
 import android.app.Dialog;
+import android.os.Bundle;
 
-import com.colman.pawnit.Model.Model;
+import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class ContactPopup extends AppCompatDialogFragment {
     String email;

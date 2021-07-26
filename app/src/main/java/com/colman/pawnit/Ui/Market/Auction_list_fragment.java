@@ -24,7 +24,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Auction_list_fragment extends Fragment {
@@ -71,6 +70,7 @@ public class Auction_list_fragment extends Fragment {
 
         mViewModel.getData().observe(getViewLifecycleOwner(),(data)->{
             adapter.setData(data);
+            adapter.notifyDataSetChanged();
         });
 
         return view;
