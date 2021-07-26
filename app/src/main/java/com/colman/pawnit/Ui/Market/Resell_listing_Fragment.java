@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.ResellListing;
 import com.colman.pawnit.R;
+import com.colman.pawnit.Ui.ContactPopup;
 import com.colman.pawnit.Ui.Pawn.PawnListingFragmentDirections;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallback {
@@ -43,6 +45,9 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
     MapView mMapView = null;
     ProgressBar progressBar;
     ImageButton popupMenu;
+    FloatingActionButton fab;
+
+    String email;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +62,7 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
         title = view.findViewById(R.id.resell_collapsing_toolbar);
         image = view.findViewById(R.id.resell_listing_image);
         popupMenu = view.findViewById(R.id.resell_popup_menu);
+        fab = view.findViewById(R.id.resell_listing_fab);
         progressBar = view.findViewById(R.id.resell_listing_pb);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.bringToFront();
@@ -87,6 +93,9 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
                     m.setPosition(latLng);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                     progressBar.setVisibility(View.GONE);
+                    Model.instance.getUserByID(listing.getOwnerId(),(user) -> {
+                        email = user.getEmail();
+                    });
                 } else {
                     Navigation.findNavController(view).navigateUp();
                 }
@@ -122,7 +131,19 @@ public class Resell_listing_Fragment extends Fragment implements OnMapReadyCallb
             }
         });
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openContact(email);
+            }
+        });
+
         return view;
+    }
+
+    public void openContact(String email){
+        ContactPopup popup = new ContactPopup(email);
+        popup.show(getActivity().getSupportFragmentManager(), "Email Popup");
     }
 
     @Override

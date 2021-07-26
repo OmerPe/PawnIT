@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 import com.colman.pawnit.Model.AuctionListing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.R;
+import com.colman.pawnit.Ui.ContactPopup;
 import com.colman.pawnit.Ui.Pawn.PawnListingFragmentDirections;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -47,6 +49,8 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
     ImageView image;
     MapView mMapView = null;
     ProgressBar progressBar;
+    FloatingActionButton fab;
+    String email;
 
     public static AuctionListingFragment newInstance() {
         return new AuctionListingFragment();
@@ -66,6 +70,7 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
         title = view.findViewById(R.id.auction_collapsing_toolbar);
         popupMenu = view.findViewById(R.id.auction_popup_menu);
         image = view.findViewById(R.id.auction_listing_image);
+        fab = view.findViewById(R.id.auction_listing_fab);
         progressBar = view.findViewById(R.id.auction_listing_pb);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.bringToFront();
@@ -98,6 +103,9 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
                     m.setPosition(latLng);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                     progressBar.setVisibility(View.GONE);
+                    Model.instance.getUserByID(listing.getOwnerId(),(user) -> {
+                        email = user.getEmail();
+                    });
                 } else {
                     Navigation.findNavController(view).navigateUp();
                 }
@@ -133,7 +141,19 @@ public class AuctionListingFragment extends Fragment implements OnMapReadyCallba
             }
         });
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openContact(email);
+            }
+        });
+
         return view;
+    }
+
+    public void openContact(String email){
+        ContactPopup popup = new ContactPopup(email);
+        popup.show(getActivity().getSupportFragmentManager(), "Email Popup");
     }
 
     @Override

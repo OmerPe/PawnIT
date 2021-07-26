@@ -1,10 +1,12 @@
 package com.colman.pawnit.Ui.Pawn;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -17,9 +19,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.colman.pawnit.Model.FirebaseModel;
+import com.colman.pawnit.Model.Listing;
 import com.colman.pawnit.Model.Model;
 import com.colman.pawnit.Model.PawnListing;
 import com.colman.pawnit.R;
+import com.colman.pawnit.Ui.ContactPopup;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -28,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -47,6 +53,9 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
     ImageView image;
     MapView mMapView = null;
     ProgressBar progressBar;
+    FloatingActionButton fab;
+
+    String email;
 
     public static PawnListingFragment newInstance() {
         return new PawnListingFragment();
@@ -67,6 +76,7 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
         popupMenu = view.findViewById(R.id.pawn_popup_menu);
         title = view.findViewById(R.id.pawn_collapsing_toolbar);
         image = view.findViewById(R.id.pawn_listing_imageV);
+        fab = view.findViewById(R.id.pawn_listing_fab);
         progressBar = view.findViewById(R.id.pawn_listing_pb);
         progressBar.setVisibility(View.VISIBLE);
         progressBar.bringToFront();
@@ -100,6 +110,10 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
                     m.setPosition(latLng);
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
                     progressBar.setVisibility(View.GONE);
+                    Model.instance.getUserByID(listing.getOwnerId(),(user) -> {
+                        email = user.getEmail();
+                    });
+
                 } else {
                     Navigation.findNavController(view).navigateUp();
                 }
@@ -135,7 +149,19 @@ public class PawnListingFragment extends Fragment implements OnMapReadyCallback 
             }
         });
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openContact(email);
+            }
+        });
+
         return view;
+    }
+
+    public void openContact(String email){
+        ContactPopup popup = new ContactPopup(email);
+        popup.show(getActivity().getSupportFragmentManager(), "Email Popup");
     }
 
     @Override
